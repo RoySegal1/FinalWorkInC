@@ -1,13 +1,11 @@
-#include "song.h"
-
+#include "stdio.h"
+#include "artist.h"
 
 int main() {
-    Song S,S1;
-    initSong(&S);
-    initSong(&S1);
-    printSong(&S);
-    printSong(&S1);
-
+    Artist artist;
+    initArtist(&artist);
+    getArtistName(&artist);
+    showArtist(&artist);
 
 	return 0;
 }
