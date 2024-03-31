@@ -5,6 +5,12 @@
 #ifndef FINALWORKINC_MACROS_H
 #define FINALWORKINC_MACROS_H
 
+#define ERROR 0
+#define FROM_TEXT_FILE 1
+#define FROM_BINARY_FILE 2
+
+
+
 #define CHECK_RETURN_NULL(ptr) {if(!ptr) return NULL;}
 #define CHECK_COLSE_RETURN_NULL(ptr,fp) {if(!ptr){fclose(fp); return NULL;}}
 

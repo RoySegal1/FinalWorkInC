@@ -47,6 +47,13 @@ void getLength(Song* pSong)
 }
 
 
+
+void playSong(Song* pSong, const char* fileName)
+{
+    system(fileName);
+}
+
+
 void printSong(const void* pSong)
 {
     Song* tempSong = (Song*) pSong;
@@ -79,7 +86,7 @@ void freeSong(void* pSong)
 {
     Song* temp = (Song*) pSong;
     free(temp->songName);
-    //free Artist
+    freeArtist(&temp->artist);
 }
 
 int compareByArtistName(const void* pSong1,const void* pSong2)
@@ -103,11 +110,12 @@ int compareByAmountPlayed(const void* pSong1,const void* pSong2)
 
 
 
-int readSongFromBFile(Song* pSong,FILE* fp)
+int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
 {
     //READ ARTIST
     char *temp;
     temp = readStringFromFile(fp, "Error Reading Artist Name");
+    pSong->artist = *findArtistInArr(artists, size, temp);
     // GET Artist With Temp
     pSong->songName = readStringFromFile(fp,"Error Reading Song Name");
     if(pSong->songName == NULL)
@@ -145,14 +153,14 @@ int writeSongToBFile(Song* pSong,FILE* fp)
         return 0;
     return 1;
 }
-int readSongFromTextFile(Song* pSong, FILE* fp)
+int readSongFromTextFile(Song* pSong, FILE* fp,Artist* artists,int size)
 {
     char temp[MAX_STR_LEN];
     if (!pSong)
         return 0;
     //Artist
     myGets(temp, MAX_STR_LEN, fp);
-    //pSong->artist = getArtistFromArr(temp, artists);
+    pSong->artist = *findArtistInArr(artists,size, temp);
     myGets(temp, MAX_STR_LEN, fp);
     pSong->songName = getDynStr(temp);
     myGets(pSong->songCode, MAX_STR_LEN, fp); // maby Not MAX_STR and USING 5 instad
@@ -171,4 +179,13 @@ int writeSongToTextFile(Song* pSong, FILE* fp)
     fprintf(fp, "%s\n", pSong->songCode);
     fprintf(fp, "%d,%d,%d,%d\n", pSong->minutes, pSong->seconds, pSong->amountPlayedSong, pSong->typeOfSong);
     return 1;
+}
+Artist* findArtistInArr(Artist* pArr,int size, const char* name)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (!strcmp(pArr[i].name, name))
+            return &pArr[i];
+    }
+    return NULL;
 }

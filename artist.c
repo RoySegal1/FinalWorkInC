@@ -68,13 +68,13 @@ int	loadArtistFromTextFile(Artist * artist, FILE* fp)
 
 int writeArtistToBFile(Artist * pArtist,FILE* fp)
 {
-    if(writeStringToFile(pArtist->name,fp,"Error Writing Artist Name"))
+    if(!writeStringToFile(pArtist->name,fp,"Error Writing Artist Name"))
         return 0;
-    if(writeStringToFile(pArtist->aboutMe,fp,"Error Writing \"About me\""))
+    if(!writeStringToFile(pArtist->aboutMe,fp,"Error Writing \"About me\""))
         return 0;
-    if(writeIntToFile(pArtist->amountOfPlay,fp,"Error Writing amount of played songs"))
+    if(!writeIntToFile(pArtist->amountOfPlay,fp,"Error Writing amount of played songs"))
         return 0;
-    if(writeIntToFile(pArtist->amountOfSongs,fp,"Error Writing amount of songs"))
+    if(!writeIntToFile(pArtist->amountOfSongs,fp,"Error Writing amount of songs"))
         return 0;
     return 1;
 }
@@ -89,9 +89,9 @@ int readArtistFromBFile(Artist * pArtist,FILE* fp)
     if(pArtist->aboutMe == NULL)
         return 0;
 
-    if(readIntFromFile(&pArtist->amountOfPlay,fp,"Error Reading of played songs"))
+    if(!readIntFromFile(&pArtist->amountOfPlay,fp,"Error Reading of played songs"))
         return 0;
-    if(readIntFromFile(&pArtist->amountOfSongs,fp,"Error Reading amount of songs"))
+    if(!readIntFromFile(&pArtist->amountOfSongs,fp,"Error Reading amount of songs"))
         return 0;
 
     return 1;

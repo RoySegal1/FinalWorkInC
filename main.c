@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "stdio.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include "artist.h"
 #include "song.h"
 
@@ -14,14 +15,19 @@ int main() {
 		return 0;
 	writeSongToTextFile(&s, fp);
 	fclose(fp);*/
-	FILE* fp;
+	FILE* fp,*fp1;
 	fp = fopen("Song.bin", "rb");
-	//Artist A;
+	fp1 = fopen("Artist.bin", "rb");
+	Artist A;
 	//initArtist(&A);
+	//creatArtist(&A);
+	readArtistFromBFile(&A, fp1);
 	Song s;
 	//initSong(&s, &A);
-	readSongFromBFile(&s, fp);
+	readSongFromBFile(&s, fp, &A, 1);
 	printSong(&s);
+	//system("start Song.mp4");
 	fclose(fp);
+	fclose(fp1);
 	return 0;
 }
