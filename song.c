@@ -53,6 +53,7 @@ void printSong(const void* pSong)
     printf("Song Name: %s\nSong Length: %d.%d minutes\n",tempSong->songName,tempSong->minutes,tempSong->seconds);
     printf("Song Genre: %s\n",typeOfGenre[tempSong->typeOfSong]);
     printf("Song Code: %s\n",tempSong->songCode);
+    showArtist(&tempSong->artist);
 }
 
 
@@ -78,6 +79,7 @@ void freeSong(void* pSong)
 {
     Song* temp = (Song*) pSong;
     free(temp->songName);
+    //free Artist
 }
 
 int compareByArtistName(const void* pSong1,const void* pSong2)
@@ -104,37 +106,42 @@ int compareByAmountPlayed(const void* pSong1,const void* pSong2)
 int readSongFromBFile(Song* pSong,FILE* fp)
 {
     //READ ARTIST
+    char *temp;
+    temp = readStringFromFile(fp, "Error Reading Artist Name");
+    // GET Artist With Temp
     pSong->songName = readStringFromFile(fp,"Error Reading Song Name");
     if(pSong->songName == NULL)
         return 0;
-    if(readCharsFromFile(pSong->songCode,5,fp,"Error Reading Song Code"))
+    if(!readCharsFromFile(pSong->songCode,5,fp,"Error Reading Song Code"))
         return 0;
-    if(readIntFromFile(&pSong->minutes,fp,"Error Reading Minutes"))
+    if(!readIntFromFile(&pSong->minutes,fp,"Error Reading Minutes"))
         return 0;
-    if(readIntFromFile(&pSong->seconds,fp,"Error Reading Seconds"))
+    if(!readIntFromFile(&pSong->seconds,fp,"Error Reading Seconds"))
         return 0;
-    if(readIntFromFile(&pSong->amountPlayedSong,fp,"Error Reading Amount Played"))
+    if(!readIntFromFile(&pSong->amountPlayedSong,fp,"Error Reading Amount Played"))
         return 0;
-    int temp;
-    if(readIntFromFile(&temp,fp,"Error Reading Type Of Song"))
+    int temp1;
+    if(!readIntFromFile(&temp1,fp,"Error Reading Type Of Song"))
         return 0;
-    pSong->typeOfSong = temp;
+    pSong->typeOfSong = temp1;
     return 1;
 }
 int writeSongToBFile(Song* pSong,FILE* fp)
 {
     //WriteArtist
-    if(writeStringToFile(pSong->songName,fp,"Error Writing Song Name"))
+    if (!writeStringToFile(pSong->artist.name, fp, "Error Writing Artist Name"))
         return 0;
-    if(writeCharsToFile(pSong->songCode,5,fp,"Error Writing Song Code"))
+    if(!writeStringToFile(pSong->songName,fp,"Error Writing Song Name"))
         return 0;
-    if(writeIntToFile(pSong->minutes,fp,"Error Writing Minutes"))
+    if(!writeCharsToFile(pSong->songCode,5,fp,"Error Writing Song Code"))
         return 0;
-    if(writeIntToFile(pSong->seconds,fp,"Error Writing Seconds"))
+    if(!writeIntToFile(pSong->minutes,fp,"Error Writing Minutes"))
         return 0;
-    if(writeIntToFile(pSong->amountPlayedSong,fp,"Error Writing Amount Played"))
+    if(!writeIntToFile(pSong->seconds,fp,"Error Writing Seconds"))
         return 0;
-    if(writeIntToFile(pSong->typeOfSong,fp,"Error Writing Type of song"))
+    if(!writeIntToFile(pSong->amountPlayedSong,fp,"Error Writing Amount Played"))
+        return 0;
+    if(!writeIntToFile(pSong->typeOfSong,fp,"Error Writing Type of song"))
         return 0;
     return 1;
 }
@@ -145,6 +152,8 @@ int readSongFromTextFile(Song* pSong, FILE* fp)
         return 0;
     //Artist
     myGets(temp, MAX_STR_LEN, fp);
+    //pSong->artist = getArtistFromArr(temp, artists);
+    myGets(temp, MAX_STR_LEN, fp);
     pSong->songName = getDynStr(temp);
     myGets(pSong->songCode, MAX_STR_LEN, fp); // maby Not MAX_STR and USING 5 instad
     if (4 != fscanf(fp, "%d,%d,%d,%d", &pSong->minutes, &pSong->seconds, &pSong->amountPlayedSong, &pSong->typeOfSong))
@@ -152,9 +161,10 @@ int readSongFromTextFile(Song* pSong, FILE* fp)
     return 1;
 
 }
-int writeSongFromTextFile(Song* pSong, FILE* fp)
+int writeSongToTextFile(Song* pSong, FILE* fp)
 {
     //Artist
+    fprintf(fp,"%s\n", pSong->artist.name);
     if (!pSong)
         return 0;
     fprintf(fp, "%s\n", pSong->songName);

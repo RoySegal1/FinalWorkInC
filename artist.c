@@ -8,7 +8,7 @@
 
 void initArtist(Artist* artist)
 {
-    artist->name = NULL;
+    artist->name = getStrExactName("Enter artist name\n");
     artist->amountOfPlay = 0;
     artist->amountOfSongs = 0;
 }
@@ -18,9 +18,3 @@ void showArtist(Artist* artist)
 {
     printf("Artist Name: %s ",artist->name);
 }
-
-void getArtistName(Artist* artist)
-{
-    artist->name = getStrExactName("Enter artist name\n");
-}
-

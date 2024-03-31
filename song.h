@@ -30,4 +30,4 @@ int compareByAmountPlayed(const void* pSong1,const void* pSong2);
 int readSongFromBFile(Song* pSong,FILE* fp);
 int writeSongToBFile(Song* pSong,FILE* fp);
 int readSongFromTextFile(Song* pSong, FILE* fp);
-int writeSongFromTextFile(Song* pSong, FILE* fp);
+int writeSongToTextFile(Song* pSong, FILE* fp);
