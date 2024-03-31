@@ -3,11 +3,13 @@
 #include "string.h"
 #include "song.h"
 #include "General.h"
+#include "macros.h"
+#include "fileHelper.h"
 
 
 
 
-void initSong(Song* pSong /*,Artist* pArtist*/)
+void initSong(Song* pSong ,Artist* pArtist)
 {
     pSong->songName = getStrExactName("Enter Song Name");
     getCode(pSong->songCode,codeHelper);
@@ -15,7 +17,7 @@ void initSong(Song* pSong /*,Artist* pArtist*/)
     getLength(pSong);
     pSong->typeOfSong = genreMenu();
     pSong->amountPlayedSong = 0;
-    //pSong->artist = *pArtist;
+    pSong->artist = *pArtist;
 }
 
 void getCode(char code[5],int num)
@@ -78,7 +80,12 @@ void freeSong(void* pSong)
     free(temp->songName);
 }
 
-//int compareByArtistName(const void* pSong1,const void* pSong2);
+int compareByArtistName(const void* pSong1,const void* pSong2)
+{
+    Song* temp1 = (Song*) pSong1;
+    Song* temp2 = (Song*) pSong2;
+    return strcmp(temp1->artist.name,temp2->artist.name);
+}
 int compareByName(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = (Song*) pSong1;
@@ -90,4 +97,46 @@ int compareByAmountPlayed(const void* pSong1,const void* pSong2)
     Song* temp1 = (Song*) pSong1;
     Song* temp2 = (Song*) pSong2;
     return temp1->amountPlayedSong-temp2->amountPlayedSong;
+}
+
+
+
+int readSongFromBFile(Song* pSong,FILE* fp)
+{
+    //READ ARTIST
+    pSong->songName = readStringFromFile(fp,"Error Reading Song Name");
+    if(pSong->songName == NULL)
+        return 0;
+    if(readCharsFromFile(pSong->songCode,5,fp,"Error Reading Song Code"))
+        return 0;
+    if(readIntFromFile(&pSong->minutes,fp,"Error Reading Minutes"))
+        return 0;
+    if(readIntFromFile(&pSong->seconds,fp,"Error Reading Seconds"))
+        return 0;
+    if(readIntFromFile(&pSong->amountPlayedSong,fp,"Error Reading Amount Played"))
+        return 0;
+    int temp;
+    if(readIntFromFile(&temp,fp,"Error Reading Type Of Song"))
+        return 0;
+    pSong->typeOfSong = temp;
+    return 1;
+}
+int writeSongToBFile(Song* pSong,FILE* fp)
+{
+    //WriteArtist
+    if(writeStringToFile(pSong->songName,fp,"Error Writing Song Name"))
+        return 0;
+    if(writeCharsToFile(pSong->songCode,5,fp,"Error Writing Song Code"))
+        return 0;
+    if(writeIntToFile(pSong->minutes,fp,"Error Writing Minutes"))
+        return 0;
+    if(writeIntToFile(pSong->seconds,fp,"Error Writing Seconds"))
+        return 0;
+    if(writeIntToFile(pSong->amountPlayedSong,fp,"Error Writing Amount Played"))
+        return 0;
+    if(writeIntToFile(pSong->typeOfSong,fp,"Error Writing Type of song"))
+        return 0;
+    return 1;
+
+
 }
