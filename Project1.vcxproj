@@ -102,7 +102,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -129,12 +129,19 @@
   <ItemGroup>
     <ClCompile Include="album.c" />
     <ClCompile Include="artist.c" />
+    <ClCompile Include="fileHelper.c" />
+    <ClCompile Include="General.c" />
+    <ClCompile Include="GeneralList.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="song.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="album.h" />
     <ClInclude Include="artist.h" />
+    <ClInclude Include="fileHelper.h" />
+    <ClInclude Include="General.h" />
+    <ClInclude Include="GeneralList.h" />
+    <ClInclude Include="macros.h" />
     <ClInclude Include="song.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
