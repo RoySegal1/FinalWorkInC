@@ -19,7 +19,7 @@ typedef struct {
 
 void initSong(Song* pSong ,Artist* pArtist);
 void getLength(Song* pSong);
-void getCode(char code[4],int num);
+void getCode(char code[5],int num);
 eGenreOptions genreMenu();
 int isSongType(const Song* pSong,eGenreOptions genre);
 void printSong(const void* pSong);
@@ -29,3 +29,5 @@ int compareByName(const void* pSong1,const void* pSong2);
 int compareByAmountPlayed(const void* pSong1,const void* pSong2);
 int readSongFromBFile(Song* pSong,FILE* fp);
 int writeSongToBFile(Song* pSong,FILE* fp);
+int readSongFromTextFile(Song* pSong, FILE* fp);
+int writeSongFromTextFile(Song* pSong, FILE* fp);

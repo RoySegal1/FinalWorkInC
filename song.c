@@ -137,6 +137,28 @@ int writeSongToBFile(Song* pSong,FILE* fp)
     if(writeIntToFile(pSong->typeOfSong,fp,"Error Writing Type of song"))
         return 0;
     return 1;
+}
+int readSongFromTextFile(Song* pSong, FILE* fp)
+{
+    char temp[MAX_STR_LEN];
+    if (!pSong)
+        return 0;
+    //Artist
+    myGets(temp, MAX_STR_LEN, fp);
+    pSong->songName = getDynStr(temp);
+    myGets(pSong->songCode, MAX_STR_LEN, fp); // maby Not MAX_STR and USING 5 instad
+    if (4 != fscanf(fp, "%d,%d,%d,%d", &pSong->minutes, &pSong->seconds, &pSong->amountPlayedSong, &pSong->typeOfSong))
+        return 0;
+    return 1;
 
-
+}
+int writeSongFromTextFile(Song* pSong, FILE* fp)
+{
+    //Artist
+    if (!pSong)
+        return 0;
+    fprintf(fp, "%s\n", pSong->songName);
+    fprintf(fp, "%s\n", pSong->songCode);
+    fprintf(fp, "%d,%d,%d,%d\n", pSong->minutes, pSong->seconds, pSong->amountPlayedSong, pSong->typeOfSong);
+    return 1;
 }
