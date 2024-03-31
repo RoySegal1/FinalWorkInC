@@ -1,5 +1,6 @@
 #pragma once
 #include "stdio.h"
+#include "artist.h"
 
 typedef enum{eRock,ePop,eHipHop,eRB,eEDM,eReggae,eNumOfOptions} eGenreOptions;
 
@@ -10,13 +11,13 @@ typedef struct {
     char songCode[5];
     char* songName;
     eGenreOptions typeOfSong;
-    // Artist artist;
+    Artist artist;
     int minutes;
     int seconds;
     int amountPlayedSong;
 } Song;
 
-void initSong(Song* pSong /*,Artist* pArtist*/);
+void initSong(Song* pSong ,Artist* pArtist);
 void getLength(Song* pSong);
 void getCode(char code[4],int num);
 eGenreOptions genreMenu();
