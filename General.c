@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-
 #include "General.h"
 
 
@@ -12,7 +11,7 @@ char* getStrExactName(const char* msg)
 	char* str;
 	char temp[MAX_STR_LEN];
 	printf("%s\t", msg);
-	myGets(temp, MAX_STR_LEN, stdin);
+	myGets(temp, MAX_STR_LEN,stdin);
 
 	str = getDynStr(temp);
 	return str;
@@ -29,15 +28,13 @@ char* getDynStr(char* str)
 	return theStr;
 }
 
-
-
-char*  myGets(char* buffer, int size, FILE* source)
+char* myGets(char* buffer, int size,FILE* stream)
 {
 	char* ok;
 	if (buffer != NULL && size > 0)
 	{
-		do {
-			ok = fgets(buffer, size, source);
+		do { //skip only '\n' strings
+			ok = fgets(buffer, size, stream);
 		} while (ok && ((strlen(buffer) <= 1) && (isspace(buffer[0]))));
 		if (ok)
 		{
@@ -54,7 +51,7 @@ char*  myGets(char* buffer, int size, FILE* source)
 
 void generalArrayFunction(void* arr, int size, int typeSize, void(*func)(void* element))
 {
-	for (int i = 0; i < size; i++)
-		func((char*)(arr)+i * typeSize);
+    for (int i = 0; i < size; i++)
+        func((char*)(arr)+i * typeSize);
 
 }
