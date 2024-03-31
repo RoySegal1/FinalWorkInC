@@ -30,11 +30,7 @@ void creatArtist(Artist* artist)
     artist->name = getStrExactName("Enter artist name\n");
     artist->aboutMe = getStrExactName("Write about the artist\n");
 
-    printf("Enter amount of play: ");
-    scanf("%d", &artist->amountOfPlay);
 
-    printf("Enter amount of songs: ");
-    scanf("%d", &artist->amountOfSongs);
 }
 
 int	saveArtistToTextFile(const Artist * artist, FILE* fp)
