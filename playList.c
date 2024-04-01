@@ -4,12 +4,13 @@
 #include <stdlib.h>
 #include "playList.h"
 #include "General.h"
+#include "string.h"
 
 
 void initPlayList(PlayList* pPlay)
 {
     pPlay->numOfSongs=0;
-    pPlay->playlistName = getDynStr("Enter PlayList Name");
+    pPlay->playlistName = getStrExactName("Enter PlayList Name");
     pPlay->allSongs= NULL;
     pPlay->playListSortOp = 0;
     pPlay->typeOfPlayList = playListTypeMenu();
@@ -31,7 +32,7 @@ ePlayListsType playListTypeMenu()
     int opt;
     printf("PlayList Options:\n");
     do {
-        for (int i = 1; i < eNofPlayListType; i++)
+        for (int i = 0; i < eNofPlayListType; i++)
             printf("Enter %d for %s\n", i, playListType[i]);
         scanf("%d", &opt);
     } while (opt < 0 || opt >=eNofPlayListType);
@@ -63,39 +64,45 @@ void sortPlayList(PlayList* pPlay)
         qsort(pPlay->allSongs,pPlay->numOfSongs,sizeof(Song*),compare);
 }
 
-Song findSong(const PlayList* pPlay) // need to be modified maby, finding not a particular song
+void findSong(const PlayList* pPlay) // need to be modified maby, finding not a particular song
 {
     int(*compare) (const void* S1,const void* S2) = NULL;
-    Song sTemp ={0};
+    Song sTemp = {0};
+    Artist temp1 = {0};
     Song* pTemp = &sTemp;
+    char temp[MAX_STR_LEN];
     switch(pPlay->playListSortOp)
     {
         case eAmountPlayed:
             compare = compareByAmountPlayed;
             printf("Enter the amount to search for\n");
-            scanf("%d",&pTemp->amountPlayedSong);
+            scanf("%d",&sTemp.amountPlayedSong);
             break;
         case eArtistName:
             compare = compareByArtistName;
             printf("Enter Artist name to search for\n");
-            scanf("%s",pTemp->artist.name);
+            myGets(temp,MAX_STR_LEN,stdin);
+            sTemp.artist.name = temp;
             break;
         case eGenre:
             compare = compareByGenre;
-            pTemp->typeOfSong = genreMenu();
+            sTemp.typeOfSong = genreMenu();
             break;
         case eSongName:
             compare = compareByName;
             printf("Enter Song name to search for\n");
-            scanf("%s",pTemp->songName);
+            myGets(temp,MAX_STR_LEN,stdin);
+            sTemp.songName = temp;
             break;
     }
-    Song** pS = NULL;
-    if(compare!=NULL)
-    {
-        Song** pS = bsearch(&pTemp,pPlay->allSongs,pPlay->numOfSongs,sizeof(Song*),compare);
+    if(compare!=NULL) {
+        Song **pS = bsearch(&pTemp, pPlay->allSongs, pPlay->numOfSongs, sizeof(Song *), compare);
+        if (pS == NULL) {
+            printf("didnt find\n");
+        } else {
+            printSong(*pS);
+        }
     }
-    return **pS;
 }
 
 
@@ -110,4 +117,13 @@ eSortOption showSortMenu()
     } while (opt < 0 || opt >=eNofSortOpt);
 
     return (eSortOption)opt;
+}
+
+
+void printPlayList(const PlayList* pPlay) {
+    printf("PlayList (%s) Name: %s, Has %d Songs\n",playListType[pPlay->typeOfPlayList],pPlay->playlistName,pPlay->numOfSongs);
+    for (int i = 0; i < pPlay->numOfSongs; i++) {
+        printSongForPlayList(pPlay->allSongs[i]);
+    }
+
 }

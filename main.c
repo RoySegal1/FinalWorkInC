@@ -4,35 +4,40 @@
 #include "artist.h"
 #include "song.h"
 #include "album.h"
+#include "songRepository.h"
+#include "playList.h"
 
 int main() {
-	FILE* fp,*fp1,*fp2,*fp3;
-	fp = fopen("Song.text", "r");
+	FILE* fp,*fp1;
 	fp1 = fopen("Artist.text", "r");
-    fp2 = fopen("Album.txt","w");
-    fp3 = fopen("Album.bin","wb");
-	Artist A;
-	//initArtist(&A);
-	//creatArtist(&A);
-    loadArtistFromTextFile(&A, fp1);
-	Song s;
-	//initSong(&s, &A);
-    readSongFromTextFile(&s, fp,&A,1);
-	printSong(&s);
-    Album aB;
-    initAlbum(&aB,&A);
-    addSong(&aB,&s);
-    printAlbum(&aB);
-    Song s2;
-    initSong(&s2,&A);
-    printSong(&s2);
-    addSong(&aB,&s2);
-    printAlbum(&aB);
-    writeAlbumToBFile(&aB,fp3);
-    writeAlbumToTextFile(&aB,fp2);
-	fclose(fp);
-	fclose(fp1);
-    fclose(fp2);
-    fclose(fp3);
+    int length;
+    fscanf(fp1,"%d",&length);
+    Artist *A = malloc(sizeof(Artist)*length);
+    for (int i = 0; i < length; i++) {
+        loadArtistFromTextFile(&A[i], fp1);
+    }
+    SongRepository sR;
+    //creatSongsArr(&sR);
+    loadSongsRepositoryFromTextFile(&sR,"Songs.text",A,length);
+    printSong(&sR.songsArr[0]);
+    Album album;
+    L_init(&album.songs);
+    readAlbumFromBFile(&album,"Album.bin",A,length,&sR);
+    PlayList P;
+    initPlayList(&P);
+    addSongToPlayList(&P,&sR.songsArr[0]);
+    addSongToPlayList(&P,&sR.songsArr[1]);
+    addSongToPlayList(&P,&sR.songsArr[2]);
+    printPlayList(&P);
+    sortPlayList(&P);
+    printPlayList(&P);
+    Song ps;
+    findSong(&P);
+  /*  initAlbum(&album,&A[2]);
+    addSongToAlbum(&album,&sR.songsArr[2]);
+    addSongToAlbum(&album,&sR.songsArr[1]);
+    printAlbum(&album);*/
+    //writeAlbumToBFile(&album,"Album.bin");
+    fclose(fp1);
 	return 0;
 }

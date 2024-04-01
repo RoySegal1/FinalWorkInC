@@ -20,9 +20,10 @@ typedef struct {
 
 void initPlayList(PlayList* pPlay);
 int addSongToPlayList(PlayList* pPlay, Song* pSong);
+int removeSongFromPlayList(PlayList* pPlay);
 
 void sortPlayList(PlayList* pPlay);
-Song findSong(const PlayList* pPlay);
+void findSong(const PlayList* pPlay);
 eSortOption showSortMenu();
 ePlayListsType playListTypeMenu();
 

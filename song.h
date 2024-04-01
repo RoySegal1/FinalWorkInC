@@ -24,6 +24,7 @@ eGenreOptions genreMenu();
 int isSongType(const Song* pSong,eGenreOptions genre);
 void printSong(const void* pSong);
 void printSongForAlbum(const void* pSong);
+void printSongForPlayList(const void* pSong);
 void playSong(Song* pSong,const char* fileName);
 void freeSong(void* pSong);
 int compareByArtistName(const void* pSong1,const void* pSong2);
