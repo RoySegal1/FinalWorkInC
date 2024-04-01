@@ -59,7 +59,7 @@ void printSong(const void* pSong)
 {
     Song* tempSong = (Song*) pSong;
     showArtist(&tempSong->artist);
-    printf("Song Name: %s\nSong Length: %d.%d minutes\n",tempSong->songName,tempSong->minutes,tempSong->seconds);
+    printf("Song Name: %s\nSong Length: %d.%d minutes\nSong Listener's: %d\n",tempSong->songName,tempSong->minutes,tempSong->seconds,tempSong->amountPlayedSong);
     printf("Song Genre: %s\n",typeOfGenre[tempSong->typeOfSong]);
     printf("Song Code: %s\n",tempSong->songCode);
 }
@@ -67,6 +67,11 @@ void printSongForAlbum(const void* pSong)
 {
     Song* tempSong = (Song*)pSong;
     printf("Name: %s\nLength: %d.%d minutes\n", tempSong->songName, tempSong->minutes, tempSong->seconds);
+}
+void printSongForPlayList(const void* pSong)
+{
+    Song* tempSong = (Song*)pSong;
+    printf("Name: %s - By %s\nLength: %d.%d minutes\n", tempSong->songName,tempSong->artist.name,tempSong->minutes, tempSong->seconds);
 }
 
 
@@ -110,13 +115,13 @@ int compareByAmountPlayed(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return temp1->amountPlayedSong-temp2->amountPlayedSong;
+    return (temp1->amountPlayedSong-temp2->amountPlayedSong);
 }
 int compareByGenre(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return temp1->typeOfSong-temp2->typeOfSong;
+    return (int)(temp1->typeOfSong-temp2->typeOfSong);
 }
 
 
@@ -171,6 +176,8 @@ int readSongFromTextFile(Song* pSong, FILE* fp,Artist* artists,int size)
         return 0;
     //Artist
     myGets(temp, MAX_STR_LEN, fp);
+    if(findArtistInArr(artists,size, temp) == NULL)
+        return 0;
     pSong->artist = *findArtistInArr(artists,size, temp);
     myGets(temp, MAX_STR_LEN, fp);
     pSong->songName = getDynStr(temp);

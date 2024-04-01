@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "string.h"
 #include "songRepository.h"
 #include "fileHelper.h"
 
@@ -185,6 +186,14 @@ int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artist
         }
     }
     return 1;
+}
 
 
+Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[5])
+{
+    for (int i = 0; i < pSongs->numSongs; i++) {
+        if(!strcmp(pSongs->songsArr[i].songCode,Code))
+            return &pSongs->songsArr[i];
+    }
+    return NULL;
 }
