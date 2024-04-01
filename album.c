@@ -15,11 +15,16 @@ int addSong(Album* pAlbum, Song* pSong)
 {
 	NODE* tmp;
 	tmp = pAlbum->songs.head.next;
-	while (tmp->next != NULL) // get to the last node
+	if (tmp == NULL) // if empty
+		L_insert(&pAlbum->songs.head, pSong);
+	else
 	{
-		tmp = tmp->next;
+		while (tmp->next != NULL) // get to the last node
+		{
+			tmp = tmp->next;
+		}
+		L_insert(tmp, pSong);
 	}
-	L_insert(tmp, pSong);
 	pAlbum->numOfSongs++;
 }
 
