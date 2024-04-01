@@ -13,7 +13,7 @@ typedef struct {
 
 
 int initAlbum(Album* pAlbum, Artist* pArtist);
-int addSong(Album* pAlbum, Song* pSong);
+int addSongToAlbum(Album* pAlbum, Song* pSong);
 Song* findSongByName(Album* pAlbum, const char* songName);
 void printAlbum(const Album* pAlbum);
 void freeAlbum(Album* pAlbum);

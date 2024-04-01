@@ -29,6 +29,7 @@ void freeSong(void* pSong);
 int compareByArtistName(const void* pSong1,const void* pSong2);
 int compareByName(const void* pSong1,const void* pSong2);
 int compareByAmountPlayed(const void* pSong1,const void* pSong2);
+int compareByGenre(const void* pSong1,const void* pSong2);
 int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size);
 int writeSongToBFile(Song* pSong,FILE* fp);
 int readSongFromTextFile(Song* pSong, FILE* fp, Artist* artists, int size);

@@ -16,7 +16,7 @@ int initAlbum(Album* pAlbum, Artist* pArtist)
     return 1;
 }
 
-int addSong(Album* pAlbum, Song* pSong)
+int addSongToAlbum(Album* pAlbum, Song* pSong)
 {
 	NODE* tmp;
 	tmp = pAlbum->songs.head.next;
@@ -100,7 +100,7 @@ int readAlbumFromTextFile(Album* pAlbum, FILE* fp, Artist* artists, int size/*,s
     for (int i = 0; i < pAlbum->numOfSongs; i++) {
         myGets(temp,MAX_STR_LEN,fp);
         //tempSong == getSongFromRepositoryByCode(temp,pSongs);
-        addSong(pAlbum,tempSong);
+        addSongToAlbum(pAlbum,tempSong);
     }
     myGets(temp,MAX_STR_LEN,fp);
     pAlbum->artist = *findArtistInArr(artists,size,temp);
@@ -120,7 +120,7 @@ int readAlbumFromBFile(Album* pAlbum, FILE* fp, Artist* artists, int size/*,song
         if(!readCharsFromFile(tmp,5,fp,"Error Reading Song Code"))
             return 0;
         //tempSong == getSongFromRepositoryByCode(tmp,pSongs);
-        addSong(pAlbum,tempSong);
+        addSongToAlbum(pAlbum,tempSong);
     }
     char *temp2 = readStringFromFile(fp,"Error Reading Artist Name");
     if(!temp2)
