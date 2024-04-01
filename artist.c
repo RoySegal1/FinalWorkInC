@@ -15,7 +15,7 @@ void initArtist(Artist* artist)
 }
 
 
-void showArtist(Artist* artist)
+void showArtist(const Artist* artist)
 {
     printf("Artist Name: %s\n ",artist->name);
     printf("About him: %s\n ",artist->aboutMe);

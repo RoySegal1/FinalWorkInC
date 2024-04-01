@@ -10,7 +10,7 @@ typedef struct{
 
 }Artist;
 
-void showArtist(Artist* artist);
+void showArtist(const Artist* artist);
 void initArtist(Artist* artist);
 //void getArtistName(Artist* artist);
 int	loadArtistFromTextFile(Artist * artist, FILE* fp);

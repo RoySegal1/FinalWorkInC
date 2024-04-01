@@ -2,10 +2,10 @@
 #include "stdio.h"
 #include "artist.h"
 
-typedef enum{eRock,ePop,eHipHop,eRB,eEDM,eReggae,eNumOfOptions} eGenreOptions;
+typedef enum{eRock,ePop,eHipHop,eRB,eEDM,eReggae,eMizrahit,eNumOfOptions} eGenreOptions;
 
 
-static char* typeOfGenre[eNumOfOptions]= {"Rock","Pop","Hip Hop","R&B","EDM","Reggae"};
+static char* typeOfGenre[eNumOfOptions]= {"Rock","Pop","Hip Hop","R&B","EDM","Reggae","Mizrahit"};
 static int codeHelper = 0;
 typedef struct {
     char songCode[5];
@@ -23,6 +23,7 @@ void getCode(char code[5],int num);
 eGenreOptions genreMenu();
 int isSongType(const Song* pSong,eGenreOptions genre);
 void printSong(const void* pSong);
+void printSongForAlbum(const void* pSong);
 void playSong(Song* pSong,const char* fileName);
 void freeSong(void* pSong);
 int compareByArtistName(const void* pSong1,const void* pSong2);
