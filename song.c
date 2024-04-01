@@ -50,17 +50,23 @@ void getLength(Song* pSong)
 
 void playSong(Song* pSong, const char* fileName)
 {
-    system(fileName);
+    //system(fileName);
+    pSong->amountPlayedSong++;
 }
 
 
 void printSong(const void* pSong)
 {
     Song* tempSong = (Song*) pSong;
+    showArtist(&tempSong->artist);
     printf("Song Name: %s\nSong Length: %d.%d minutes\n",tempSong->songName,tempSong->minutes,tempSong->seconds);
     printf("Song Genre: %s\n",typeOfGenre[tempSong->typeOfSong]);
     printf("Song Code: %s\n",tempSong->songCode);
-    showArtist(&tempSong->artist);
+}
+void printSongForAlbum(const void* pSong)
+{
+    Song* tempSong = (Song*)pSong;
+    printf("Name: %s\nLength: %d.%d minutes\n", tempSong->songName, tempSong->minutes, tempSong->seconds);
 }
 
 
@@ -86,28 +92,32 @@ void freeSong(void* pSong)
 {
     Song* temp = (Song*) pSong;
     free(temp->songName);
-    freeArtist(&temp->artist);
 }
 
 int compareByArtistName(const void* pSong1,const void* pSong2)
 {
-    Song* temp1 = (Song*) pSong1;
-    Song* temp2 = (Song*) pSong2;
+    Song* temp1 = *(Song**) pSong1;
+    Song* temp2 = *(Song**) pSong2;
     return strcmp(temp1->artist.name,temp2->artist.name);
 }
 int compareByName(const void* pSong1,const void* pSong2)
 {
-    Song* temp1 = (Song*) pSong1;
-    Song* temp2 = (Song*) pSong2;
+    Song* temp1 = *(Song**) pSong1;
+    Song* temp2 = *(Song**) pSong2;
     return strcmp(temp1->songName,temp2->songName);
 }
 int compareByAmountPlayed(const void* pSong1,const void* pSong2)
 {
-    Song* temp1 = (Song*) pSong1;
-    Song* temp2 = (Song*) pSong2;
+    Song* temp1 = *(Song**) pSong1;
+    Song* temp2 = *(Song**) pSong2;
     return temp1->amountPlayedSong-temp2->amountPlayedSong;
 }
-
+int compareByGenre(const void* pSong1,const void* pSong2)
+{
+    Song* temp1 = *(Song**) pSong1;
+    Song* temp2 = *(Song**) pSong2;
+    return temp1->typeOfSong-temp2->typeOfSong;
+}
 
 
 int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
@@ -132,6 +142,7 @@ int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
     if(!readIntFromFile(&temp1,fp,"Error Reading Type Of Song"))
         return 0;
     pSong->typeOfSong = temp1;
+    codeHelper++;
     return 1;
 }
 int writeSongToBFile(Song* pSong,FILE* fp)
@@ -166,6 +177,7 @@ int readSongFromTextFile(Song* pSong, FILE* fp,Artist* artists,int size)
     myGets(pSong->songCode, MAX_STR_LEN, fp); // maby Not MAX_STR and USING 5 instad
     if (4 != fscanf(fp, "%d,%d,%d,%d", &pSong->minutes, &pSong->seconds, &pSong->amountPlayedSong, &pSong->typeOfSong))
         return 0;
+    codeHelper++;
     return 1;
 
 }

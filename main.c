@@ -3,31 +3,36 @@
 #include <stdlib.h>
 #include "artist.h"
 #include "song.h"
+#include "album.h"
 
 int main() {
-	/*Artist A;
-	initArtist(&A);
-	Song s;
-	initSong(&s,&A);
-	FILE* fp;
-	fp = fopen("Song.txt", "w");
-	if (!fp)
-		return 0;
-	writeSongToTextFile(&s, fp);
-	fclose(fp);*/
-	FILE* fp,*fp1;
-	fp = fopen("Song.bin", "rb");
-	fp1 = fopen("Artist.bin", "rb");
+	FILE* fp,*fp1,*fp2,*fp3;
+	fp = fopen("Song.text", "r");
+	fp1 = fopen("Artist.text", "r");
+    fp2 = fopen("Album.txt","w");
+    fp3 = fopen("Album.bin","wb");
 	Artist A;
 	//initArtist(&A);
 	//creatArtist(&A);
-	readArtistFromBFile(&A, fp1);
+    loadArtistFromTextFile(&A, fp1);
 	Song s;
 	//initSong(&s, &A);
-	readSongFromBFile(&s, fp, &A, 1);
+    readSongFromTextFile(&s, fp,&A,1);
 	printSong(&s);
-	//system("start Song.mp4");
+    Album aB;
+    initAlbum(&aB,&A);
+    addSong(&aB,&s);
+    printAlbum(&aB);
+    Song s2;
+    initSong(&s2,&A);
+    printSong(&s2);
+    addSong(&aB,&s2);
+    printAlbum(&aB);
+    writeAlbumToBFile(&aB,fp3);
+    writeAlbumToTextFile(&aB,fp2);
 	fclose(fp);
 	fclose(fp1);
+    fclose(fp2);
+    fclose(fp3);
 	return 0;
 }

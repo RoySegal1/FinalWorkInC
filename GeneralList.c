@@ -133,8 +133,9 @@ int L_print(const LIST* pList, void(*print)(const void*))
 	tmp = pList->head.next;
 	while(tmp != NULL)
 	{
-		print(tmp->key);
 		c++;
+		printf("%d:", c);
+		print(tmp->key);
 		tmp = tmp->next;
 	}
 	printf("\n");
