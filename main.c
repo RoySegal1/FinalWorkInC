@@ -29,7 +29,7 @@ int main() {
     addSongToPlayList(&P,&sR.songsArr[1]);
     addSongToPlayList(&P,&sR.songsArr[2]);
     printPlayList(&P);
-    sortPlayList(&P);
+    removeSongFromPlayList(&P);
     printPlayList(&P);
     Song ps;
     findSong(&P);
