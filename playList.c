@@ -9,7 +9,9 @@
 #include "macros.h"
 
 
+
 int initPlayListForSystem(PlayList* pPlay)
+
 {
     pPlay->numOfSongs=0;
     pPlay->playlistName = getStrExactName("Enter PlayList Name");

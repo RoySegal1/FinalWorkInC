@@ -21,8 +21,10 @@ typedef struct {
     eSortOption playListSortOp;
 }PlayList;
 
+
 int initPlayListForSystem(PlayList* pPlay);
 int initPlayListForUser(PlayList* pPlay);
+
 
 int addSongToPlayList(PlayList* pPlay, Song* pSong);
 int removeSongFromPlayList(PlayList* pPlay);
@@ -44,5 +46,6 @@ int writePlayListToBFile(PlayList* pPlay,FILE* fp);
 int writePlayListToTextFile(PlayList* pPlay,FILE* fp);
 int readPlayListFromBFile(PlayList* pPlay,FILE* fp,SongRepository* sR);
 int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,SongRepository* sR);
+int initPlayListForUser(PlayList* pPlay);
 
 #endif //FINALWORKINC_PLAYLIST_H
