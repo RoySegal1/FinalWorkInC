@@ -8,8 +8,8 @@
 #include "songRepository.h"
 
 
-typedef enum {ePrivate,ePublic,eNofPlayListType} ePlayListsType;
-static const char* playListType[eNofPlayListType] = {"Private","Public"};
+typedef enum {eUser,eSystem,eNofPlayListType} ePlayListsType;
+static const char* playListType[eNofPlayListType] = {"User","System"};
 typedef enum { eNotOrdered, eAmountPlayed, eArtistName, eGenre,eSongName, eNofSortOpt } eSortOption;
 static const char* sortOptStr[eNofSortOpt] = {"Default","Amount Played","Artist Name","Genre","Song Name"};
 
@@ -21,8 +21,8 @@ typedef struct {
     eSortOption playListSortOp;
 }PlayList;
 
-void initPlayList(PlayList* pPlay);
-
+int initPlayListForSystem(PlayList* pPlay);
+int initPlayListForUser(PlayList* pPlay);
 
 int addSongToPlayList(PlayList* pPlay, Song* pSong);
 int removeSongFromPlayList(PlayList* pPlay);

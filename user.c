@@ -16,9 +16,10 @@ void initUser(User* pUser)
     pUser->userPlayLists = NULL;
 }
 
+int createPlayListToUser(User* pUser, SongRepository* pSongs)
+{
 
-
-
+}
 
 int addPlayListToUser(User* pUser, PlayList* pPlay)
 {
@@ -59,7 +60,7 @@ void printPlayListForUser(const User* pUser)
 
 void printAlbumsForUser(const User* pUser)
 {
-    for (int i = 0; i < pUser->userAlbums; i++)
+    for (int i = 0; i < pUser->numOfAlbums; i++)
     {
         printAlbum(&pUser->userAlbums[i]);
     }

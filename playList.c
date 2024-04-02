@@ -9,13 +9,26 @@
 #include "macros.h"
 
 
-void initPlayList(PlayList* pPlay)
+int initPlayListForSystem(PlayList* pPlay)
 {
     pPlay->numOfSongs=0;
     pPlay->playlistName = getStrExactName("Enter PlayList Name");
+    CHECK_RETURN_0(pPlay->playlistName)
     pPlay->allSongs= NULL;
     pPlay->playListSortOp = eNotOrdered;
     pPlay->typeOfPlayList = playListTypeMenu();
+    return 1;
+}
+
+int initPlayListForUser(PlayList* pPlay)
+{
+    pPlay->numOfSongs=0;
+    pPlay->playlistName = getStrExactName("Enter PlayList Name");
+    CHECK_RETURN_0(pPlay->playlistName)
+    pPlay->allSongs= NULL;
+    pPlay->playListSortOp = eNotOrdered;
+    pPlay->typeOfPlayList = eUser;
+    return 1;
 }
 
 int addSongToPlayList(PlayList* pPlay, Song* pSong)
