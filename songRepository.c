@@ -229,3 +229,17 @@ void printAllSongs(SongRepository* pSongRepository)
 
     }
 }
+
+void freeSongRepository(SongRepository* songRepository)
+{
+    if (songRepository == NULL)
+        return;
+
+    for (int i = 0; i < songRepository->numSongs; ++i)
+    {
+        freeSong(&songRepository[i]);
+
+    }
+    free(songRepository->songsArr);
+}
+
