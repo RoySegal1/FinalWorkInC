@@ -191,11 +191,15 @@ int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artist
 
 Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[CODE_LENGTH])
 {
-    for (int i = 0; i < pSongs->numSongs; i++) {
-        if(!strcmp(pSongs->songsArr[i].songCode,Code))
-            return &pSongs->songsArr[i];
-    }
-    return NULL;
+    Song sTemp = {0};
+    Song * pTemp = & sTemp;
+    strcpy(pTemp->songCode,Code);
+    pTemp = bsearch(pTemp,pSongs->songsArr,pSongs->numSongs, sizeof(Song),compareSongByCode);
+//    for (int i = 0; i < pSongs->numSongs; i++) {
+//        if(!strcmp(pSongs->songsArr[i].songCode,Code))
+//            return &pSongs->songsArr[i];
+//    }
+    return pTemp;
 }
 
 //get a pointer to song and if not Null or already exist adding to repository

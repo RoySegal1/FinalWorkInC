@@ -103,13 +103,13 @@ int compareByArtistName(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return _strcmpi(temp1->artist.name, temp2->artist.name);
+    return strcasecmp(temp1->artist.name, temp2->artist.name);
 }
 int compareByName(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return _strcmpi(temp1->songName,temp2->songName);
+    return strcasecmp(temp1->songName,temp2->songName);
 }
 int compareByAmountPlayed(const void* pSong1,const void* pSong2)
 {
@@ -122,6 +122,12 @@ int compareByGenre(const void* pSong1,const void* pSong2)
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
     return (int)(temp1->typeOfSong-temp2->typeOfSong);
+}
+int compareSongByCode(const void* pSong1,const void* pSong2)
+{
+    Song* temp1 = (Song*) pSong1;
+    Song* temp2 = (Song*) pSong2;
+    return strcasecmp(temp1->songCode,temp2->songCode);
 }
 
 

@@ -59,7 +59,7 @@ void printPlayListForUser(const User* pUser)
 
 void printAlbumsForUser(const User* pUser)
 {
-    for (int i = 0; i < pUser->userAlbums; i++)
+    for (int i = 0; i < pUser->numOfAlbums; i++)
     {
         printAlbum(&pUser->userAlbums[i]);
     }
