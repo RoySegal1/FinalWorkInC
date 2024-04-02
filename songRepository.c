@@ -197,3 +197,35 @@ Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[5])
     }
     return NULL;
 }
+
+//get a pointer to song and if not Null or already exist adding to repository
+int addSongToRepository(SongRepository* pRepository, Song* pSong)
+{
+    if(pSong == NULL)
+        return 0;
+    Song* temp = getSongFromRepositoryByCode(pRepository,pSong->songCode) ;
+    if(temp)// if temp != null
+    {
+        printf("Song already exist in repository\n");
+        return 0;
+    }
+    pRepository->songsArr = (Song*)realloc(pRepository->songsArr,(pRepository->numSongs + 1)*sizeof(Song));
+    if(!pRepository->songsArr)
+        return 0;
+    pRepository->songsArr[pRepository->numSongs++] = *pSong;
+    return 1;
+
+}
+void printAllSongs(SongRepository* pSongRepository)
+{
+    if (!pSongRepository || pSongRepository->numSongs<1)
+    {
+        printf("Empty repository\n");
+        return;
+    }
+    for (int i = 0; i < pSongRepository->numSongs; ++i)
+    {
+        printSong(&pSongRepository->songsArr[i]);
+
+    }
+}
