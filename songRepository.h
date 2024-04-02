@@ -21,7 +21,9 @@ int saveSongRepositoryToTextFile(const SongRepository* songRepository, const cha
 int loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* fileName, Artist* artist, int numOfArtists);
 int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artists, int numOfArtists);
 Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[5]);
-
+int addSongToRepository(SongRepository* pRepository, Song* pSong);
+void printAllSongs(SongRepository* pSongRepository);
+void freeSongRepository(SongRepository* songRepository);
 
 
 #endif //FINALWORKINC_SONGREPOSITORY_H

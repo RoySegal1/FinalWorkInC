@@ -40,6 +40,10 @@ int main() {
    // printPlayList(&P);
     Song ps;
     findSong(&P);
+    Song new ;
+    initSong(&new,&A[0]);// creat new song
+    addSongToRepository(&sR,&new);
+    printAllSongs(&sR);
   /*  initAlbum(&album,&A[2]);
     addSongToAlbum(&album,&sR.songsArr[2]);
     addSongToAlbum(&album,&sR.songsArr[1]);
