@@ -7,6 +7,7 @@
 #include "string.h"
 #include "songRepository.h"
 #include "fileHelper.h"
+#include "macros.h"
 
 
 
@@ -191,6 +192,7 @@ int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artist
 
 Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[CODE_LENGTH])
 {
+    CHECK_RETURN_0(pSongs)
     for (int i = 0; i < pSongs->numSongs; i++) {
         if(!strcmp(pSongs->songsArr[i].songCode,Code))
             return &pSongs->songsArr[i];
@@ -225,8 +227,8 @@ void printAllSongs(SongRepository* pSongRepository)
     }
     for (int i = 0; i < pSongRepository->numSongs; ++i)
     {
-        printSong(&pSongRepository->songsArr[i]);
-
+        printf("%d.",i+1);
+        printSongForPlayList(&pSongRepository->songsArr[i]);
     }
 }
 

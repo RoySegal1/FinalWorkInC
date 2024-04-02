@@ -8,6 +8,7 @@
 #include "album.h"
 #include "songRepository.h"
 #include "playList.h"
+#include "user.h"
 
 int main() {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -31,9 +32,14 @@ int main() {
     //saveSongRepositoryToBFile(&sR,"Songs.bin");
     printAllSongs(&sR);
     Album album;
-    L_init(&album.songs);
+  //  L_init(&album.songs);
     readAlbumFromTextFile(&album,"Album.txt",A,length,&sR);
-    printAlbum(&album);
+    User user;
+    initUser(&user);
+    createPlayListToUser(&user,&sR);
+    if (!deleteSongFromUserPlayList(&user, 0))
+        return 0;
+    printPlayListForUser(&user);
    // PlayList P;
    // readPlayListFromBFile(&P,fp2,&sR);
    // writePlayListToBFile(&P,fp2);
@@ -63,5 +69,7 @@ int main() {
     freeArtist(&A[1]);
     freeArtist(&A[2]);
     free(A);
+    freeUser(&user);
+    
 	return 0;
 }
