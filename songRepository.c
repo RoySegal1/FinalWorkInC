@@ -237,7 +237,7 @@ void freeSongRepository(SongRepository* songRepository)
 
     for (int i = 0; i < songRepository->numSongs; ++i)
     {
-        freeSong(&songRepository[i]);
+        freeSong(&songRepository->songsArr[i]);
 
     }
     free(songRepository->songsArr);
