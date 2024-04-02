@@ -7,7 +7,7 @@
 #include "song.h"
 typedef enum {ePrivate,ePublic,eNofPlayListType} ePlayListsType;
 static const char* playListType[eNofPlayListType] = {"Private","Public"};
-typedef enum { eNone, eAmountPlayed, eArtistName, eGenre,eSongName, eNofSortOpt } eSortOption;
+typedef enum { eNotOrderd, eAmountPlayed, eArtistName, eGenre,eSongName, eNofSortOpt } eSortOption;
 static const char* sortOptStr[eNofSortOpt] = {"Default","Amount Played","Artist Name","Genre","Song Name"};
 
 typedef struct {
