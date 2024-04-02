@@ -21,11 +21,14 @@ typedef struct {
     eSortOption playListSortOp;
 }PlayList;
 
-void initPlayListForSystem(PlayList* pPlay);
+
+int initPlayListForSystem(PlayList* pPlay);
+int initPlayListForUser(PlayList* pPlay);
 
 
 int addSongToPlayList(PlayList* pPlay, Song* pSong);
 int removeSongFromPlayList(PlayList* pPlay);
+Song* getSongFromPlayList(PlayList* pPlay,const char code[5]);
 
 void sortPlayList(PlayList* pPlay);
 void findSong(const PlayList* pPlay);

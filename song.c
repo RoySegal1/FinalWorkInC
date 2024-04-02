@@ -71,7 +71,7 @@ void printSongForAlbum(const void* pSong)
 void printSongForPlayList(const void* pSong)
 {
     Song* tempSong = (Song*)pSong;
-    printf("Name: %s - By %s\nLength: %d.%d minutes\n", tempSong->songName,tempSong->artist.name,tempSong->minutes, tempSong->seconds);
+    printf("Name:""\x1b[34m""%s"ANSI_COLOR_RESET"- By %s\nLength: %d.%d minutes\n", tempSong->songName,tempSong->artist.name,tempSong->minutes, tempSong->seconds);
 }
 
 

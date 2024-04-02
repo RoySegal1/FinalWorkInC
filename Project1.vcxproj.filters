@@ -36,6 +36,15 @@
     <ClCompile Include="GeneralList.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="songRepository.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="playList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="user.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="song.h">
@@ -57,6 +66,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="songRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="playList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="user.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

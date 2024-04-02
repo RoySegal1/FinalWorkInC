@@ -7,6 +7,7 @@
 #include "string.h"
 #include "songRepository.h"
 #include "fileHelper.h"
+#include "macros.h"
 
 
 
@@ -200,6 +201,7 @@ Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[CODE_LE
 //            return &pSongs->songsArr[i];
 //    }
     return pTemp;
+
 }
 
 //get a pointer to song and if not Null or already exist adding to repository
@@ -229,8 +231,8 @@ void printAllSongs(SongRepository* pSongRepository)
     }
     for (int i = 0; i < pSongRepository->numSongs; ++i)
     {
-        printSong(&pSongRepository->songsArr[i]);
-
+        printf("%d.",i+1);
+        printSongForPlayList(&pSongRepository->songsArr[i]);
     }
 }
 

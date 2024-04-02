@@ -133,7 +133,10 @@
     <ClCompile Include="General.c" />
     <ClCompile Include="GeneralList.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="playList.c" />
     <ClCompile Include="song.c" />
+    <ClCompile Include="songRepository.c" />
+    <ClCompile Include="user.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="album.h" />
@@ -142,7 +145,10 @@
     <ClInclude Include="General.h" />
     <ClInclude Include="GeneralList.h" />
     <ClInclude Include="macros.h" />
+    <ClInclude Include="playList.h" />
     <ClInclude Include="song.h" />
+    <ClInclude Include="songRepository.h" />
+    <ClInclude Include="user.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

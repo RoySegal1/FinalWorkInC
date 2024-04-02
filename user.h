@@ -21,7 +21,7 @@ void initUser(User* pUser);
 
 int addPlayListToUser(User* pUser, PlayList* pPlay);
 int createPlayListToUser(User* pUser, SongRepository* pSongs);
-int deleteSongFromUserPlayList(User* pUser);
+int deleteSongFromUserPlayList(User* pUser,int index);
 int addAlbumToUser(User* pUser, Album* pAlbums);
 int deleteAlbumsFromUser(User* pUser);
 
