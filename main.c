@@ -26,13 +26,14 @@ int main() {
     }
     SongRepository sR;
     //creatSongsArr(&sR);
-    if (!loadSongsRepositoryFromBFile(&sR, "Songs.bin", A, length))
+    if (!loadSongsRepositoryFromTextFile(&sR, "Songs.text", A, length))
         return 0;
     //saveSongRepositoryToBFile(&sR,"Songs.bin");
-    printSong(&sR.songsArr[0]);
+    printAllSongs(&sR);
     Album album;
     L_init(&album.songs);
-    readAlbumFromBFile(&album,"Album.bin",A,length,&sR);
+    readAlbumFromTextFile(&album,"Album.txt",A,length,&sR);
+    printAlbum(&album);
    // PlayList P;
    // readPlayListFromBFile(&P,fp2,&sR);
    // writePlayListToBFile(&P,fp2);
