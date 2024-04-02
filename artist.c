@@ -100,6 +100,6 @@ int readArtistFromBFile(Artist * pArtist,FILE* fp)
 void freeArtist(Artist *artist) {
     free(artist->name);
     free(artist->aboutMe);
-    artist->name = NULL;
-    artist->aboutMe = NULL;
+//    artist->name = NULL;
+//    artist->aboutMe = NULL;
 }

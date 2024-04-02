@@ -42,7 +42,7 @@ int addSongToAlbum(Album* pAlbum, Song* pSong,int fromFile)
     }
 }
 
-Song* findSongByName(Album* pAlbum, const char* songName)
+Song* findSongByName(const Album* pAlbum, const char* songName)
 {
 	NODE* tmp;
 	tmp = pAlbum->songs.head.next; // first node
@@ -57,7 +57,7 @@ Song* findSongByName(Album* pAlbum, const char* songName)
 	return NULL;
 }
 
-int writeAlbumToTextFile(Album* pAlbum, const char* fileName)
+int writeAlbumToTextFile(const Album* pAlbum, const char* fileName)
 {
     if(!pAlbum)
         return ERROR;
@@ -79,7 +79,7 @@ int writeAlbumToTextFile(Album* pAlbum, const char* fileName)
     return 1;
 }
 
-int writeAlbumToBFile(Album* pAlbum, const char* fileName)
+int writeAlbumToBFile(const Album* pAlbum, const char* fileName)
 {
     FILE* fp;
     fp = fopen(fileName,"wb");
@@ -95,14 +95,14 @@ int writeAlbumToBFile(Album* pAlbum, const char* fileName)
     tmp = pAlbum->songs.head.next;
     while(tmp != NULL) {
         tmpSong = (Song*)tmp->key;
-        if(!writeCharsToFile(tmpSong->songCode,5,fp,"Error Writing Song Code"))
+        if(!writeCharsToFile(tmpSong->songCode, CODE_LENGTH,fp,"Error Writing Song Code"))
             return 0;
         tmp = tmp->next;
     }
     return 1;
 }
 
-int readAlbumFromTextFile(Album* pAlbum, const char* fileName, Artist* artists, int size,SongRepository* pSongs)
+int readAlbumFromTextFile(Album* pAlbum, const char* fileName,const Artist* artists, int size,const SongRepository* pSongs)
 {
     FILE* fp;
     fp = fopen(fileName,"r");
@@ -118,14 +118,14 @@ int readAlbumFromTextFile(Album* pAlbum, const char* fileName, Artist* artists, 
         return 0;
     Song* tempSong;
     for (int i = 0; i < pAlbum->numOfSongs; i++) {
-        myGets(temp,MAX_STR_LEN,fp);
+        myGets(temp,CODE_LENGTH,fp);
         tempSong = getSongFromRepositoryByCode(pSongs,temp);
         addSongToAlbum(pAlbum,tempSong,1);
     }
     return 1;
 }
 
-int readAlbumFromBFile(Album* pAlbum, const char* fileName, Artist* artists, int size,SongRepository* pSongs)
+int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs)
 {
     FILE* fp;
     fp = fopen(fileName,"rb");
@@ -139,10 +139,10 @@ int readAlbumFromBFile(Album* pAlbum, const char* fileName, Artist* artists, int
         return 0;
     if(!readIntFromFile(&pAlbum->numOfSongs,fp,"Error Reading Number Of Songs"))
         return 0;
-    char tmp[5];
+    char tmp[CODE_LENGTH];
     Song* tempSong;
     for (int i = 0; i < pAlbum->numOfSongs; i++) {
-        if(!readCharsFromFile(tmp,5,fp,"Error Reading Song Code"))
+        if(!readCharsFromFile(tmp,CODE_LENGTH,fp,"Error Reading Song Code"))
             return 0;
         tempSong = getSongFromRepositoryByCode(pSongs,tmp);
         addSongToAlbum(pAlbum,tempSong,1);
@@ -150,6 +150,11 @@ int readAlbumFromBFile(Album* pAlbum, const char* fileName, Artist* artists, int
     return 1;
 }
 
+void freeAlbum(Album* pAlbum)
+{
+    free(pAlbum->albumName);
+    L_free(&pAlbum->songs, NULL); // frees only the NODES and not the songs
+}
 
 
 void printAlbum(const Album* pAlbum)

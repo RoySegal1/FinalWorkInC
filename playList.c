@@ -151,10 +151,23 @@ void printPlayList(const PlayList* pPlay) {
         printf("%d.",i+1);
         printSongForPlayList(pPlay->allSongs[i]);
     }
-
 }
 
-int createSongArr(PlayList* pPlay)
+void freePlayList(PlayList* pPlay)
+{
+   // freeSongsArr(pPlay->allSongs,pPlay->numOfSongs);
+    free(pPlay->playlistName);
+    free(pPlay->allSongs);
+}
+void freeSongsArr(Song** pSongs,int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        free(pSongs[i]);
+    }
+}
+
+int createSongArr(PlayList* pPlay) // for reading from a file
 {
     if(pPlay->numOfSongs>0)
     {
@@ -164,10 +177,10 @@ int createSongArr(PlayList* pPlay)
     else
         pPlay->allSongs = NULL;
 
-    for (int i = 0; i < pPlay->numOfSongs; i++) {
+   /* for (int i = 0; i < pPlay->numOfSongs; i++) {
         pPlay->allSongs[i] = (Song*)calloc(1,sizeof(Song));
         CHECK_RETURN_0_PRINT_ALOC(pPlay->allSongs[i])
-    }
+    }*/
     return 1;
 }
 
@@ -211,9 +224,9 @@ int readPlayListFromBFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
         return 0;
     if(!createSongArr(pPlay))
         return 0;
-    char temp[5];
+    char temp[CODE_LENGTH];
     for (int i = 0; i < pPlay->numOfSongs; i++) {
-        if(!readCharsFromFile(temp,5,fp,"Error Reading Song Code"))
+        if(!readCharsFromFile(temp, CODE_LENGTH,fp,"Error Reading Song Code"))
             return 0;
         pPlay->allSongs[i] = getSongFromRepositoryByCode(sR,temp);
         CHECK_RETURN_0(pPlay->allSongs[i])
@@ -235,12 +248,12 @@ int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
     CHECK_RETURN_0(pPlay->playlistName)
     if(fscanf(fp,"%d",&pPlay->numOfSongs) != 1)
         return 0;
-    char temp[5];
+    char temp[CODE_LENGTH];
     Song* s;
     if(!createSongArr(pPlay))
         return 0;
     for (int i = 0; i < pPlay->numOfSongs; i++) {
-        myGets(temp,5,fp);
+        myGets(temp, CODE_LENGTH,fp);
         s = getSongFromRepositoryByCode(sR,temp);
         if(!s)
             return 0;

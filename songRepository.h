@@ -20,7 +20,7 @@ int saveSongRepositoryToBFile(const SongRepository* songRepository, const char* 
 int saveSongRepositoryToTextFile(const SongRepository* songRepository, const char* fileName);
 int loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* fileName, Artist* artist, int numOfArtists);
 int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artists, int numOfArtists);
-Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[5]);
+Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[CODE_LENGTH]);
 int addSongToRepository(SongRepository* pRepository, Song* pSong);
 void printAllSongs(SongRepository* pSongRepository);
 void freeSongRepository(SongRepository* songRepository);

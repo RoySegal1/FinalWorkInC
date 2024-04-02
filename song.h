@@ -1,6 +1,7 @@
 #pragma once
 #include "stdio.h"
 #include "artist.h"
+#define CODE_LENGTH 5
 
 typedef enum{eRock,ePop,eHipHop,eRB,eEDM,eReggae,eMizrahit,eNumOfOptions} eGenreOptions;
 
@@ -8,7 +9,7 @@ typedef enum{eRock,ePop,eHipHop,eRB,eEDM,eReggae,eMizrahit,eNumOfOptions} eGenre
 static char* typeOfGenre[eNumOfOptions]= {"Rock","Pop","Hip Hop","R&B","EDM","Reggae","Mizrahit"};
 static int codeHelper = 0;
 typedef struct {
-    char songCode[5];
+    char songCode[CODE_LENGTH];
     char* songName;
     eGenreOptions typeOfSong;
     Artist artist;
