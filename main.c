@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -9,6 +10,7 @@
 #include "playList.h"
 
 int main() {
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	FILE* fp,*fp1,*fp2;
 	fp1 = fopen("Artist.text", "r");
     fp = fopen("PlayList1.txt","r");
@@ -54,11 +56,11 @@ int main() {
     fclose(fp);
     fclose(fp2);
     freeAlbum(&album);
-    //freePlayList(&P);
+    freePlayList(&P);
+    freeSongRepository(&sR);
     freeArtist(&A[0]);
     freeArtist(&A[1]);
     freeArtist(&A[2]);
     free(A);
-    _CrtDumpMemoryLeaks();
 	return 0;
 }
