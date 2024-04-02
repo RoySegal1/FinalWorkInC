@@ -18,7 +18,39 @@ void initUser(User* pUser)
 
 int createPlayListToUser(User* pUser, SongRepository* pSongs)
 {
+    pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists+1)*sizeof(PlayList));
+    CHECK_RETURN_0(pUser->userPlayLists)
+    initPlayListForUser(&pUser->userPlayLists[pUser->numOfPlaylists]);
+    printAllSongs(pSongs);
+    int choice,cont = 1,addFlag;
+    while(cont) {
+        do {
+            printf("Enter Number Of Song To Add From 1-%d\n", pSongs->numSongs);
+            scanf("%d", &choice);
+        } while (choice < 1 || choice > pSongs->numSongs);
+     addFlag = addSongToPlayList(&pUser->userPlayLists[pUser->numOfPlaylists],&pSongs->songsArr[choice-1]);
+     if(addFlag == 0)
+     {
+         printf("error\n");
+         return 0;
+     }
+     if(addFlag == 1)
+         printf("Song added\n");
+     printf("Do you want to add more songs to playlist? 1 for yes any other number of no\n");
+     scanf("%d",&cont);
+    }
+    pUser->numOfPlaylists++;
+    return 1;
+}
 
+int deleteSongFromUserPlayList(User* pUser,int index)
+{
+    if (index<0 || index>pUser->numOfPlaylists)
+        return 0;
+    if (pUser->userPlayLists[index].numOfSongs < 1) // empty PlayList
+        return 0;
+    if (!removeSongFromPlayList(&pUser->userPlayLists[index]))
+        return 0;
 }
 
 int addPlayListToUser(User* pUser, PlayList* pPlay)
@@ -68,7 +100,15 @@ void printAlbumsForUser(const User* pUser)
 
 void freeUser(User* pUser)
 {
+    for (int i = 0; i < pUser->numOfAlbums; i++)
+    {
+        freeAlbum(&pUser->userAlbums[i]);
+    }
     free(pUser->userAlbums);
+    for (int i = 0; i < pUser->numOfPlaylists; i++)
+    {
+        freePlayList(&pUser->userPlayLists[i]);
+    }
     free(pUser->userPlayLists);
     free(pUser->userName);
 }

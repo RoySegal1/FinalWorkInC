@@ -33,6 +33,13 @@ int initPlayListForUser(PlayList* pPlay)
 
 int addSongToPlayList(PlayList* pPlay, Song* pSong)
 {
+    CHECK_RETURN_0(pSong)
+    CHECK_RETURN_0(pPlay)
+    if(getSongFromPlayList(pPlay,pSong->songCode))
+    {
+        printf("Song all ready in PlayList\n");
+        return 2; // 2 for duplicate
+    }
     pPlay->allSongs = (Song**)realloc(pPlay->allSongs,(pPlay->numOfSongs + 1)*sizeof(Song*));
     if(!pPlay->allSongs)
         return 0;
@@ -42,8 +49,30 @@ int addSongToPlayList(PlayList* pPlay, Song* pSong)
     return 1;
 }
 
+Song* getSongFromPlayList(PlayList* pPlay,const char code[5])
+{
+    if (pPlay->numOfSongs < 1)
+    {
+        printf("PlayList is empty\n");
+        return;
+    }
+    CHECK_RETURN_0(pPlay)
+    Song* temp;
+    for (int i = 0; i < pPlay->numOfSongs; i++) {
+        temp = pPlay->allSongs[i];
+        if(!strcmp(temp->songCode,code))
+            return temp;
+    }
+    return NULL;
+ }
+
 int removeSongFromPlayList(PlayList* pPlay)
 {
+    if (pPlay->numOfSongs < 1)
+    {
+        printf("PlayList is empty\n");
+        return;
+    }
     printf("Enter index of song to remove\n");
     printPlayList(pPlay);
     int index;
@@ -55,9 +84,10 @@ int removeSongFromPlayList(PlayList* pPlay)
     index -=1; // index goes from 1..numOfSongs,  so now 0...numOfSongs-1.
     pPlay->allSongs[index] = pPlay->allSongs[pPlay->numOfSongs-1];
     pPlay->allSongs = (Song**)realloc(pPlay->allSongs,(pPlay->numOfSongs - 1)*sizeof(Song*));
-    if(!pPlay->allSongs)
-        return 0;
     pPlay->numOfSongs--;
+    if(pPlay->numOfSongs != 0) // if PlayList isnt empty
+        if(!pPlay->allSongs)
+            return 0;
     pPlay->playListSortOp = eNotOrdered; // when we remove a song the arr becomes not sorted.
     return 1;
 }
@@ -78,6 +108,12 @@ ePlayListsType playListTypeMenu()
 
 void sortPlayList(PlayList* pPlay)
 {
+    if (pPlay->numOfSongs < 1)
+    {
+        printf("PlayList is empty\n");
+        return;
+    }
+    CHECK_RETURN_NULL(pPlay)
     pPlay->playListSortOp = showSortMenu();
     int(*compare) (const void* S1,const void* S2) = NULL;
     switch(pPlay->playListSortOp)
@@ -101,6 +137,12 @@ void sortPlayList(PlayList* pPlay)
 
 void findSong(const PlayList* pPlay) // need to be modified maby, finding not a particular song
 {
+    if (pPlay->numOfSongs < 1)
+    {
+        printf("PlayList is empty\n");
+        return;
+    }
+    CHECK_RETURN_NULL(pPlay)
     int(*compare) (const void* S1,const void* S2) = NULL;
     Song sTemp = {0};
     Artist temp1 = {0};
@@ -159,6 +201,11 @@ eSortOption showSortMenu()
 
 
 void printPlayList(const PlayList* pPlay) {
+    if (pPlay->numOfSongs < 1)
+    {
+        printf("Playlist is empty\n");
+        return;
+    }
     printf("PlayList (%s) Name: %s, Has %d Songs\n",playListType[pPlay->typeOfPlayList],pPlay->playlistName,pPlay->numOfSongs);
     for (int i = 0; i < pPlay->numOfSongs; i++) {
         printf("%d.",i+1);
