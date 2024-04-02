@@ -103,13 +103,13 @@ int compareByArtistName(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return strcasecmp(temp1->artist.name,temp2->artist.name);
+    return _strcmpi(temp1->artist.name, temp2->artist.name);
 }
 int compareByName(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return strcasecmp(temp1->songName,temp2->songName);
+    return _strcmpi(temp1->songName,temp2->songName);
 }
 int compareByAmountPlayed(const void* pSong1,const void* pSong2)
 {
@@ -135,7 +135,7 @@ int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
     pSong->songName = readStringFromFile(fp,"Error Reading Song Name");
     if(pSong->songName == NULL)
         return 0;
-    if(!readCharsFromFile(pSong->songCode,5,fp,"Error Reading Song Code"))
+    if(!readCharsFromFile(pSong->songCode, CODE_LENGTH,fp,"Error Reading Song Code"))
         return 0;
     if(!readIntFromFile(&pSong->minutes,fp,"Error Reading Minutes"))
         return 0;
@@ -157,7 +157,7 @@ int writeSongToBFile(Song* pSong,FILE* fp)
         return 0;
     if(!writeStringToFile(pSong->songName,fp,"Error Writing Song Name"))
         return 0;
-    if(!writeCharsToFile(pSong->songCode,5,fp,"Error Writing Song Code"))
+    if(!writeCharsToFile(pSong->songCode, CODE_LENGTH,fp,"Error Writing Song Code"))
         return 0;
     if(!writeIntToFile(pSong->minutes,fp,"Error Writing Minutes"))
         return 0;

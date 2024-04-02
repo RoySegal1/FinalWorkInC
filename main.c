@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
+#include <crtdbg.h>
 #include "artist.h"
 #include "song.h"
 #include "album.h"
@@ -18,11 +19,13 @@ int main() {
     fscanf(fp1,"%d",&length);
     Artist *A = malloc(sizeof(Artist)*length);
     for (int i = 0; i < length; i++) {
-        loadArtistFromTextFile(&A[i], fp1);
+        if (!loadArtistFromTextFile(&A[i], fp1))
+            return 0;
     }
     SongRepository sR;
     //creatSongsArr(&sR);
-    loadSongsRepositoryFromTextFile(&sR,"Songs.text",A,length);
+    if (!loadSongsRepositoryFromTextFile(&sR, "Songs.text", A, length))
+        return 0;
     printSong(&sR.songsArr[0]);
     Album album;
     L_init(&album.songs);
@@ -34,12 +37,14 @@ int main() {
    // addSongToPlayList(&P,&sR.songsArr[0]);
    // addSongToPlayList(&P,&sR.songsArr[1]);
    // addSongToPlayList(&P,&sR.songsArr[2]);
+    sR.songsArr[0].minutes = 5;
+    printSong(&sR.songsArr[0]);
     printPlayList(&P);
    // writePlayListToTextFile(&P,fp);
-   // sortPlayList(&P);
+    //sortPlayList(&P);
    // printPlayList(&P);
-    Song ps;
-    findSong(&P);
+   // Song ps;
+    //findSong(&P);
   /*  initAlbum(&album,&A[2]);
     addSongToAlbum(&album,&sR.songsArr[2]);
     addSongToAlbum(&album,&sR.songsArr[1]);
@@ -48,5 +53,12 @@ int main() {
     fclose(fp1);
     fclose(fp);
     fclose(fp2);
+    freeAlbum(&album);
+    //freePlayList(&P);
+    freeArtist(&A[0]);
+    freeArtist(&A[1]);
+    freeArtist(&A[2]);
+    free(A);
+    _CrtDumpMemoryLeaks();
 	return 0;
 }

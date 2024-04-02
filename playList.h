@@ -36,6 +36,8 @@ eSortOption showSortMenu();
 ePlayListsType playListTypeMenu();
 
 void printPlayList(const PlayList* pPlay);
+void freePlayList(PlayList* pPlay);
+void freeSongsArr(Song** pSongs, int size);
 
 int writePlayListToBFile(PlayList* pPlay,FILE* fp);
 int writePlayListToTextFile(PlayList* pPlay,FILE* fp);

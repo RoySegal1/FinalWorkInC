@@ -14,10 +14,16 @@ typedef struct {
 
 int initAlbum(Album* pAlbum, Artist* pArtist);
 int addSongToAlbum(Album* pAlbum, Song* pSong,int fromFile);
-Song* findSongByName(Album* pAlbum, const char* songName);
+
+
+Song* findSongByName(const Album* pAlbum, const char* songName);
+
+
 void printAlbum(const Album* pAlbum);
 void freeAlbum(Album* pAlbum);
-int readAlbumFromBFile(Album* pAlbum, const char* fileName, Artist* artists, int size,SongRepository* pSongs);
-int writeAlbumToBFile(Album* pAlbum, const char* fileName);
-int readAlbumFromTextFile(Album* pAlbum, const char* fileName, Artist* artists, int size,SongRepository* pSongs);
-int writeAlbumToTextFile(Album* pAlbum, const char* fileName);
+
+
+int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs);
+int writeAlbumToBFile(const Album* pAlbum, const char* fileName);
+int readAlbumFromTextFile(Album* pAlbum, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs);
+int writeAlbumToTextFile(const Album* pAlbum, const char* fileName);

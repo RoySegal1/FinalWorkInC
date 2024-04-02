@@ -189,7 +189,7 @@ int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artist
 }
 
 
-Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[5])
+Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[CODE_LENGTH])
 {
     for (int i = 0; i < pSongs->numSongs; i++) {
         if(!strcmp(pSongs->songsArr[i].songCode,Code))
