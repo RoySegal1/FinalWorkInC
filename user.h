@@ -31,8 +31,8 @@ void playByOrderPlayList(const User* pUser, PlayList* pPlay); // same comments t
 
 
 void printUser(const User* pUser);
-void printPlayListForUseR(const User* pUser);
-void printAlbumsForUseR(const User* pUser);
+void printPlayListForUser(const User* pUser);
+void printAlbumsForUser(const User* pUser);
 void freeUser(User* pUser);
 
 
