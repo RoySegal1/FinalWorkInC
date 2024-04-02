@@ -255,8 +255,7 @@ int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
     for (int i = 0; i < pPlay->numOfSongs; i++) {
         myGets(temp, CODE_LENGTH,fp);
         s = getSongFromRepositoryByCode(sR,temp);
-        if(!s)
-            return 0;
+        CHECK_RETURN_0(s)
         pPlay->allSongs[i] = s;
     }
     if(fscanf(fp,"%d",&pPlay->typeOfPlayList) != 1)

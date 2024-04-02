@@ -26,22 +26,22 @@ int main() {
     }
     SongRepository sR;
     //creatSongsArr(&sR);
-    if (!loadSongsRepositoryFromTextFile(&sR, "Songs.text", A, length))
+    if (!loadSongsRepositoryFromBFile(&sR, "Songs.bin", A, length))
         return 0;
+    //saveSongRepositoryToBFile(&sR,"Songs.bin");
     printSong(&sR.songsArr[0]);
     Album album;
     L_init(&album.songs);
     readAlbumFromBFile(&album,"Album.bin",A,length,&sR);
-    PlayList P;
-    readPlayListFromBFile(&P,fp2,&sR);
+   // PlayList P;
+   // readPlayListFromBFile(&P,fp2,&sR);
    // writePlayListToBFile(&P,fp2);
    // initPlayList(&P);
    // addSongToPlayList(&P,&sR.songsArr[0]);
    // addSongToPlayList(&P,&sR.songsArr[1]);
    // addSongToPlayList(&P,&sR.songsArr[2]);
-    sR.songsArr[0].minutes = 5;
-    printSong(&sR.songsArr[0]);
-    printPlayList(&P);
+   // printSong(&sR.songsArr[0]);
+   // printPlayList(&P);
    // writePlayListToTextFile(&P,fp);
     //sortPlayList(&P);
    // printPlayList(&P);
@@ -56,7 +56,7 @@ int main() {
     fclose(fp);
     fclose(fp2);
     freeAlbum(&album);
-    freePlayList(&P);
+    //freePlayList(&P);
     freeSongRepository(&sR);
     freeArtist(&A[0]);
     freeArtist(&A[1]);

@@ -1,5 +1,5 @@
 #include "string.h"
-
+#include <stdlib.h>
 #include "album.h"
 #include "macros.h"
 #include "General.h"
@@ -134,6 +134,7 @@ int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artist
     if(!temp2)
         return 0;
     pAlbum->artist = *findArtistInArr(artists,size,temp2);
+    free(temp2); //maby Change to new Function
     pAlbum->albumName = readStringFromFile(fp,"Error Reading Album Name");
     if(!pAlbum->albumName)
         return 0;

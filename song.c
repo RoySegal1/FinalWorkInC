@@ -132,6 +132,7 @@ int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
     temp = readStringFromFile(fp, "Error Reading Artist Name");
     pSong->artist = *findArtistInArr(artists, size, temp);
     // GET Artist With Temp
+    free(temp); //maby Change to new Function
     pSong->songName = readStringFromFile(fp,"Error Reading Song Name");
     if(pSong->songName == NULL)
         return 0;
@@ -199,7 +200,7 @@ int writeSongToTextFile(Song* pSong, FILE* fp)
     fprintf(fp, "%d,%d,%d,%d\n", pSong->minutes, pSong->seconds, pSong->amountPlayedSong, pSong->typeOfSong);
     return 1;
 }
-Artist* findArtistInArr(Artist* pArr,int size, const char* name)
+Artist* findArtistInArr(const Artist* pArr,int size, const char* name)
 {
     for (int i = 0; i < size; i++)
     {
