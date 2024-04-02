@@ -2,9 +2,11 @@
 // Created by User on 01/04/2024.
 //
 #include <stdlib.h>
+#include "string.h"
 #include "playList.h"
 #include "General.h"
-#include "string.h"
+#include "fileHelper.h"
+#include "macros.h"
 
 
 void initPlayList(PlayList* pPlay)
@@ -12,7 +14,7 @@ void initPlayList(PlayList* pPlay)
     pPlay->numOfSongs=0;
     pPlay->playlistName = getStrExactName("Enter PlayList Name");
     pPlay->allSongs= NULL;
-    pPlay->playListSortOp = eNotOrderd;
+    pPlay->playListSortOp = eNotOrdered;
     pPlay->typeOfPlayList = playListTypeMenu();
 }
 
@@ -23,7 +25,7 @@ int addSongToPlayList(PlayList* pPlay, Song* pSong)
         return 0;
     pPlay->allSongs[pPlay->numOfSongs] = pSong;
     pPlay->numOfSongs++;
-    pPlay->playListSortOp = eNotOrderd; // when we add a song the arr becomes not sorted.
+    pPlay->playListSortOp = eNotOrdered; // when we add a song the arr becomes not sorted.
     return 1;
 }
 
@@ -43,7 +45,7 @@ int removeSongFromPlayList(PlayList* pPlay)
     if(!pPlay->allSongs)
         return 0;
     pPlay->numOfSongs--;
-    pPlay->playListSortOp = eNotOrderd; // when we remove a song the arr becomes not sorted.
+    pPlay->playListSortOp = eNotOrdered; // when we remove a song the arr becomes not sorted.
     return 1;
 }
 
@@ -114,7 +116,7 @@ void findSong(const PlayList* pPlay) // need to be modified maby, finding not a 
             myGets(temp,MAX_STR_LEN,stdin);
             sTemp.songName = temp;
             break;
-        case eNofSortOpt:
+        case eNotOrdered:
             printf("Array not sorted, cant perform search.\n");
             break;
     }
@@ -150,4 +152,102 @@ void printPlayList(const PlayList* pPlay) {
         printSongForPlayList(pPlay->allSongs[i]);
     }
 
+}
+
+int createSongArr(PlayList* pPlay)
+{
+    if(pPlay->numOfSongs>0)
+    {
+        pPlay->allSongs = (Song**) malloc(pPlay->numOfSongs*sizeof(Song*));
+        CHECK_RETURN_0_PRINT_ALOC(pPlay->allSongs)
+    }
+    else
+        pPlay->allSongs = NULL;
+
+    for (int i = 0; i < pPlay->numOfSongs; i++) {
+        pPlay->allSongs[i] = (Song*)calloc(1,sizeof(Song));
+        CHECK_RETURN_0_PRINT_ALOC(pPlay->allSongs[i])
+    }
+    return 1;
+}
+
+int writePlayListToBFile(PlayList* pPlay,FILE* fp)
+{
+    if(!pPlay)
+        return 0;
+    if(!writeStringToFile(pPlay->playlistName,fp,"Error Writing PlayList Name"))
+        return 0;
+    if(!writeIntToFile(pPlay->numOfSongs,fp,"Error Writing number of songs"))
+        return 0;
+    for (int i = 0; i < pPlay->numOfSongs; i++) {
+        if(!writeCharsToFile(pPlay->allSongs[i]->songCode,5,fp,"Error Writing Song code"))
+            return 0;
+    }
+    if(!writeIntToFile(pPlay->typeOfPlayList,fp,"Error Writing PlayList Type"))
+        return 0;
+    return 1;
+
+}
+int writePlayListToTextFile(PlayList* pPlay,FILE* fp)
+{
+    if(!pPlay)
+        return 0;
+    fprintf(fp,"%s\n",pPlay->playlistName);
+    fprintf(fp,"%d\n",pPlay->numOfSongs);
+    for (int i = 0; i < pPlay->numOfSongs; i++) {
+        fprintf(fp,"%s\n",pPlay->allSongs[i]->songCode);
+    }
+    fprintf(fp,"%d\n",pPlay->typeOfPlayList);
+    return 1;
+}
+int readPlayListFromBFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
+{
+    if(!pPlay)
+        return 0;
+    pPlay->playlistName = readStringFromFile(fp,"Error Reading PlayList Name");
+    if(!pPlay->playlistName)
+        return 0;
+    if(!readIntFromFile(&pPlay->numOfSongs,fp,"Error Reading number of songs"))
+        return 0;
+    if(!createSongArr(pPlay))
+        return 0;
+    char temp[5];
+    for (int i = 0; i < pPlay->numOfSongs; i++) {
+        if(!readCharsFromFile(temp,5,fp,"Error Reading Song Code"))
+            return 0;
+        pPlay->allSongs[i] = getSongFromRepositoryByCode(sR,temp);
+        CHECK_RETURN_0(pPlay->allSongs[i])
+    }
+    int temp2;
+    if(!readIntFromFile(&temp2,fp,"Error Reading Playlist Type"))
+        return 0;
+    pPlay->typeOfPlayList = temp2;
+    pPlay->playListSortOp = eNotOrdered;
+    return 1;
+}
+int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
+{
+    char temp2[MAX_STR_LEN];
+    if(!pPlay)
+        return 0;
+    myGets(temp2,MAX_STR_LEN,fp);
+    pPlay->playlistName = getDynStr(temp2);
+    CHECK_RETURN_0(pPlay->playlistName)
+    if(fscanf(fp,"%d",&pPlay->numOfSongs) != 1)
+        return 0;
+    char temp[5];
+    Song* s;
+    if(!createSongArr(pPlay))
+        return 0;
+    for (int i = 0; i < pPlay->numOfSongs; i++) {
+        myGets(temp,5,fp);
+        s = getSongFromRepositoryByCode(sR,temp);
+        if(!s)
+            return 0;
+        pPlay->allSongs[i] = s;
+    }
+    if(fscanf(fp,"%d",&pPlay->typeOfPlayList) != 1)
+        return 0;
+    pPlay->playListSortOp = eNotOrdered;
+    return 1;
 }
