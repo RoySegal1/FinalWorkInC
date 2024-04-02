@@ -21,15 +21,19 @@ void showArtist(const Artist* artist)
     printf("About him: %s\n ",artist->aboutMe);
 }
 
-//void getArtistName(Artist* artist)
-//{
-//    artist->name = getStrExactName("Enter artist name\n");
-//}
-void creatArtist(Artist* artist)
+
+int creatArtist(Artist* artist)
 {
     artist->name = getStrExactName("Enter artist name\n");
+    if(!artist->name)
+        return 0;
     artist->aboutMe = getStrExactName("Write about the artist\n");
-
+    if(!artist->aboutMe)
+    {
+        free(artist->name);
+        return 0;
+    }
+    return 1;
 
 }
 
