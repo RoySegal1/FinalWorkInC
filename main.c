@@ -2,6 +2,10 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
+#include <SDL3/SDL_audio.h>
+//#include <SDL3/main.h>
 #include <crtdbg.h>
 #include "artist.h"
 #include "song.h"
@@ -9,10 +13,13 @@
 #include "songRepository.h"
 #include "playList.h"
 #include "user.h"
+#include "playback.h"
+
+//static SDL_AudioDeviceID audio_device = 0;
 
 int main() {
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	FILE* fp,*fp1,*fp2;
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); 
+	FILE* fp, * fp1, * fp2;
 	fp1 = fopen("Artist.text", "r");
     fp = fopen("PlayList1.txt","r");
     fp2 = fopen("PlayList1.bin","rb");
@@ -31,8 +38,9 @@ int main() {
         return 0;
     //saveSongRepositoryToBFile(&sR,"Songs.bin");
     printAllSongs(&sR);
+    playSong(&sR.songsArr[0]);
     Album album;
-  //  L_init(&album.songs);
+    L_init(&album.songs);
     readAlbumFromTextFile(&album,"Album.txt",A,length,&sR);
     User user;
     initUser(&user);
@@ -40,25 +48,6 @@ int main() {
     if (!deleteSongFromUserPlayList(&user, 0))
         return 0;
     printPlayListForUser(&user);
-   // PlayList P;
-   // readPlayListFromBFile(&P,fp2,&sR);
-   // writePlayListToBFile(&P,fp2);
-   // initPlayList(&P);
-   // addSongToPlayList(&P,&sR.songsArr[0]);
-   // addSongToPlayList(&P,&sR.songsArr[1]);
-   // addSongToPlayList(&P,&sR.songsArr[2]);
-   // printSong(&sR.songsArr[0]);
-   // printPlayList(&P);
-   // writePlayListToTextFile(&P,fp);
-    //sortPlayList(&P);
-   // printPlayList(&P);
-   // Song ps;
-    //findSong(&P);
-  /*  initAlbum(&album,&A[2]);
-    addSongToAlbum(&album,&sR.songsArr[2]);
-    addSongToAlbum(&album,&sR.songsArr[1]);
-    printAlbum(&album);*/
-    //writeAlbumToBFile(&album,"Album.bin");
     fclose(fp1);
     fclose(fp);
     fclose(fp2);
