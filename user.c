@@ -16,14 +16,32 @@ void initUser(User* pUser)
     pUser->userPlayLists = NULL;
 }
 
+
+void playByOrderPlayList(const User* pUser)
+{
+    printf("Enter Number Of PlayList To Be Played. From 1 - %d\n",pUser->numOfPlaylists);
+    for (int i = 0; i < pUser->numOfPlaylists; i++)
+    {
+        printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n",i+1,pUser->userPlayLists[i].playlistName);
+    }
+    int choice;
+    do{
+        scanf("%d",&choice);
+    }
+    while(choice<0 | choice>pUser->numOfPlaylists);
+    for (int i = 0; i < pUser->userPlayLists[choice-1].numOfSongs; ++i) {
+        playSong(pUser->userPlayLists[choice - 1].allSongs[i]);
+    }
+}
+
 int createPlayListToUser(User* pUser, SongRepository* pSongs)
 {
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists+1)*sizeof(PlayList));
     CHECK_RETURN_0(pUser->userPlayLists)
     initPlayListForUser(&pUser->userPlayLists[pUser->numOfPlaylists]);
     printAllSongs(pSongs);
-    int choice,cont = 1,addFlag;
-    while(cont) {
+    int choice,cont = 0,addFlag;
+    while(!cont) {
         do {
             printf("Enter Number Of Song To Add From 1-%d\n", pSongs->numSongs);
             scanf("%d", &choice);
@@ -36,7 +54,7 @@ int createPlayListToUser(User* pUser, SongRepository* pSongs)
      }
      if(addFlag == 1)
          printf("Song added\n");
-     printf("Do you want to add more songs to playlist? 1 for yes any other number of no\n");
+     printf("Do you want to add more songs to playlist? 0 for yes any other number of no\n");
      scanf("%d",&cont);
     }
     pUser->numOfPlaylists++;
@@ -51,6 +69,7 @@ int deleteSongFromUserPlayList(User* pUser,int index)
         return 0;
     if (!removeSongFromPlayList(&pUser->userPlayLists[index]))
         return 0;
+    return 1;
 }
 
 int addPlayListToUser(User* pUser, PlayList* pPlay)
@@ -68,14 +87,14 @@ int deletePlayListFromUser(User* pUser)
     printf("Enter Number Of PlayList To Be Deleted. From 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
     {
-        printf("%d.ANSI_COLOR_BLUE%sANSI_COLOR_RESET\n",i+1,pUser->userPlayLists[i].playlistName);
+        printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n",i+1,pUser->userPlayLists[i].playlistName);
     }
     int choice;
     do{
         scanf("%d",&choice);
     }
     while(choice<0 | choice>pUser->numOfPlaylists);
-    pUser->userPlayLists[choice] = pUser->userPlayLists[pUser->numOfPlaylists-1];
+    pUser->userPlayLists[choice-1] = pUser->userPlayLists[pUser->numOfPlaylists-1];
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists-1)*sizeof(PlayList));
     CHECK_RETURN_0_PRINT_ALOC(pUser->userPlayLists)
     pUser->numOfPlaylists--;
@@ -86,14 +105,14 @@ int deleteAlbumFromUser(User* pUser)
     printf("Enter Number Of Album To Be Deleted. From 1 - %d\n",pUser->numOfAlbums);
     for (int i = 0; i < pUser->numOfAlbums; i++)
     {
-        printf("%d.ANSI_COLOR_BLUE%sANSI_COLOR_RESET\n",i+1,pUser->userAlbums[i].albumName);
+        printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n",i+1,pUser->userAlbums[i].albumName);
     }
     int choice;
     do{
         scanf("%d",&choice);
     }
     while(choice<0 | choice>pUser->numOfAlbums);
-    pUser->userAlbums[choice] = pUser->userAlbums[pUser->numOfAlbums-1];
+    pUser->userAlbums[choice-1] = pUser->userAlbums[pUser->numOfAlbums-1];
     pUser->userAlbums = (Album*) realloc(pUser->userAlbums,(pUser->numOfAlbums-1)*sizeof(Album));
     CHECK_RETURN_0_PRINT_ALOC(pUser->userAlbums)
     pUser->numOfAlbums--;
