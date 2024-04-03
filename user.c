@@ -55,6 +55,7 @@ int deleteSongFromUserPlayList(User* pUser,int index)
 
 int addPlayListToUser(User* pUser, PlayList* pPlay)
 {
+    CHECK_RETURN_0(pPlay)
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists+1)*sizeof(PlayList));
     CHECK_RETURN_0(pUser->userPlayLists)
     pUser->userPlayLists[pUser->numOfPlaylists] = *pPlay; // maybe not shallow
@@ -62,8 +63,46 @@ int addPlayListToUser(User* pUser, PlayList* pPlay)
     return 1;
 }
 
+int deletePlayListFromUser(User* pUser)
+{
+    printf("Enter Number Of PlayList To Be Deleted. From 1 - %d\n",pUser->numOfPlaylists);
+    for (int i = 0; i < pUser->numOfPlaylists; i++)
+    {
+        printf("%d.ANSI_COLOR_BLUE%sANSI_COLOR_RESET\n",i+1,pUser->userPlayLists[i].playlistName);
+    }
+    int choice;
+    do{
+        scanf("%d",&choice);
+    }
+    while(choice<0 | choice>pUser->numOfPlaylists);
+    pUser->userPlayLists[choice] = pUser->userPlayLists[pUser->numOfPlaylists-1];
+    pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists-1)*sizeof(PlayList));
+    CHECK_RETURN_0_PRINT_ALOC(pUser->userPlayLists)
+    pUser->numOfPlaylists--;
+    return 1;
+}
+int deleteAlbumFromUser(User* pUser)
+{
+    printf("Enter Number Of Album To Be Deleted. From 1 - %d\n",pUser->numOfAlbums);
+    for (int i = 0; i < pUser->numOfAlbums; i++)
+    {
+        printf("%d.ANSI_COLOR_BLUE%sANSI_COLOR_RESET\n",i+1,pUser->userAlbums[i].albumName);
+    }
+    int choice;
+    do{
+        scanf("%d",&choice);
+    }
+    while(choice<0 | choice>pUser->numOfAlbums);
+    pUser->userAlbums[choice] = pUser->userAlbums[pUser->numOfAlbums-1];
+    pUser->userAlbums = (Album*) realloc(pUser->userAlbums,(pUser->numOfAlbums-1)*sizeof(Album));
+    CHECK_RETURN_0_PRINT_ALOC(pUser->userAlbums)
+    pUser->numOfAlbums--;
+    return 1;
+}
+
 int addAlbumToUser(User* pUser, Album* pAlbums)
 {
+    CHECK_RETURN_0(pAlbums)
     pUser->userAlbums = (Album *)realloc(pUser->userAlbums,(pUser->numOfAlbums+1)*sizeof(Album));
     CHECK_RETURN_0(pUser->userAlbums)
     pUser->userAlbums[pUser->numOfAlbums] = *pAlbums; // maybe not shallow
