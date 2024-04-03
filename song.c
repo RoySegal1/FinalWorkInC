@@ -51,8 +51,9 @@ void getLength(Song* pSong)
 
 
 
-void playSong(Song* pSong)
+int playSong(Song* pSong)
 {
+
     if (SDL_Init(SDL_INIT_AUDIO) != 0) {
         printf("SDL initialization error: %s\n", SDL_GetError());
         return 1;
@@ -62,8 +63,8 @@ void playSong(Song* pSong)
     Uint32 wavelen = 0;
     char temp[9] = {0};
     strcpy(temp, pSong->songCode);
-    strcat(temp, ".mp3");
-    printf("%s", temp);
+    strcat(temp, ".wav");
+    printf(ANSI_COLOR_CYAN"Playing: %s Press Any Key To Stop The Music.\n"ANSI_COLOR_RESET, pSong->songName);
     if (SDL_LoadWAV(temp, &wavespec, &wavbuf, &wavelen) == NULL)
         printf(stderr, "DIDNT WORK %s\n", SDL_GetError);
     // Initialize SDL Mixer
@@ -74,13 +75,14 @@ void playSong(Song* pSong)
     }
 
     // Load audio files
-    Mix_Chunk* audio1 = Mix_LoadMUS(temp);
+    Mix_Chunk* audio1 = Mix_LoadWAV(temp);
     if (!audio1) {
         printf("Failed to load audio file: %s\n", Mix_GetError());
         Mix_CloseAudio();
         SDL_Quit();
         return 1;
     }
+    Mix_Volume(0, 50);
 
     // Play audio on different channels
     int channel1 = Mix_PlayChannel(-1, audio1, 0);
@@ -93,11 +95,18 @@ void playSong(Song* pSong)
     }
 
     // Wait for audio to finish playing
-    while (Mix_Playing(channel1)) {
+   // while (Mix_Playing(channel1)) {
+   //     SDL_Delay(100); // Adjust delay as needed
+  //  }
+   // SDL_Delay(time * 1000);
+    int quit = 0;
+    while (!quit) {
+        if (_kbhit()) {  // Check if a key has been pressed
+            getchar();   // Clear the key from the buffer
+            quit = 1;    // Quit the loop if a key is pressed
+        }
         SDL_Delay(100); // Adjust delay as needed
     }
-    SDL_Delay(5000);
-
     // Clean up
     Mix_FreeChunk(audio1);
     Mix_CloseAudio();

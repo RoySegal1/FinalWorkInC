@@ -27,7 +27,7 @@ int deleteAlbumFromUser(User* pUser);
 int deletePlayListFromUser(User* pUser);
 
 void ShufflePlayList(const User* pUser, PlayList* pPlay); // maby receives only user and asks him which one to play
-void playByOrderPlayList(const User* pUser, PlayList* pPlay); // same comments to all play functions
+void playByOrderPlayList(const User* pUser); // same comments to all play functions
 
 
 
