@@ -5,6 +5,9 @@
 #include "General.h"
 #include "macros.h"
 #include "fileHelper.h"
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
+#include <SDL3/SDL_audio.h>
 
 
 
@@ -48,9 +51,58 @@ void getLength(Song* pSong)
 
 
 
-void playSong(Song* pSong, const char* fileName)
+void playSong(Song* pSong)
 {
-    //system(fileName);
+    if (SDL_Init(SDL_INIT_AUDIO) != 0) {
+        printf("SDL initialization error: %s\n", SDL_GetError());
+        return 1;
+    }
+    SDL_AudioSpec wavespec;
+    Uint8* wavbuf = NULL;
+    Uint32 wavelen = 0;
+    char temp[9] = {0};
+    strcpy(temp, pSong->songCode);
+    strcat(temp, ".mp3");
+    printf("%s", temp);
+    if (SDL_LoadWAV(temp, &wavespec, &wavbuf, &wavelen) == NULL)
+        printf(stderr, "DIDNT WORK %s\n", SDL_GetError);
+    // Initialize SDL Mixer
+    if (Mix_OpenAudio(0, &wavespec) == -1) {
+        printf("SDL Mixer initialization error: %s\n", Mix_GetError());
+        SDL_Quit();
+        return 1;
+    }
+
+    // Load audio files
+    Mix_Chunk* audio1 = Mix_LoadMUS(temp);
+    if (!audio1) {
+        printf("Failed to load audio file: %s\n", Mix_GetError());
+        Mix_CloseAudio();
+        SDL_Quit();
+        return 1;
+    }
+
+    // Play audio on different channels
+    int channel1 = Mix_PlayChannel(-1, audio1, 0);
+    if (channel1 == -1) {
+        printf("Failed to play audio: %s\n", Mix_GetError());
+        Mix_FreeChunk(audio1);
+        Mix_CloseAudio();
+        SDL_Quit();
+        return 1;
+    }
+
+    // Wait for audio to finish playing
+    while (Mix_Playing(channel1)) {
+        SDL_Delay(100); // Adjust delay as needed
+    }
+    SDL_Delay(5000);
+
+    // Clean up
+    Mix_FreeChunk(audio1);
+    Mix_CloseAudio();
+    SDL_free(wavbuf);
+    SDL_Quit();
     pSong->amountPlayedSong++;
 }
 
@@ -103,13 +155,13 @@ int compareByArtistName(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return strcasecmp(temp1->artist.name, temp2->artist.name);
+    return _stricmp(temp1->artist.name, temp2->artist.name);
 }
 int compareByName(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = *(Song**) pSong1;
     Song* temp2 = *(Song**) pSong2;
-    return strcasecmp(temp1->songName,temp2->songName);
+    return _stricmp(temp1->songName,temp2->songName);
 }
 int compareByAmountPlayed(const void* pSong1,const void* pSong2)
 {
@@ -127,7 +179,7 @@ int compareSongByCode(const void* pSong1,const void* pSong2)
 {
     Song* temp1 = (Song*) pSong1;
     Song* temp2 = (Song*) pSong2;
-    return strcasecmp(temp1->songCode,temp2->songCode);
+    return _stricmp(temp1->songCode,temp2->songCode);
 }
 
 

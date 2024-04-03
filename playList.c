@@ -53,12 +53,12 @@ int addSongToPlayList(PlayList* pPlay, Song* pSong)
 
 Song* getSongFromPlayList(PlayList* pPlay,const char code[5])
 {
+    CHECK_RETURN_0(pPlay)
     if (pPlay->numOfSongs < 1)
     {
         printf("PlayList is empty\n");
         return NULL;
     }
-    CHECK_RETURN_0(pPlay)
     Song* temp;
     for (int i = 0; i < pPlay->numOfSongs; i++) {
         temp = pPlay->allSongs[i];
@@ -70,6 +70,7 @@ Song* getSongFromPlayList(PlayList* pPlay,const char code[5])
 
 int removeSongFromPlayList(PlayList* pPlay)
 {
+    CHECK_RETURN_0(pPlay)
     if (pPlay->numOfSongs < 1)
     {
         printf("PlayList is empty\n");
@@ -112,14 +113,11 @@ void sortPlayList(PlayList* pPlay)
 {
     if(!pPlay)
         return;
-
     if (pPlay->numOfSongs < 1)
     {
         printf("PlayList is empty\n");
         return;
     }
-    //CHECK_RETURN_NULL(pPlay)
-
     pPlay->playListSortOp = showSortMenu();
     int(*compare) (const void* S1,const void* S2) = NULL;
     switch(pPlay->playListSortOp)
@@ -150,7 +148,6 @@ void findSong(const PlayList* pPlay) // need to be modified maby, finding not a 
         printf("PlayList is empty\n");
         return;
     }
-    //CHECK_RETURN_NULL(pPlay)
     int(*compare) (const void* S1,const void* S2) = NULL;
     Song sTemp = {0};
     Artist temp1 = {0};
@@ -209,6 +206,8 @@ eSortOption showSortMenu()
 
 
 void printPlayList(const PlayList* pPlay) {
+    if(!pPlay)
+        return;
     if (pPlay->numOfSongs < 1)
     {
         printf("Playlist is empty\n");
