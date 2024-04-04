@@ -285,33 +285,47 @@ int writePlayListToTextFile(PlayList* pPlay,FILE* fp)
     fprintf(fp,"%d\n",pPlay->typeOfPlayList);
     return 1;
 }
-int readPlayListFromBFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
+int readPlayListFromBFile(PlayList* pPlay, FILE* fp,const SongRepository* sR)
 {
     CHECK_RETURN_0(pPlay)
-//    if(!pPlay)
-//        return 0;
-    pPlay->playlistName = readStringFromFile(fp,"Error Reading PlayList Name");
-    if(!pPlay->playlistName)
+        //    if(!pPlay)
+        //        return 0;
+        pPlay->playlistName = readStringFromFile(fp, "Error Reading PlayList Name");
+    if (!pPlay->playlistName)
         return 0;
-    if(!readIntFromFile(&pPlay->numOfSongs,fp,"Error Reading number of songs"))
+    if (!readIntFromFile(&pPlay->numOfSongs, fp, "Error Reading number of songs"))
+    {
+        free(pPlay->playlistName);
         return 0;
+    }
     if(!createSongArr(pPlay))
+    {
+        free(pPlay->playlistName);
         return 0;
+    }
     char temp[CODE_LENGTH];
     for (int i = 0; i < pPlay->numOfSongs; i++) {
         if(!readCharsFromFile(temp, CODE_LENGTH,fp,"Error Reading Song Code"))
+        {
+            free(pPlay->playlistName);
+            free(pPlay->allSongs);
             return 0;
+        }
         pPlay->allSongs[i] = getSongFromRepositoryByCode(sR,temp);
         CHECK_RETURN_0(pPlay->allSongs[i])
     }
     int temp2;
     if(!readIntFromFile(&temp2,fp,"Error Reading Playlist Type"))
+    {
+        free(pPlay->playlistName);
+        free(pPlay->allSongs);
         return 0;
+    }
     pPlay->typeOfPlayList = temp2;
     pPlay->playListSortOp = eNotOrdered;
     return 1;
 }
-int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
+int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,const SongRepository* sR)
 {
     char temp2[MAX_STR_LEN];
     if(!pPlay)
@@ -320,19 +334,34 @@ int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,SongRepository* sR)
     pPlay->playlistName = getDynStr(temp2);
     CHECK_RETURN_0(pPlay->playlistName)
     if(fscanf(fp,"%d",&pPlay->numOfSongs) != 1)
+    {
+        free(pPlay->playlistName);
         return 0;
+    }
     char temp[CODE_LENGTH];
     Song* s;
     if(!createSongArr(pPlay))
+    {
+        free(pPlay->playlistName);
         return 0;
+    }
     for (int i = 0; i < pPlay->numOfSongs; i++) {
         myGets(temp, CODE_LENGTH,fp);
         s = getSongFromRepositoryByCode(sR,temp);
-        CHECK_RETURN_0(s)
+        if(!s)
+        {
+            free(pPlay->playlistName);
+            free(pPlay->allSongs);
+            return 0;
+        }
         pPlay->allSongs[i] = s;
     }
     if(fscanf(fp,"%d",&pPlay->typeOfPlayList) != 1)
+    {
+        free(pPlay->playlistName);
+        free(pPlay->allSongs);
         return 0;
+    }
     pPlay->playListSortOp = eNotOrdered;
     return 1;
 }

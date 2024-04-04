@@ -158,15 +158,132 @@ void printAlbumsForUser(const User* pUser)
 
 void freeUser(User* pUser)
 {
-    for (int i = 0; i < pUser->numOfAlbums; i++)
-    {
-        freeAlbum(&pUser->userAlbums[i]);
-    }
-    free(pUser->userAlbums);
-    for (int i = 0; i < pUser->numOfPlaylists; i++)
-    {
-        freePlayList(&pUser->userPlayLists[i]);
-    }
-    free(pUser->userPlayLists);
+    freeUserAlbums(pUser->userAlbums,pUser->numOfAlbums);
+    freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
     free(pUser->userName);
 }
+
+void freeUserAlbums(Album* albums,int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        freeAlbum(&albums[i]);
+    }
+    free(albums);
+}
+
+void freeUserPlayLists(PlayList* pPlay,int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        freePlayList(&pPlay[i]);
+    }
+    free(pPlay);
+}
+
+int createPlayListArr(User* pUser)
+{
+    if (pUser->numOfPlaylists > 0)
+    {
+        pUser->userPlayLists = (PlayList*)malloc(pUser->numOfPlaylists * sizeof(PlayList));
+        CHECK_RETURN_0_PRINT_ALOC(pUser->userPlayLists)
+            return 1;
+    }
+    else
+    {
+        pUser->userPlayLists = NULL;
+        return 1;
+    }
+    return 0;
+
+}
+int createAlbumArr(User* pUser)
+{
+    if (pUser->numOfAlbums > 0)
+    {
+        pUser->userAlbums = (Album*)malloc(pUser->numOfAlbums * sizeof(Album));
+        CHECK_RETURN_0_PRINT_ALOC(pUser->userAlbums)
+            return 1;
+    }
+    else
+    {
+        pUser->userAlbums = NULL;
+        return 1;
+    }
+    return 0;
+}
+
+int writeUserToTextFile(User* pUser, const char* fileName)
+{
+    FILE* fp;
+    fp = fopen(fileName,"w");
+    CHECK_RETURN_0(fp)
+    fprintf(fp,"%s\n",pUser->userName);
+    fprintf(fp,"%d\n",pUser->numOfPlaylists);
+    for (int i = 0; i < pUser->numOfPlaylists; ++i) {
+        if(!writePlayListToTextFile(&pUser->userPlayLists[i],fp))
+            return 0;
+    }
+    fprintf(fp,"%d\n",pUser->numOfAlbums);
+    for (int i = 0; i < pUser->numOfAlbums; ++i) {
+        if(!writeAlbumToTextFileWithOpenFile(&pUser->userAlbums[i],fp))
+            return 0;
+    }
+    fclose(fp);
+    return 1;
+}
+int readUserFromTextFile(User* pUser, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs)
+{
+    FILE* fp;
+    fp = fopen(fileName,"r");
+    CHECK_RETURN_0(fp)
+    char temp[MAX_STR_LEN];
+    myGets(temp,MAX_STR_LEN, fp);
+    pUser->userName = getDynStr(temp);
+    CHECK_RETURN_0(pUser->userName)
+    if(fscanf(fp,"%d",&pUser->numOfPlaylists) != 1)
+    {
+        free(pUser->userName);
+        return 0;
+    }
+    if (!createPlayListArr(pUser))
+    {
+        free(pUser->userName);
+        return 0;
+    }
+    for (int i = 0; i < pUser->numOfPlaylists; i++) {
+        if(!readPlayListFromTextFile(&pUser->userPlayLists[i],fp,pSongs))
+        {
+            freeUserPlayLists(pUser->userPlayLists,i);
+            free(pUser->userName);
+            return 0;
+        }
+    }
+    if(fscanf(fp,"%d",&pUser->numOfAlbums) != 1)
+    {
+        freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
+        free(pUser->userName);
+        return 0;
+    }
+    if (!createAlbumArr(pUser))
+    {
+        freeUserPlayLists(pUser->userPlayLists, pUser->numOfPlaylists);
+        free(pUser->userName);
+        return 0;
+    }
+    for (int i = 0; i < pUser->numOfAlbums; i++) {
+        if(!readAlbumFromTextFileWithOpenFile(&pUser->userAlbums[i],fp,artists,size,pSongs))
+        {
+            freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
+            freeUserAlbums(pUser->userAlbums,i);
+            free(pUser->userName);
+            return 0;
+        }
+    }
+    return 1;
+}
+int writeUserToBFile(User* pUser, const char* fileName);
+int readUserFromBFile(User* pUser, const char* fileName);
+
+
+

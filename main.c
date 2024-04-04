@@ -41,12 +41,15 @@ int main() {
     L_init(&album.songs);
     readAlbumFromTextFile(&album,"Album.txt",A,length,&sR);
     User user;
-    initUser(&user);
-    createPlayListToUser(&user,&sR);
+    readUserFromTextFile(&user, "user.txt", &A, length, &sR);
+    //initUser(&user);
+    //createPlayListToUser(&user,&sR);
     //if (!deleteSongFromUserPlayList(&user, 0))
       //  return 0;
-    printPlayListForUser(&user);
-    playByOrderPlayList(&user);
+    printUser(&user);
+   // printPlayListForUser(&user);
+   // playByOrderPlayList(&user);
+   // writeUserToTextFile(&user, "user.txt");
     fclose(fp1);
     fclose(fp);
     fclose(fp2);
