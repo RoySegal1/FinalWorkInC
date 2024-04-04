@@ -104,15 +104,17 @@ int playSong(Song* pSong)
         if (_kbhit()) {  // Check if a key has been pressed
             getchar();   // Clear the key from the buffer
             quit = 1;    // Quit the loop if a key is pressed
+            Mix_FreeChunk(audio1);
+            Mix_CloseAudio();
+            SDL_free(wavbuf);
+            SDL_Quit();
+            pSong->amountPlayedSong++;
         }
         SDL_Delay(100); // Adjust delay as needed
     }
     // Clean up
-    Mix_FreeChunk(audio1);
-    Mix_CloseAudio();
-    SDL_free(wavbuf);
-    SDL_Quit();
-    pSong->amountPlayedSong++;
+
+
 }
 
 

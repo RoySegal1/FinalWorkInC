@@ -30,11 +30,16 @@ void ShufflePlayList(const User* pUser, PlayList* pPlay); // maby receives only 
 void playByOrderPlayList(const User* pUser); // same comments to all play functions
 
 
-
 void printUser(const User* pUser);
 void printPlayListForUser(const User* pUser);
 void printAlbumsForUser(const User* pUser);
 void freeUser(User* pUser);
+
+
+int writeUserToTextFile(User* pUser, const char* fileName);
+int readUserFromTextFile(User* pUser, const char* fileName);
+int writeUserToBFile(User* pUser, const char* fileName);
+int readUserFromBFile(User* pUser, const char* fileName);
 
 
 
