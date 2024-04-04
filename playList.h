@@ -28,7 +28,7 @@ int initPlayListForUser(PlayList* pPlay);
 
 int addSongToPlayList(PlayList* pPlay, Song* pSong);
 int removeSongFromPlayList(PlayList* pPlay);
-Song* getSongFromPlayList(PlayList* pPlay,const char code[5]);
+Song* getSongFromPlayList(const PlayList* pPlay,const char code[5]);
 
 void sortPlayList(PlayList* pPlay);
 void findSong(const PlayList* pPlay);

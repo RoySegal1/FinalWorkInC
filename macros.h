@@ -24,5 +24,6 @@
 #define CHECK_CLOSE_PRINT_RETURN_0(ptr,fp,str) {if(!ptr){printf(#str"\n"); fclose(fp); return 0;}}
 #define CHECK_RETURN_0_PRINT(ptr,str) {if(!ptr){ printf(#str"\n"); return 0;}}
 #define CHECK_RETURN(fp) if(!fp) return;
+#define RETURN_0_CLOSE_FILE(fp) {fclose(fp); return 0;}
 
 #endif //FINALWORKINC_MACROS_H

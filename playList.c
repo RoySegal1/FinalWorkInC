@@ -51,7 +51,7 @@ int addSongToPlayList(PlayList* pPlay, Song* pSong)
     return 1;
 }
 
-Song* getSongFromPlayList(PlayList* pPlay,const char code[5])
+Song* getSongFromPlayList(const PlayList* pPlay,const char code[5])
 {
     CHECK_RETURN_0(pPlay)
     if (pPlay->numOfSongs < 1)
@@ -221,6 +221,7 @@ void printPlayList(const PlayList* pPlay) {
         printf("%d.",i+1);
         printSongForPlayList(pPlay->allSongs[i]);
     }
+    printf("\n");
 }
 
 void freePlayList(PlayList* pPlay)
