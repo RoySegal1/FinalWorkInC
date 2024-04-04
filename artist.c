@@ -91,6 +91,28 @@ int writeArtistToBFile(Artist * pArtist,FILE* fp)
         return 0;
     return 1;
 }
+int saveArtistToCompressFile(Artist* pArtist, FILE* fp)
+{
+    BYTE dataArtist[4];
+    int len1  = strlen(pArtist->name);
+    int len2 = strlen(pArtist->aboutMe);
+    dataArtist[0] = len1 << 3 | len2 >> 5;
+    dataArtist[1] = (len2 & 0x1F) << 3 | pArtist->amountOfSongs >> 4 ;
+    dataArtist[2] = (pArtist->amountOfSongs & 0xF) << 4 | pArtist->amountOfPlay >> 8;
+    dataArtist[3] = pArtist->amountOfPlay & 0xFF;
+    if(fwrite(dataArtist, sizeof(BYTE), 4, fp) != 4)
+    {
+        printf("Error write artist data to compress file\n");
+        return 0;
+    }
+
+    if(!writeStringToComprassFile(pArtist->name,fp,"Error write artist name to compress file\n"))
+        return 0;
+    if (!writeStringToComprassFile(pArtist->aboutMe,fp,"Error write artist VC to compress file\n"))
+        return 0;
+
+    return 1;
+}
 
 int readArtistFromBFile(Artist * pArtist,FILE* fp)
 {
@@ -108,6 +130,97 @@ int readArtistFromBFile(Artist * pArtist,FILE* fp)
         return 0;
 
     return 1;
+}
+
+int readArtistFromCompressFile(Artist * pArtist,FILE* fp)
+{
+    BYTE dataArtist[4];
+    if (fread(&dataArtist, sizeof(BYTE), 4, fp) != 4)
+    {
+        printf("Error reading artist's data from compress file\n");
+        return 0;
+    }
+    int len1 = dataArtist[0] >> 3;
+    int len2 = (dataArtist[0] & 0x7) << 5 | (dataArtist[1] >>3);
+    pArtist->amountOfSongs = (dataArtist[1] & 0x7) << 4 | dataArtist[2] >> 4;
+    pArtist->amountOfPlay = (dataArtist[2] & 0xF) << 8 | dataArtist[3];
+    pArtist->name = calloc(len1 + 1, sizeof(char ));
+    if (!pArtist->name || fread(pArtist->name,sizeof(char),len1,fp) != len1)
+        return 0;
+
+    pArtist->aboutMe = calloc(len2 + 1, sizeof(char));
+    if (!pArtist->aboutMe || fread(pArtist->aboutMe,sizeof(char),len2,fp) != len2)
+        return 0;
+
+    return 1;
+
+}
+
+Artist* initArtistArrFromFile(Artist* artist,const char* fileName,int* length, int typeFile)
+{
+    FILE* fp;
+    if (typeFile == 0)// init from text file
+    {
+        fp = fopen(fileName, "r");
+        CHECK_RETURN_NULL(fp)
+
+
+        if(fscanf(fp,"%d",length) != 1)
+        {
+            fclose(fp);
+            return NULL;
+        }
+
+        artist = malloc(sizeof(Artist)*(*length));
+        for (int i = 0; i < *length; i++) {
+            if (!loadArtistFromTextFile(&artist[i], fp))
+                return NULL;
+        }
+        return artist;
+    }
+
+    if (typeFile == 1)// init from binary file
+    {
+        fp = fopen(fileName, "rb");
+        CHECK_RETURN_NULL(fp)
+
+        if (!readIntFromFile(length, fp, "Error reading song count\n"))
+        {
+            fclose(fp);
+            return NULL;
+        }
+        artist = malloc(sizeof(Artist)*(*length));
+        for (int i = 0; i < *length; ++i)
+        {
+            if(!readArtistFromBFile(&artist[i],fp))
+                return NULL;
+        }
+        return artist;
+    }
+
+    if(typeFile == 2)// init from compress binary file
+    {
+        fp = fopen(fileName, "rb");
+        CHECK_RETURN_NULL(fp)
+        BYTE dataCounter;
+        if (fread(&dataCounter, sizeof(BYTE),1,fp) != 1)
+        {
+            fclose(fp);
+            return NULL;
+        }
+        *length = dataCounter;
+        for (int i = 0; i < *length; ++i)
+        {
+            if(!readArtistFromCompressFile(&artist[i],fp))
+            {
+                fclose(fp);
+                return NULL;
+            }
+
+        }
+        return artist;
+    }
+    return NULL;
 }
 
 void freeArtist(Artist *artist)
