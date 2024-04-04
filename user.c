@@ -96,7 +96,7 @@ int deletePlayListFromUser(User* pUser)
     while(choice<0 | choice>pUser->numOfPlaylists);
     pUser->userPlayLists[choice-1] = pUser->userPlayLists[pUser->numOfPlaylists-1];
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists-1)*sizeof(PlayList));
-    CHECK_RETURN_0_PRINT_ALOC(pUser->userPlayLists)
+    CHECK_RETURN_0_PRINT(pUser->userPlayLists,ALOC_ERROR)
     pUser->numOfPlaylists--;
     return 1;
 }
@@ -114,7 +114,7 @@ int deleteAlbumFromUser(User* pUser)
     while(choice<0 | choice>pUser->numOfAlbums);
     pUser->userAlbums[choice-1] = pUser->userAlbums[pUser->numOfAlbums-1];
     pUser->userAlbums = (Album*) realloc(pUser->userAlbums,(pUser->numOfAlbums-1)*sizeof(Album));
-    CHECK_RETURN_0_PRINT_ALOC(pUser->userAlbums)
+    CHECK_RETURN_0_PRINT(pUser->userAlbums,ALOC_ERROR)
     pUser->numOfAlbums--;
     return 1;
 }

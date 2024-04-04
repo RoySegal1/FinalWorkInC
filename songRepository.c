@@ -18,11 +18,7 @@ int creatSongsArr(SongRepository* songRepository)
     {
 
         songRepository->songsArr = (Song *) malloc(songRepository->numSongs * sizeof(Song));
-        if (!songRepository->songsArr)
-        {
-            printf("Alocation error\n");
-            return 0;
-        }
+        CHECK_RETURN_0_PRINT(songRepository->songsArr,ALOC_ERROR) //if NULL printing error and  returns 0
         return 1;
 
     }
@@ -37,11 +33,12 @@ int loadSongsRepositoryFromBFile(SongRepository* songRepository, const char* fil
 {
     FILE* fp;
     fp = fopen(fileName, "rb");
-    if (!fp)
-    {
-        printf("Error open Song repository file\n");
-        return 0;
-    }
+    CHECK_RETURN_0_PRINT(fp,"Error open Song repository file\n")
+//    if (!fp)
+//    {
+//        printf("Error open Song repository file\n");
+//        return 0;
+//    }
 
     if (!readIntFromFile(&songRepository->numSongs, fp, "Error reading song count\n"))
     {
@@ -92,10 +89,11 @@ int saveSongRepositoryToBFile(const SongRepository* songRepository, const char* 
 {
     FILE* fp;
     fp = fopen(fileName, "wb");
-    if (!fp) {
-        printf("Error open Song repository file to write\n");
-        return 0;
-    }
+    CHECK_RETURN_0_PRINT(fp,"Error open Song repository file to write\n")
+//    if (!fp) {
+//        printf("Error open Song repository file to write\n");
+//        return 0;
+//    }
     if (!writeIntToFile(songRepository->numSongs, fp, "Error write songs count\n"))
     {
         fclose(fp);
@@ -120,10 +118,11 @@ int saveSongRepositoryToTextFile(const SongRepository* songRepository, const cha
     FILE* fp;
 
     fp = fopen(fileName, "w");
-    if (!fp) {
-        printf("Error open song repository file to write\n");
-        return 0;
-    }
+    CHECK_RETURN_0_PRINT(fp,"Error open song repository file to write\n")// if file == null print and return 0
+//    if (!fp) {
+//        printf("Error open song repository file to write\n");
+//        return 0;
+//    }
 
     fprintf(fp, "%d\n", songRepository->numSongs);
 
@@ -145,19 +144,21 @@ int loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* 
     FILE* fp;
 
     fp = fopen(fileName, "r");
-    if (!fp)
-    {
-        printf("Error open song repository file\n");
-        return 0;
-    }
+    CHECK_RETURN_0_PRINT(fp,"Error open song repository file\n")// if file == null print and return 0
+//    if (!fp)
+//    {
+//        printf("Error open song repository file\n");
+//        return 0;
+//    }
 
-    fscanf(fp, "%d", &songRepository->numSongs);
+   if(fscanf(fp, "%d", &songRepository->numSongs) != 1)
+       return 0;
 //    //clean the buffer
 //    fgetc(fp);
 
     if(!creatSongsArr(songRepository))
     {
-        printf("Alocation error\n");
+        printf(ALOC_ERROR);
         fclose(fp);
         return 0;
     }
@@ -207,8 +208,9 @@ Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[CODE_LE
 //get a pointer to song and if not Null or already exist adding to repository
 int addSongToRepository(SongRepository* pRepository, Song* pSong)
 {
-    if(pSong == NULL)
-        return 0;
+    CHECK_RETURN_0(pSong)
+//    if(pSong == NULL)
+//        return 0;
     Song* temp = getSongFromRepositoryByCode(pRepository,pSong->songCode) ;
     if(temp)// if temp != null
     {
@@ -238,8 +240,9 @@ void printAllSongs(SongRepository* pSongRepository)
 
 void freeSongRepository(SongRepository* songRepository)
 {
-    if (songRepository == NULL)
-        return;
+    CHECK_RETURN(songRepository)
+//    if (songRepository == NULL)
+//        return;
 
     for (int i = 0; i < songRepository->numSongs; ++i)
     {

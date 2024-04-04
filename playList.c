@@ -242,14 +242,14 @@ int createSongArr(PlayList* pPlay) // for reading from a file
     if(pPlay->numOfSongs>0)
     {
         pPlay->allSongs = (Song**) malloc(pPlay->numOfSongs*sizeof(Song*));
-        CHECK_RETURN_0_PRINT_ALOC(pPlay->allSongs)
+        CHECK_RETURN_0_PRINT(pPlay->allSongs, ALOC_ERROR)
     }
     else
         pPlay->allSongs = NULL;
 
    /* for (int i = 0; i < pPlay->numOfSongs; i++) {
         pPlay->allSongs[i] = (Song*)calloc(1,sizeof(Song));
-        CHECK_RETURN_0_PRINT_ALOC(pPlay->allSongs[i])
+        CHECK_RETURN_0_PRINT(pPlay->allSongs[i])
     }*/
     return 1;
 }
