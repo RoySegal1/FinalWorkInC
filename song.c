@@ -206,16 +206,31 @@ int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
     if(pSong->songName == NULL)
         return 0;
     if(!readCharsFromFile(pSong->songCode, CODE_LENGTH,fp,"Error Reading Song Code"))
+    {
+        free(pSong->songName);
         return 0;
+    }
     if(!readIntFromFile(&pSong->minutes,fp,"Error Reading Minutes"))
+    {
+        free(pSong->songName);
         return 0;
+    }
     if(!readIntFromFile(&pSong->seconds,fp,"Error Reading Seconds"))
+    {
+        free(pSong->songName);
         return 0;
+    }
     if(!readIntFromFile(&pSong->amountPlayedSong,fp,"Error Reading Amount Played"))
+    {
+        free(pSong->songName);
         return 0;
+    }
     int temp1;
     if(!readIntFromFile(&temp1,fp,"Error Reading Type Of Song"))
+    {
+        free(pSong->songName);
         return 0;
+    }
     pSong->typeOfSong = temp1;
     codeHelper++;
     return 1;
@@ -252,8 +267,10 @@ int readSongFromTextFile(Song* pSong, FILE* fp,Artist* artists,int size)
     myGets(temp, MAX_STR_LEN, fp);
     pSong->songName = getDynStr(temp);
     myGets(pSong->songCode, MAX_STR_LEN, fp); // maby Not MAX_STR and USING 5 instad
-    if (4 != fscanf(fp, "%d,%d,%d,%d", &pSong->minutes, &pSong->seconds, &pSong->amountPlayedSong, &pSong->typeOfSong))
+    if (4 != fscanf(fp, "%d,%d,%d,%d", &pSong->minutes, &pSong->seconds, &pSong->amountPlayedSong, &pSong->typeOfSong)) {
+        free(pSong->songName);
         return 0;
+    }
     codeHelper++;
     return 1;
 

@@ -190,7 +190,7 @@ int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artist
 }
 
 
-Song* getSongFromRepositoryByCode(SongRepository* pSongs,const char Code[CODE_LENGTH])
+Song* getSongFromRepositoryByCode(const SongRepository* pSongs,const char Code[CODE_LENGTH])
 {
     Song sTemp = {0};
     Song * pTemp = & sTemp;
@@ -222,7 +222,7 @@ int addSongToRepository(SongRepository* pRepository, Song* pSong)
     return 1;
 
 }
-void printAllSongs(SongRepository* pSongRepository)
+void printAllSongs(const SongRepository* pSongRepository)
 {
     if (!pSongRepository || pSongRepository->numSongs<1)
     {

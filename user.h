@@ -34,10 +34,12 @@ void printUser(const User* pUser);
 void printPlayListForUser(const User* pUser);
 void printAlbumsForUser(const User* pUser);
 void freeUser(User* pUser);
+void freeUserAlbums(Album* albums,int size);
+void freeUserPlayLists(PlayList* pPlay,int size);
 
 
 int writeUserToTextFile(User* pUser, const char* fileName);
-int readUserFromTextFile(User* pUser, const char* fileName);
+int readUserFromTextFile(User* pUser, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs);
 int writeUserToBFile(User* pUser, const char* fileName);
 int readUserFromBFile(User* pUser, const char* fileName);
 
