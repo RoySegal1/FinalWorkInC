@@ -5,6 +5,7 @@
 #include "user.h"
 #include "macros.h"
 #include "General.h"
+#include "fileHelper.h"
 
 
 void initUser(User* pUser)
@@ -14,6 +15,11 @@ void initUser(User* pUser)
     pUser->userName = getStrExactName("Enter User Name");
     pUser->userAlbums = NULL;
     pUser->userPlayLists = NULL;
+}
+
+void ShufflePlayList(const User* pUser)
+{
+
 }
 
 
@@ -28,9 +34,44 @@ void playByOrderPlayList(const User* pUser)
     do{
         scanf("%d",&choice);
     }
-    while(choice<0 | choice>pUser->numOfPlaylists);
+    while(choice<0 || choice>pUser->numOfPlaylists);
     for (int i = 0; i < pUser->userPlayLists[choice-1].numOfSongs; ++i) {
         playSong(pUser->userPlayLists[choice - 1].allSongs[i]);
+        printf("Press Enter To Play Next Song\n");
+        getchar();
+    }
+}
+
+int addSongToUserPlayList(User* pUser,const SongRepository* pSongs)
+{
+    printf("Enter Index Of Playlist To add a Song to from 1 - %d\n",pUser->numOfPlaylists);
+    for (int i = 0; i < pUser->numOfPlaylists; i++)
+    {
+        printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n",i+1,pUser->userPlayLists[i].playlistName);
+    }
+    int choicePlayList,choiceSong;
+    do{
+        scanf("%d",&choicePlayList);
+    }
+    while(choicePlayList<0 || choicePlayList>pUser->numOfPlaylists);
+    choicePlayList--;
+    if(pUser->userPlayLists[choicePlayList].typeOfPlayList == eSystem)
+    {
+        printf("Cant add songs to a system Playlist.\n");
+        return 1;
+    }
+    else
+    {
+        printf("Enter number of song to be added , 1-%d\n",pSongs->numSongs);
+        printAllSongs(pSongs);
+        do{
+            scanf("%d",&choiceSong);
+        }
+        while(choiceSong<0 || choiceSong>pSongs->numSongs);
+        choiceSong--;
+        if(!addSongToPlayList(&pUser->userPlayLists[choicePlayList],&pSongs->songsArr[choiceSong]))
+            return 0;
+        return 1;
     }
 }
 
@@ -61,14 +102,26 @@ int createPlayListToUser(User* pUser, SongRepository* pSongs)
     return 1;
 }
 
-int deleteSongFromUserPlayList(User* pUser,int index)
+int deleteSongFromUserPlayList(User* pUser)
 {
-    if (index<0 || index>pUser->numOfPlaylists)
-        return 0;
-    if (pUser->userPlayLists[index].numOfSongs < 1) // empty PlayList
-        return 0;
-    if (!removeSongFromPlayList(&pUser->userPlayLists[index]))
-        return 0;
+    printf("Enter Index Of Playlist To Remove a Song to from 1 - %d\n", pUser->numOfPlaylists);
+    for (int i = 0; i < pUser->numOfPlaylists; i++)
+    {
+        printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n", i + 1, pUser->userPlayLists[i].playlistName);
+    }
+    int choicePlayList;
+    do {
+        scanf("%d", &choicePlayList);
+    } while (choicePlayList<0 || choicePlayList>pUser->numOfPlaylists);
+    choicePlayList--;
+    if(pUser->userPlayLists[choicePlayList].typeOfPlayList == eUser)
+        if (!removeSongFromPlayList(&pUser->userPlayLists[choicePlayList]))
+            return 0;
+        else
+        {
+            printf("Cant Delete Songs From System PlayList\n");
+            return 1;
+        }
     return 1;
 }
 
@@ -82,7 +135,7 @@ int addPlayListToUser(User* pUser, PlayList* pPlay)
     return 1;
 }
 
-int deletePlayListFromUser(User* pUser)
+int deletePlayListFromUser(User* pUser) // maybe need to free it
 {
     printf("Enter Number Of PlayList To Be Deleted. From 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
@@ -93,14 +146,17 @@ int deletePlayListFromUser(User* pUser)
     do{
         scanf("%d",&choice);
     }
-    while(choice<0 | choice>pUser->numOfPlaylists);
+    while(choice<0 || choice>pUser->numOfPlaylists);
+    if (pUser->userPlayLists[choice - 1].typeOfPlayList == eUser)
+        freePlayList(&pUser->userPlayLists[choice - 1]);
     pUser->userPlayLists[choice-1] = pUser->userPlayLists[pUser->numOfPlaylists-1];
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists-1)*sizeof(PlayList));
-    CHECK_RETURN_0_PRINT(pUser->userPlayLists,ALOC_ERROR)
     pUser->numOfPlaylists--;
+    if(pUser->numOfPlaylists>0)
+        CHECK_RETURN_0_PRINT(pUser->userPlayLists,ALOC_ERROR)
     return 1;
 }
-int deleteAlbumFromUser(User* pUser)
+int deleteAlbumFromUser(User* pUser) //maybe need to free it
 {
     printf("Enter Number Of Album To Be Deleted. From 1 - %d\n",pUser->numOfAlbums);
     for (int i = 0; i < pUser->numOfAlbums; i++)
@@ -111,15 +167,17 @@ int deleteAlbumFromUser(User* pUser)
     do{
         scanf("%d",&choice);
     }
-    while(choice<0 | choice>pUser->numOfAlbums);
+    while(choice<0 || choice>pUser->numOfAlbums);
+    freeAlbum(&pUser->userAlbums[choice - 1]);
     pUser->userAlbums[choice-1] = pUser->userAlbums[pUser->numOfAlbums-1];
     pUser->userAlbums = (Album*) realloc(pUser->userAlbums,(pUser->numOfAlbums-1)*sizeof(Album));
-    CHECK_RETURN_0_PRINT(pUser->userAlbums,ALOC_ERROR)
     pUser->numOfAlbums--;
+    if(pUser->numOfAlbums>0)
+        CHECK_RETURN_0_PRINT(pUser->userAlbums,ALOC_ERROR)
     return 1;
 }
 
-int addAlbumToUser(User* pUser, Album* pAlbums)
+int addAlbumToUser(User* pUser, Album* pAlbums)//// need change!!!
 {
     CHECK_RETURN_0(pAlbums)
     pUser->userAlbums = (Album *)realloc(pUser->userAlbums,(pUser->numOfAlbums+1)*sizeof(Album));
@@ -176,7 +234,8 @@ void freeUserPlayLists(PlayList* pPlay,int size)
 {
     for (int i = 0; i < size; i++)
     {
-        freePlayList(&pPlay[i]);
+        if(pPlay[i].typeOfPlayList == eUser) // if it's the system she suppose to free it.
+            freePlayList(&pPlay[i]);
     }
     free(pPlay);
 }
@@ -186,7 +245,7 @@ int createPlayListArr(User* pUser)
     if (pUser->numOfPlaylists > 0)
     {
         pUser->userPlayLists = (PlayList*)malloc(pUser->numOfPlaylists * sizeof(PlayList));
-        CHECK_RETURN_0_PRINT_ALOC(pUser->userPlayLists)
+        CHECK_RETURN_0_PRINT(pUser->userPlayLists,ALOC_ERROR)
             return 1;
     }
     else
@@ -202,7 +261,11 @@ int createAlbumArr(User* pUser)
     if (pUser->numOfAlbums > 0)
     {
         pUser->userAlbums = (Album*)malloc(pUser->numOfAlbums * sizeof(Album));
-        CHECK_RETURN_0_PRINT_ALOC(pUser->userAlbums)
+        CHECK_RETURN_0_PRINT(pUser->userAlbums, ALOC_ERROR)
+            for (int i = 0; i < pUser->numOfAlbums; i++)
+            {
+                L_init(&pUser->userAlbums[i].songs);
+            }
             return 1;
     }
     else
@@ -280,10 +343,78 @@ int readUserFromTextFile(User* pUser, const char* fileName, const Artist* artist
             return 0;
         }
     }
+    fclose(fp);
     return 1;
 }
-int writeUserToBFile(User* pUser, const char* fileName);
-int readUserFromBFile(User* pUser, const char* fileName);
+int writeUserToBFile(User* pUser, const char* fileName)
+{
+    FILE* fp;
+    fp = fopen(fileName, "wb");
+    CHECK_RETURN_0_PRINT(fp,"Error Opening File")
+    if(!writeStringToFile(pUser->userName,fp,"Error Writing User name"))
+        RETURN_0_CLOSE_FILE(fp)
+    if(!writeIntToFile(pUser->numOfPlaylists,fp,"Error Writing User Number Of PlayLists"))
+    RETURN_0_CLOSE_FILE(fp)
+    for (int i = 0; i < pUser->numOfPlaylists; i++) {
+        if(!writePlayListToBFile(&pUser->userPlayLists[i],fp))
+        RETURN_0_CLOSE_FILE(fp)
+    }
+    if(!writeIntToFile(pUser->numOfAlbums,fp,"Error Writing User Number Of Albums)"))
+        RETURN_0_CLOSE_FILE(fp)
+    for (int i = 0; i < pUser->numOfAlbums; i++) {
+        if(!writeAlbumToBFileWithOpenFile(&pUser->userAlbums[i],fp))
+            RETURN_0_CLOSE_FILE(fp)
+    }
+    fclose(fp);
+    return 1;
+}
+int readUserFromBFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs)
+{
+    FILE* fp;
+    fp = fopen(fileName, "rb");
+    CHECK_RETURN_0_PRINT(fp,"Error Opening File")
+    pUser->userName = readStringFromFile(fp,"Error Reading User Name");
+    CHECK_RETURN_0_PRINT(pUser->userName,"Error Reading User Name")
+    if(!readIntFromFile(&pUser->numOfPlaylists,fp,"Error Reading User Number Of PlayLists"))
+    {
+        free(pUser->userName);
+        return 0;
+    }
+    if(!createPlayListArr(pUser))
+    {
+        free(pUser->userName);
+        return 0;
+    }
+    for (int i = 0; i < pUser->numOfPlaylists; i++) {
+        if(!readPlayListFromBFile(&pUser->userPlayLists[i],fp,pSongs))
+        {
+            freeUserPlayLists(pUser->userPlayLists,i);
+            free(pUser->userName);
+            return 0;
+        }
+    }
+    if(!readIntFromFile(&pUser->numOfAlbums,fp,"Error Reading User Number Of Albums"))
+    {
+        freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
+        free(pUser->userName);
+        return 0;
+    }
+    if (!createAlbumArr(pUser)) {
+        freeUserPlayLists(pUser->userPlayLists, pUser->numOfPlaylists);
+        free(pUser->userName);
+        return 0;
+    }
+    for (int i = 0; i < pUser->numOfAlbums; i++) {
+        if(!readAlbumFromBFileWithOpenFile(&pUser->userAlbums[i],fp,artists,size,pSongs)) {
+            freeUserPlayLists(pUser->userPlayLists, pUser->numOfPlaylists);
+            freeUserAlbums(pUser->userAlbums, i);
+            free(pUser->userName);
+            return 0;
+        }
+    }
+    fclose(fp);
+    return 1;
+}
 
 
 

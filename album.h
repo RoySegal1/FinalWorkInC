@@ -24,7 +24,9 @@ void freeAlbum(Album* pAlbum);
 
 
 int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs);
+int readAlbumFromBFileWithOpenFile(Album* pAlbum,FILE* fp, const Artist* artists, int size,const SongRepository* pSongs);
 int writeAlbumToBFile(const Album* pAlbum, const char* fileName);
+int writeAlbumToBFileWithOpenFile(const Album* pAlbum, FILE* fp);
 int readAlbumFromTextFile(Album* pAlbum, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs);
 int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp, const Artist* artists, int size, const SongRepository* pSongs);
 int writeAlbumToTextFile(const Album* pAlbum, const char* fileName);

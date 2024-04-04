@@ -19,7 +19,7 @@ void initArtist(Artist* artist)
 void showArtist(const Artist* artist)
 {
     printf("Artist Name: %s\n ",artist->name);
-    printf("About him: %s\n ",artist->aboutMe);
+    printf("About him: %s\n",artist->aboutMe);
 }
 
 
@@ -78,6 +78,7 @@ int	loadArtistFromTextFile(Artist * artist, FILE* fp)
 
     return 1;
 }
+
 
 int writeArtistToBFile(Artist * pArtist,FILE* fp)
 {

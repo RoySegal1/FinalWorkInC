@@ -103,6 +103,27 @@ int writeAlbumToBFile(const Album* pAlbum, const char* fileName)
     fp = fopen(fileName,"wb");
     CHECK_RETURN_0(fp)
     if(!writeStringToFile(pAlbum->artist.name,fp,"Error Writing Artist Name"))
+        RETURN_0_CLOSE_FILE(fp)
+    if(!writeStringToFile(pAlbum->albumName,fp,"Error Writing Album Name"))
+    RETURN_0_CLOSE_FILE(fp)
+    if(!writeIntToFile(pAlbum->numOfSongs,fp,"Error Writing Number Of Songs"))
+    RETURN_0_CLOSE_FILE(fp)
+    NODE* tmp;
+    Song* tmpSong;
+    tmp = pAlbum->songs.head.next;
+    while(tmp != NULL) {
+        tmpSong = (Song*)tmp->key;
+        if(!writeCharsToFile(tmpSong->songCode, CODE_LENGTH,fp,"Error Writing Song Code"))
+            RETURN_0_CLOSE_FILE(fp)
+        tmp = tmp->next;
+    }
+    fclose(fp);
+    return 1;
+}
+int writeAlbumToBFileWithOpenFile(const Album* pAlbum, FILE* fp)
+{
+    CHECK_RETURN_0(fp)
+    if(!writeStringToFile(pAlbum->artist.name,fp,"Error Writing Artist Name"))
         return 0;
     if(!writeStringToFile(pAlbum->albumName,fp,"Error Writing Album Name"))
         return 0;
@@ -127,7 +148,7 @@ int readAlbumFromTextFile(Album* pAlbum, const char* fileName,const Artist* arti
     CHECK_RETURN_0(fp)
     char temp[MAX_STR_LEN];
     if(!pAlbum)
-        return 0;
+        RETURN_0_CLOSE_FILE(fp)
     myGets(temp,MAX_STR_LEN,fp);
     pAlbum->artist = *findArtistInArr(artists,size,temp);
     myGets(temp,MAX_STR_LEN,fp);
@@ -135,7 +156,7 @@ int readAlbumFromTextFile(Album* pAlbum, const char* fileName,const Artist* arti
     if(fscanf(fp,"%d",&pAlbum->numOfSongs) != 1)
     {
         free(pAlbum->albumName);
-        return 0;
+        RETURN_0_CLOSE_FILE(fp)
     }
     Song* tempSong;
     for (int i = 0; i < pAlbum->numOfSongs; i++) {
@@ -144,9 +165,10 @@ int readAlbumFromTextFile(Album* pAlbum, const char* fileName,const Artist* arti
         if(!addSongToAlbum(pAlbum,tempSong,1))
         {
             freeAlbum(pAlbum); // check
-            return 0;
+            RETURN_0_CLOSE_FILE(fp)
         }
     }
+    fclose(fp);
     return 1;
 }
 
@@ -185,16 +207,16 @@ int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artist
     CHECK_RETURN_0(fp)
     char *temp2 = readStringFromFile(fp,"Error Reading Artist Name");
     if(!temp2)
-        return 0;
+        RETURN_0_CLOSE_FILE(fp)
     pAlbum->artist = *findArtistInArr(artists,size,temp2);
     free(temp2); //maby Change to new Function
     pAlbum->albumName = readStringFromFile(fp,"Error Reading Album Name");
     if(!pAlbum->albumName)
-        return 0;
+        RETURN_0_CLOSE_FILE(fp)
     if(!readIntFromFile(&pAlbum->numOfSongs,fp,"Error Reading Number Of Songs"))
     {
         free(pAlbum->albumName);
-        return 0;
+        RETURN_0_CLOSE_FILE(fp)
     }
     char tmp[CODE_LENGTH];
     Song* tempSong;
@@ -202,10 +224,44 @@ int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artist
         if(!readCharsFromFile(tmp,CODE_LENGTH,fp,"Error Reading Song Code"))
         {
             freeAlbum(pAlbum);
-            return 0;
+            RETURN_0_CLOSE_FILE(fp)
         }
         tempSong = getSongFromRepositoryByCode(pSongs,tmp);
         if(!addSongToAlbum(pAlbum,tempSong,1))
+        {
+            freeAlbum(pAlbum);
+            RETURN_0_CLOSE_FILE(fp)
+        }
+    }
+    fclose(fp);
+    return 1;
+}
+
+int readAlbumFromBFileWithOpenFile(Album* pAlbum, FILE* fp, const Artist* artists, int size, const SongRepository* pSongs)
+{
+    char* temp2 = readStringFromFile(fp, "Error Reading Artist Name");
+    if (!temp2)
+        return 0;
+        pAlbum->artist = *findArtistInArr(artists, size, temp2);
+    free(temp2); //maby Change to new Function
+    pAlbum->albumName = readStringFromFile(fp, "Error Reading Album Name");
+    if (!pAlbum->albumName)
+        return 0;
+        if (!readIntFromFile(&pAlbum->numOfSongs, fp, "Error Reading Number Of Songs"))
+        {
+            free(pAlbum->albumName);
+            return 0;
+        }
+    char tmp[CODE_LENGTH];
+    Song* tempSong;
+    for (int i = 0; i < pAlbum->numOfSongs; i++) {
+        if (!readCharsFromFile(tmp, CODE_LENGTH, fp, "Error Reading Song Code"))
+        {
+            freeAlbum(pAlbum);
+            return 0;
+        }
+        tempSong = getSongFromRepositoryByCode(pSongs, tmp);
+        if (!addSongToAlbum(pAlbum, tempSong, 1))
         {
             freeAlbum(pAlbum);
             return 0;
