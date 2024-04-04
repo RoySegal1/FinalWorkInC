@@ -21,6 +21,6 @@
 #define CHECK_RETURN_0(fp) if(!fp) return 0;
 #define CHECK_COLSE_RETURN_NULL(ptr,fp) {if(!ptr){fclose(fp); return NULL;}}
 #define CHECK_RETURN_0_PRINT_ALOC(ptr) {if(!ptr){ printf("Alocation error\n"); return 0;}}
-
+#define CHECK_RETURN(fp) if(!fp) return;
 
 #endif //FINALWORKINC_MACROS_H
