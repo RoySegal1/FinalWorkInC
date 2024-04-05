@@ -7,7 +7,6 @@ typedef struct{
     int amountOfPlay;
     int amountOfSongs;
     char* aboutMe;
-
 }Artist;
 
 void showArtist(const Artist* artist);

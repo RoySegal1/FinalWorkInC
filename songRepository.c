@@ -8,6 +8,7 @@
 #include "songRepository.h"
 #include "fileHelper.h"
 #include "macros.h"
+#include "General.h"
 
 
 
@@ -135,6 +136,7 @@ int saveSongRepositoryToTextFile(const SongRepository* songRepository, const cha
             return 0;
         }
     }
+
     fclose(fp);
     return 1;
 }
@@ -169,6 +171,7 @@ int loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* 
         fclose(fp);
         return 0;
     }
+
     fclose(fp);
     return 1;
 }
@@ -206,11 +209,21 @@ Song* getSongFromRepositoryByCode(const SongRepository* pSongs,const char Code[C
 }
 
 //get a pointer to song and if not Null or already exist adding to repository
-int addSongToRepository(SongRepository* pRepository, Song* pSong)
+int addSongToRepository(SongRepository* pRepository, Artist* artists,int size)
 {
-    CHECK_RETURN_0(pSong)
 //    if(pSong == NULL)
 //        return 0;
+    Song* pSong = (Song*) malloc(sizeof(Song));
+    int artistIndex;
+    //print all artists
+
+    do {
+      printf("Enter index of artists to add to song\n");
+      scanf("%d",&artistIndex);
+    }
+    while(artistIndex<0 || artistIndex> size);//number of artists)
+
+    initSong(pSong,&artists[artistIndex]);
     Song* temp = getSongFromRepositoryByCode(pRepository,pSong->songCode) ;
     if(temp)// if temp != null
     {
@@ -231,24 +244,25 @@ void printAllSongs(const SongRepository* pSongRepository)
         printf("Empty repository\n");
         return;
     }
-    for (int i = 0; i < pSongRepository->numSongs; ++i)
-    {
-        printf("%d.",i+1);
-        printSongForPlayList(&pSongRepository->songsArr[i]);
-    }
+    generalArrayFunctionForSongRepostiory(pSongRepository->songsArr, pSongRepository->numSongs, sizeof(Song), printSongForPlayList);
+   // for (int i = 0; i < pSongRepository->numSongs; ++i)
+  //  {
+    //    printf("%d.",i+1);
+        //printSongForPlayList(&pSongRepository->songsArr[i]);
+  //  }
 }
 
 void freeSongRepository(SongRepository* songRepository)
 {
     CHECK_RETURN(songRepository)
-//    if (songRepository == NULL)
-//        return;
+        //    if (songRepository == NULL)
+        //        return;
 
-    for (int i = 0; i < songRepository->numSongs; ++i)
-    {
-        freeSong(&songRepository->songsArr[i]);
+        generalArrayFunction(songRepository->songsArr, songRepository->numSongs, sizeof(Song), freeSong);
+   // for (int i = 0; i < songRepository->numSongs; ++i)
+  //  {
+  //      freeSong(&songRepository->songsArr[i]);
 
-    }
+ //   }
     free(songRepository->songsArr);
 }
-
