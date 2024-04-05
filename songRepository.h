@@ -7,22 +7,24 @@
 #include "song.h"
 
 
-
 typedef struct {
     Song *songsArr;
     int numSongs;
-
 } SongRepository;
 
 int creatSongsArr(SongRepository* songRepository);
+
 int loadSongArrFromBFile(SongRepository* repository, FILE* fp, Artist* artists, int numOfArtists);
 int loadSongsRepositoryFromBFile(SongRepository* songRepository, const char* fileName, Artist* artist, int numOfArtists);
 int saveSongRepositoryToBFile(const SongRepository* songRepository, const char* fileName);
 int saveSongRepositoryToTextFile(const SongRepository* songRepository, const char* fileName);
 int loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* fileName, Artist* artist, int numOfArtists);
 int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artists, int numOfArtists);
+
+
 Song* getSongFromRepositoryByCode(const SongRepository* pSongs,const char Code[CODE_LENGTH]);
-int addSongToRepository(SongRepository* pRepository, Song* pSong);
+int addSongToRepository(SongRepository* pRepository, Artist* artists,int size);
+
 void printAllSongs(const SongRepository* pSongRepository);
 void freeSongRepository(SongRepository* songRepository);
 
