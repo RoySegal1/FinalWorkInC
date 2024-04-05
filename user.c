@@ -182,7 +182,21 @@ int addAlbumToUser(User* pUser, Album* pAlbums)//// need change!!!
     CHECK_RETURN_0(pAlbums)
     pUser->userAlbums = (Album *)realloc(pUser->userAlbums,(pUser->numOfAlbums+1)*sizeof(Album));
     CHECK_RETURN_0(pUser->userAlbums)
-    pUser->userAlbums[pUser->numOfAlbums] = *pAlbums; // maybe not shallow
+
+    L_init(&pUser->userAlbums[pUser->numOfAlbums].songs);
+    pUser->userAlbums[pUser->numOfAlbums].albumName = getDynStr(pAlbums->albumName);
+    pUser->userAlbums[pUser->numOfAlbums].artist = pAlbums->artist;
+    pUser->userAlbums[pUser->numOfAlbums].numOfSongs = 0;
+    NODE* tmp;
+    Song* songTmp;
+    tmp = pAlbums->songs.head.next;
+        while (tmp != NULL) // go over the albums songs
+        {
+            songTmp = tmp->key;
+            addSongToAlbum(&pUser->userAlbums[pUser->numOfAlbums].songs, songTmp, 0);
+            tmp = tmp->next;
+        }
+   // pUser->userAlbums[pUser->numOfAlbums] = *pAlbums; // maybe not shallow
     pUser->numOfAlbums++;
     return 1;
 }

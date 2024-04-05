@@ -8,6 +8,7 @@
 #include "songRepository.h"
 #include "fileHelper.h"
 #include "macros.h"
+#include "General.h"
 
 
 
@@ -231,24 +232,26 @@ void printAllSongs(const SongRepository* pSongRepository)
         printf("Empty repository\n");
         return;
     }
-    for (int i = 0; i < pSongRepository->numSongs; ++i)
-    {
-        printf("%d.",i+1);
-        printSongForPlayList(&pSongRepository->songsArr[i]);
-    }
+    generalArrayFunctionForSongRepostiory(pSongRepository->songsArr, pSongRepository->numSongs, sizeof(Song), printSongForPlayList);
+   // for (int i = 0; i < pSongRepository->numSongs; ++i)
+  //  {
+    //    printf("%d.",i+1);
+        //printSongForPlayList(&pSongRepository->songsArr[i]);
+  //  }
 }
 
 void freeSongRepository(SongRepository* songRepository)
 {
     CHECK_RETURN(songRepository)
-//    if (songRepository == NULL)
-//        return;
+        //    if (songRepository == NULL)
+        //        return;
 
-    for (int i = 0; i < songRepository->numSongs; ++i)
-    {
-        freeSong(&songRepository->songsArr[i]);
+        generalArrayFunction(songRepository->songsArr, songRepository->numSongs, sizeof(Song), freeSong);
+   // for (int i = 0; i < songRepository->numSongs; ++i)
+  //  {
+  //      freeSong(&songRepository->songsArr[i]);
 
-    }
+ //   }
     free(songRepository->songsArr);
 }
 

@@ -217,10 +217,11 @@ void printPlayList(const PlayList* pPlay) {
         return;
     }
     printf("PlayList (%s) Name: %s, Has %d Songs\n",playListType[pPlay->typeOfPlayList],pPlay->playlistName,pPlay->numOfSongs);
-    for (int i = 0; i < pPlay->numOfSongs; i++) {
-        printf("%d.",i+1);
-        printSongForPlayList(pPlay->allSongs[i]);
-    }
+    generalArrayFunctionForSongRepostiory(pPlay->allSongs, pPlay->numOfSongs, sizeof(Song*), printSongForPlayListptr);
+    //for (int i = 0; i < pPlay->numOfSongs; i++) {
+    //    printf("%d.",i+1);
+     //   printSongForPlayList(pPlay->allSongs[i]);
+  //  }
     printf("\n");
 }
 
@@ -232,10 +233,11 @@ void freePlayList(PlayList* pPlay)
 }
 void freeSongsArr(Song** pSongs,int size)
 {
-    for (int i = 0; i < size; i++)
-    {
-        free(pSongs[i]);
-    }
+    generalArrayFunction(pSongs, size, sizeof(Song*), free);
+    //for (int i = 0; i < size; i++)
+   // {
+   //     free(pSongs[i]);
+  //  }
 }
 
 int createSongArr(PlayList* pPlay) // for reading from a file

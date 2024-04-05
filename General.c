@@ -55,3 +55,13 @@ void generalArrayFunction(void* arr, int size, int typeSize, void(*func)(void* e
         func((char*)(arr)+i * typeSize);
 
 }
+void generalArrayFunctionForSongRepostiory(void* arr, int size, int typeSize, void(*func)(void* element))
+{
+	for (int i = 0; i < size; i++)
+	{
+		printf("%d.", i + 1);
+		func((char*)(arr)+i * typeSize);
+	}
+
+}
+
