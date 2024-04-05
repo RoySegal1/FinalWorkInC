@@ -18,7 +18,7 @@ int initPlayListForSystem(PlayList* pPlay)
     CHECK_RETURN_0(pPlay->playlistName)
     pPlay->allSongs= NULL;
     pPlay->playListSortOp = eNotOrdered;
-    pPlay->typeOfPlayList = playListTypeMenu();
+    pPlay->typeOfPlayList = eSystem;
     return 1;
 }
 

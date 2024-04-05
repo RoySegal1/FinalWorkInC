@@ -136,6 +136,7 @@ int saveSongRepositoryToTextFile(const SongRepository* songRepository, const cha
             return 0;
         }
     }
+
     fclose(fp);
     return 1;
 }
@@ -170,6 +171,7 @@ int loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* 
         fclose(fp);
         return 0;
     }
+
     fclose(fp);
     return 1;
 }
@@ -207,11 +209,21 @@ Song* getSongFromRepositoryByCode(const SongRepository* pSongs,const char Code[C
 }
 
 //get a pointer to song and if not Null or already exist adding to repository
-int addSongToRepository(SongRepository* pRepository, Song* pSong)
+int addSongToRepository(SongRepository* pRepository, Artist* artists,int size)
 {
-    CHECK_RETURN_0(pSong)
 //    if(pSong == NULL)
 //        return 0;
+    Song* pSong = (Song*) malloc(sizeof(Song));
+    int artistIndex;
+    //print all artists
+
+    do {
+      printf("Enter index of artists to add to song\n");
+      scanf("%d",&artistIndex);
+    }
+    while(artistIndex<0 || artistIndex> size);//number of artists)
+
+    initSong(pSong,&artists[artistIndex]);
     Song* temp = getSongFromRepositoryByCode(pRepository,pSong->songCode) ;
     if(temp)// if temp != null
     {
@@ -254,4 +266,3 @@ void freeSongRepository(SongRepository* songRepository)
  //   }
     free(songRepository->songsArr);
 }
-

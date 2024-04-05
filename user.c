@@ -25,6 +25,11 @@ void ShufflePlayList(const User* pUser)
 
 void playByOrderPlayList(const User* pUser)
 {
+    if (pUser->numOfPlaylists < 1)
+    {
+        printf("No Enough PlayLists\n");
+        return;
+    }
     printf("Enter Number Of PlayList To Be Played. From 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
     {
@@ -44,6 +49,11 @@ void playByOrderPlayList(const User* pUser)
 
 int addSongToUserPlayList(User* pUser,const SongRepository* pSongs)
 {
+    if (pUser->numOfPlaylists < 1)
+    {
+        printf("No Enough PlayLists\n");
+        return 0;
+    }
     printf("Enter Index Of Playlist To add a Song to from 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
     {
@@ -104,6 +114,11 @@ int createPlayListToUser(User* pUser, SongRepository* pSongs)
 
 int deleteSongFromUserPlayList(User* pUser)
 {
+    if (pUser->numOfPlaylists < 1)
+    {
+        printf("No Enough PlayLists\n");
+        return 0;
+    }
     printf("Enter Index Of Playlist To Remove a Song to from 1 - %d\n", pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
     {
@@ -137,6 +152,11 @@ int addPlayListToUser(User* pUser, PlayList* pPlay)
 
 int deletePlayListFromUser(User* pUser) // maybe need to free it
 {
+    if (pUser->numOfPlaylists < 1)
+    {
+        printf("No Enough PlayLists\n");
+        return 0;
+    }
     printf("Enter Number Of PlayList To Be Deleted. From 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
     {
@@ -158,6 +178,11 @@ int deletePlayListFromUser(User* pUser) // maybe need to free it
 }
 int deleteAlbumFromUser(User* pUser) //maybe need to free it
 {
+    if (pUser->numOfAlbums < 1)
+    {
+        printf("Not Enough Albums\n");
+        return 0;
+    }
     printf("Enter Number Of Album To Be Deleted. From 1 - %d\n",pUser->numOfAlbums);
     for (int i = 0; i < pUser->numOfAlbums; i++)
     {
@@ -177,7 +202,7 @@ int deleteAlbumFromUser(User* pUser) //maybe need to free it
     return 1;
 }
 
-int addAlbumToUser(User* pUser, Album* pAlbums)//// need change!!!
+int addAlbumToUser(User* pUser, Album* pAlbums)
 {
     CHECK_RETURN_0(pAlbums)
     pUser->userAlbums = (Album *)realloc(pUser->userAlbums,(pUser->numOfAlbums+1)*sizeof(Album));
