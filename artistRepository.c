@@ -80,7 +80,7 @@ int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* 
         return 0;
 }
 
-int saveArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* fileName,int typeFile)
+int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* fileName, int typeFile)
 {
     FILE* fp;
     if (typeFile == FROM_TEXT_FILE)// init from text file
