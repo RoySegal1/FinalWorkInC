@@ -7,10 +7,11 @@
 #include "song.h"
 
 
+
 typedef struct {
     Song *songsArr;
     int numSongs;
-    int maxSongs;
+
 } SongRepository;
 
 int creatSongsArr(SongRepository* songRepository);
