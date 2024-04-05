@@ -12,7 +12,6 @@
 
 
 
-
 int creatSongsArr(SongRepository* songRepository)
 {
     if (songRepository->numSongs > 0)
@@ -49,7 +48,7 @@ int loadSongsRepositoryFromBFile(SongRepository* songRepository, const char* fil
 
     if(!creatSongsArr(songRepository))
     {
-        printf("Alocation error\n");
+        printf("Allocation error\n");
         fclose(fp);
         return 0;
     }
@@ -141,7 +140,7 @@ int saveSongRepositoryToTextFile(const SongRepository* songRepository, const cha
     return 1;
 }
 
-int loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* fileName, Artist* artist, int numOfArtists)
+int  loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char* fileName, Artist* artist, int numOfArtists)
 {
     FILE* fp;
 

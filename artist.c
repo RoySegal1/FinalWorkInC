@@ -7,22 +7,6 @@
 #include "macros.h"
 
 
-void initArtist(Artist* artist)
-{
-    artist->name = NULL;
-    artist->aboutMe = NULL;
-    artist->amountOfPlay = 0;
-    artist->amountOfSongs = 0;
-}
-
-
-void showArtist(const Artist* artist)
-{
-    printf("Artist Name: %s\n ",artist->name);
-    printf("About him: %s\n",artist->aboutMe);
-}
-
-
 int creatArtist(Artist* artist)
 {
     artist->name = getStrExactName("Enter artist name\n");
@@ -34,9 +18,22 @@ int creatArtist(Artist* artist)
         free(artist->name);
         return 0;
     }
+    artist->amountOfPlay = 0;
+    artist->amountOfSongs = 0;
+
     return 1;
 
 }
+
+
+void showArtist(const Artist* artist)
+{
+    printf("Artist Name: %s\n ",artist->name);
+    printf("About him: %s\n",artist->aboutMe);
+}
+
+
+
 
 int	saveArtistToTextFile(const Artist * artist, FILE* fp)
 {
@@ -133,7 +130,7 @@ int readArtistFromBFile(Artist * pArtist,FILE* fp)
     return 1;
 }
 
-int readArtistFromCompressFile(Artist * pArtist,FILE* fp)
+int readArtistFromCompressFile(Artist* pArtist,FILE* fp)
 {
     BYTE dataArtist[4];
     if (fread(&dataArtist, sizeof(BYTE), 4, fp) != 4)
@@ -155,73 +152,6 @@ int readArtistFromCompressFile(Artist * pArtist,FILE* fp)
 
     return 1;
 
-}
-
-Artist* initArtistArrFromFile(Artist* artist,const char* fileName,int* length, int typeFile)
-{
-    FILE* fp;
-    if (typeFile == 0)// init from text file
-    {
-        fp = fopen(fileName, "r");
-        CHECK_RETURN_NULL(fp)
-
-
-        if(fscanf(fp,"%d",length) != 1)
-        {
-            fclose(fp);
-            return NULL;
-        }
-
-        artist = malloc(sizeof(Artist)*(*length));
-        for (int i = 0; i < *length; i++) {
-            if (!loadArtistFromTextFile(&artist[i], fp))
-                return NULL;
-        }
-        return artist;
-    }
-
-    if (typeFile == 1)// init from binary file
-    {
-        fp = fopen(fileName, "rb");
-        CHECK_RETURN_NULL(fp)
-
-        if (!readIntFromFile(length, fp, "Error reading song count\n"))
-        {
-            fclose(fp);
-            return NULL;
-        }
-        artist = malloc(sizeof(Artist)*(*length));
-        for (int i = 0; i < *length; ++i)
-        {
-            if(!readArtistFromBFile(&artist[i],fp))
-                return NULL;
-        }
-        return artist;
-    }
-
-    if(typeFile == 2)// init from compress binary file
-    {
-        fp = fopen(fileName, "rb");
-        CHECK_RETURN_NULL(fp)
-        BYTE dataCounter;
-        if (fread(&dataCounter, sizeof(BYTE),1,fp) != 1)
-        {
-            fclose(fp);
-            return NULL;
-        }
-        *length = dataCounter;
-        for (int i = 0; i < *length; ++i)
-        {
-            if(!readArtistFromCompressFile(&artist[i],fp))
-            {
-                fclose(fp);
-                return NULL;
-            }
-
-        }
-        return artist;
-    }
-    return NULL;
 }
 
 void freeArtist(Artist *artist)

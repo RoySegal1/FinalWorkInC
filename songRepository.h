@@ -6,6 +6,7 @@
 #define FINALWORKINC_SONGREPOSITORY_H
 #include "song.h"
 
+
 typedef struct {
     Song *songsArr;
     int numSongs;
