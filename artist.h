@@ -9,7 +9,8 @@ typedef struct{
     char* aboutMe;
 }Artist;
 
-void showArtist(const Artist* artist);
+void showArtist(const void* pArtist);
+void showArtistName(const void* pArtist);
 //void getArtistName(Artist* artist);
 int	loadArtistFromTextFile(Artist * artist, FILE* fp);
 int	saveArtistToTextFile(const Artist * artist, FILE* fp);

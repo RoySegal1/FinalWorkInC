@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "artistRepository.h"
 #include "macros.h"
+#include "General.h"
 
 
 int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* fileName, int typeFile)
@@ -38,6 +39,7 @@ int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* 
                 return 0;
             }
         }
+        fclose(fp);
         return 1;
 
     }
@@ -75,6 +77,7 @@ int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* 
                 }
 
             }
+        fclose(fp);
         return 1;
    }
     else //invalid input
@@ -133,10 +136,11 @@ int showArtistRepository(ArtistRepository* artistRepository)
 {
     if (!artistRepository || artistRepository->numOfArtist<0)
         return 0;
-    for (int i = 0; i < artistRepository->numOfArtist; ++i)
-    {
-        showArtist(&artistRepository->allArtists[i]);
-    }
+    generalArrayFunctionForRepostiory(artistRepository->allArtists,artistRepository->numOfArtist, sizeof(Artist),showArtist);
+//    for (int i = 0; i < artistRepository->numOfArtist; ++i)
+//    {
+//        showArtist(&artistRepository->allArtists[i]);
+//    }
 
     return 1;
 }
@@ -163,4 +167,17 @@ void freeArtistRepository(ArtistRepository * artistRepository)
         freeArtist(&artistRepository->allArtists[i]);
     }
     free(artistRepository->allArtists);
+}
+
+int addArtistToRepository(ArtistRepository* artistRepository)
+{
+
+    artistRepository->allArtists = (Artist *)realloc(artistRepository->allArtists,(artistRepository->numOfArtist + 1)*sizeof(Artist));
+    if(!artistRepository->allArtists)
+        return 0;
+   if(!creatArtist(&artistRepository->allArtists[artistRepository->numOfArtist++]))
+       return 0;
+//    artistRepository->allArtists[artistRepository->numOfArtist++] = *pSong;
+    return 1;
+
 }
