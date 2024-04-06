@@ -107,6 +107,9 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
     }
     if (typeFile == FROM_BINARY_FILE)
     {
+        if (artistRepository->numOfArtist > MAX_ARTISTS_NUM)
+        PRINT_RETURN_0("Cant compress artists to File")// num of artist more than we can compress
+
         fp = fopen(fileName, "wb");
         CHECK_RETURN_0_PRINT(fp,"Error open artist repository file to write\n")
 

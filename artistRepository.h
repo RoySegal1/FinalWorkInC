@@ -5,7 +5,7 @@
 #ifndef FINALWORKINC_ARTISTREPOSITORY_H
 #define FINALWORKINC_ARTISTREPOSITORY_H
 #include "artist.h"
-
+#define MAX_ARTISTS_NUM 256
 
 typedef struct {
     Artist *allArtists;
