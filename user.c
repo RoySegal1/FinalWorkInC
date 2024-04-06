@@ -344,7 +344,7 @@ int writeUserToTextFile(const User* pUser, const char* fileName)
     fclose(fp);
     return 1;
 }
-int readUserFromTextFile(User* pUser, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs)
+int readUserFromTextFile(User* pUser, const char* fileName, Artist* artists, int size,const SongRepository* pSongs)
 {
     FILE* fp;
     fp = fopen(fileName,"r");
@@ -422,7 +422,7 @@ int writeUserToBFile(const User* pUser, const char* fileName) /// maybe take out
     fclose(fp);
     return 1;
 }
-int readUserFromBFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs)
+int readUserFromBFile(User* pUser, const char* fileName, Artist* artists, int size, const SongRepository* pSongs)
 {
     FILE* fp;
     fp = fopen(fileName, "rb");
@@ -470,7 +470,7 @@ int readUserFromBFile(User* pUser, const char* fileName, const Artist* artists, 
     return 1;
 }
 
-int readUserFromFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs, int fileType)
+int readUserFromFile(User* pUser, const char* fileName, Artist* artists, int size, const SongRepository* pSongs, int fileType)
 {
     if (fileType == FROM_BINARY_FILE)
     {

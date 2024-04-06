@@ -1,5 +1,7 @@
 #pragma once
 #include "album.h"
+#include "artistRepository.h"
+#include "songRepository.h"
 
 
 
@@ -11,6 +13,13 @@ typedef struct {
 
 void printAlbumManager(AlbumManager* pAlbumManager);
 void freeAlbumManager(AlbumManager* pAlbumManager);
+
+int addAlbumToManager(AlbumManager* pAblumManager,const ArtistRepository* pArtistRepo);
+int addSongToAlbumManager(AlbumManager* pAlbumManager,const SongRepository* pSongs);
+
+
+
+
 
 int writeAlbumManagerToTextFile(const AlbumManager* pAlbum, FILE* fp);
 int writeAlbumManagerToBFile(const AlbumManager* pAlbum, FILE* fp);

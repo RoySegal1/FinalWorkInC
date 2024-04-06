@@ -135,7 +135,7 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
 }
 
 
-int showArtistRepository(ArtistRepository* artistRepository)
+int showArtistRepository(const ArtistRepository* artistRepository)
 {
     if (!artistRepository || artistRepository->numOfArtist<0)
         return 0;

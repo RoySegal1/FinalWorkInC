@@ -27,6 +27,10 @@ int addAlbumToUser(User* pUser, Album* pAlbums);
 int deleteAlbumFromUser(User* pUser);
 int deletePlayListFromUser(User* pUser);
 
+
+int hasPlayList(User* pUser, PlayList* pPlay);
+int hasAlbum(User* pUser, Album* pAlbum);
+
 void ShufflePlayList(const User* pUser); // maby receives only user and asks him which one to play
 void playByOrderPlayList(const User* pUser); // same comments to all play functions
 
@@ -40,10 +44,10 @@ void freeUserPlayLists(PlayList* pPlay,int size);
 
 
 int writeUserToTextFile(const User* pUser, const char* fileName);
-int readUserFromTextFile(User* pUser, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs);
+int readUserFromTextFile(User* pUser, const char* fileName, Artist* artists, int size,const SongRepository* pSongs);
 int writeUserToBFile(const User* pUser, const char* fileName);
-int readUserFromBFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs);
-int readUserFromFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs, int fileType);
+int readUserFromBFile(User* pUser, const char* fileName, Artist* artists, int size, const SongRepository* pSongs);
+int readUserFromFile(User* pUser, const char* fileName, Artist* artists, int size, const SongRepository* pSongs, int fileType);
 int writeUserToFile(const User* pUser, const char* fileName, int fileType);
 
 
