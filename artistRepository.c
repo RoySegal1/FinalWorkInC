@@ -140,10 +140,7 @@ int showArtistRepository(ArtistRepository* artistRepository)
     if (!artistRepository || artistRepository->numOfArtist<0)
         return 0;
     generalArrayFunctionForRepostiory(artistRepository->allArtists,artistRepository->numOfArtist, sizeof(Artist),showArtist);
-//    for (int i = 0; i < artistRepository->numOfArtist; ++i)
-//    {
-//        showArtist(&artistRepository->allArtists[i]);
-//    }
+
 
     return 1;
 }
