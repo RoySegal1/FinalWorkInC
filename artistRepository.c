@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "artistRepository.h"
 #include "macros.h"
+#include "General.h"
 
 
 int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* fileName, int typeFile)
@@ -38,6 +39,7 @@ int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* 
                 return 0;
             }
         }
+        fclose(fp);
         return 1;
 
     }
@@ -48,11 +50,12 @@ int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* 
             fp = fopen(fileName, "rb");
             CHECK_RETURN_0(fp)
             BYTE dataCounter;
-            if (fread(&artistRepository->numOfArtist, sizeof(BYTE),1,fp) != 1)
+            if (fread(&dataCounter, sizeof(BYTE),1,fp) != 1)
             {
                 fclose(fp);
                 return 0;
             }
+            artistRepository->numOfArtist = dataCounter;
 
             if(!createArtistArr(artistRepository))//printing allocation error
             {
@@ -74,6 +77,7 @@ int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* 
                 }
 
             }
+        fclose(fp);
         return 1;
    }
     else //invalid input
@@ -98,6 +102,7 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
            if(!saveArtistToTextFile(&artistRepository->allArtists[i],fp))
                return 0;
         }
+        fclose(fp);
         return 1;
     }
     if (typeFile == FROM_BINARY_FILE)
@@ -106,7 +111,6 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
         CHECK_RETURN_0_PRINT(fp,"Error open artist repository file to write\n")
 
         BYTE bCounter = (BYTE)artistRepository->numOfArtist;
-        printf("%d", bCounter);
         if (fwrite(&bCounter, sizeof(BYTE),1,fp) != 1)
         {
             fclose(fp);
@@ -120,6 +124,7 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
                 return 0;
             }
         }
+        fclose(fp);
         return 1;
 
     }else
@@ -131,10 +136,11 @@ int showArtistRepository(ArtistRepository* artistRepository)
 {
     if (!artistRepository || artistRepository->numOfArtist<0)
         return 0;
-    for (int i = 0; i < artistRepository->numOfArtist; ++i)
-    {
-        showArtist(&artistRepository->allArtists[i]);
-    }
+    generalArrayFunctionForRepostiory(artistRepository->allArtists,artistRepository->numOfArtist, sizeof(Artist),showArtist);
+//    for (int i = 0; i < artistRepository->numOfArtist; ++i)
+//    {
+//        showArtist(&artistRepository->allArtists[i]);
+//    }
 
     return 1;
 }
@@ -162,4 +168,17 @@ void freeArtistRepository(ArtistRepository * artistRepository)
 
     }
     free(artistRepository->allArtists);
+}
+
+int addArtistToRepository(ArtistRepository* artistRepository)
+{
+
+    artistRepository->allArtists = (Artist *)realloc(artistRepository->allArtists,(artistRepository->numOfArtist + 1)*sizeof(Artist));
+    if(!artistRepository->allArtists)
+        return 0;
+   if(!creatArtist(&artistRepository->allArtists[artistRepository->numOfArtist++]))
+       return 0;
+//    artistRepository->allArtists[artistRepository->numOfArtist++] = *pSong;
+    return 1;
+
 }
