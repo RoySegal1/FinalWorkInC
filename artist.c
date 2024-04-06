@@ -158,6 +158,7 @@ int readArtistFromCompressFile(Artist* pArtist,FILE* fp)
 
 }
 
+
 void showArtistName(const void* pArtist)
 {
     Artist *temp = (Artist*)pArtist;
@@ -168,5 +169,4 @@ void freeArtist(Artist *artist)
 {
     free(artist->name);
     free(artist->aboutMe);
-
 }

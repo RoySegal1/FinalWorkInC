@@ -23,6 +23,8 @@ void ShufflePlayList(const User* pUser)
 }
 
 
+
+
 void playByOrderPlayList(const User* pUser)
 {
     if (pUser->numOfPlaylists < 1)
@@ -85,7 +87,7 @@ int addSongToUserPlayList(User* pUser,const SongRepository* pSongs)
     }
 }
 
-int createPlayListToUser(User* pUser, SongRepository* pSongs)
+int createPlayListToUser(User* pUser, const SongRepository* pSongs)
 {
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists+1)*sizeof(PlayList));
     CHECK_RETURN_0(pUser->userPlayLists)
@@ -315,10 +317,15 @@ int createAlbumArr(User* pUser)
     return 0;
 }
 
-int writeUserToTextFile(User* pUser, const char* fileName)
+int writeUserToTextFile(const User* pUser, const char* fileName)
 {
     FILE* fp;
-    fp = fopen(fileName,"w");
+    char temp[MAX_STR_LEN];
+    strcpy(temp, pUser->userName);
+    strcat(temp, ".txt");
+    if (temp == NULL)
+        return 0;
+    fp = fopen(temp,"w");
     CHECK_RETURN_0(fp)
     fprintf(fp,"%s\n",pUser->userName);
     fprintf(fp,"%d\n",pUser->numOfPlaylists);
@@ -385,10 +392,15 @@ int readUserFromTextFile(User* pUser, const char* fileName, const Artist* artist
     fclose(fp);
     return 1;
 }
-int writeUserToBFile(User* pUser, const char* fileName)
+int writeUserToBFile(const User* pUser, const char* fileName) /// maybe take out fileName in all Write functions
 {
     FILE* fp;
-    fp = fopen(fileName, "wb");
+    char temp[MAX_STR_LEN];
+    strcpy(temp, pUser->userName);
+    strcat(temp, ".bin");
+    if (temp == NULL)
+        return 0;
+    fp = fopen(temp,"wb");
     CHECK_RETURN_0_PRINT(fp,"Error Opening File")
     if(!writeStringToFile(pUser->userName,fp,"Error Writing User name"))
         RETURN_0_CLOSE_FILE(fp)
@@ -453,6 +465,39 @@ int readUserFromBFile(User* pUser, const char* fileName, const Artist* artists, 
     }
     fclose(fp);
     return 1;
+}
+
+int readUserFromFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs, int fileType)
+{
+    if (fileType == FROM_BINARY_FILE)
+    {
+        if (!readUserFromBFile(pUser, fileName, artists, size, pSongs))
+            return 0;
+        return 1;
+    }
+    else
+    {
+        if (!readUserFromTextFile(pUser, fileName, artists, size, pSongs))
+            return 0;
+        return 1;
+    }
+    return 0;
+}
+int writeUserToFile(const User* pUser, const char* fileName, int fileType)
+{
+    if (fileType == FROM_BINARY_FILE)
+    {
+        if (!writeUserToBFile(pUser,fileName))
+            return 0;
+        return 1;
+    }
+    else
+    {
+        if (!writeUserToTextFile(pUser, fileName))
+            return 0;
+        return 1;
+    }
+    return 0;
 }
 
 

@@ -19,11 +19,13 @@ int savePlayListArrToBfile(PlayListRepository* pPlay, const char* fileName);
 int savePlayListArrToTextfile(PlayListRepository* pPlay, const char* fileName);
 int loadPlayListArrFromBfile(PlayListRepository* repository, const char* fileName, SongRepository* pSongRepository);
 int loadPlayListArrFromTextfile(PlayListRepository* repository, const char* fileName, SongRepository* pSongRepository);
+int savePlayListRepositoryToFile(PlayListRepository* pPlay, const char* fileName, int fileType);
+int loadPlayListRepositoryFromFile(PlayListRepository* repository, const char* fileName, SongRepository* pSongRepository,int fileType);
 
 int createNewSystemPlayList(PlayListRepository* pPlayRepository, SongRepository* pSongRepository);
 
-void printPlayLists(PlayListRepository* pPlayRepository);
-void freePlayLists(PlayListRepository* pPlayRepository);
+void printPlayLists(const PlayListRepository* pPlayRepository);
+void freePlayListsRepo(PlayListRepository* pPlayRepository);
 
 
 

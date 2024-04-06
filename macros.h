@@ -9,6 +9,15 @@
 #define FROM_TEXT_FILE 1
 #define FROM_BINARY_FILE 2
 #define ALOC_ERROR "Allocation error"
+#define SONGS_REPO_FROM_TEXT "Songs.txt"
+#define SONGS_REPO_FROM_BIN "Songs.bin"
+#define ARTIST_REPO_FROM_TEXT "Artist.text"
+#define ARTIST_REPO_FROM_BIN "ComperssArtistRepo.bin"
+#define PLAYLIST_REPO_FROM_TEXT "PlayList.txt"
+#define PLAYLIST_REPO_FROM_BIN "PlayList.bin"
+
+
+
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"

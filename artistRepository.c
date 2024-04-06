@@ -165,7 +165,6 @@ void freeArtistRepository(ArtistRepository * artistRepository)
     for (int i = 0; i < artistRepository->numOfArtist; ++i)
     {
         freeArtist(&artistRepository->allArtists[i]);
-
     }
     free(artistRepository->allArtists);
 }

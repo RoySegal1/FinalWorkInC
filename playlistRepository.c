@@ -14,6 +14,43 @@ void initPlayListRepo(PlayListRepository* repository)
     repository->systemPlaylists = NULL;
 }
 
+
+int savePlayListRepositoryToFile(PlayListRepository* pPlay, const char* fileName, int fileType)
+{
+    if (fileType == FROM_BINARY_FILE)
+    {
+        if (!(savePlayListArrToBfile(pPlay, fileName)))
+            return 0;
+        return 1;
+    }
+    else
+    {
+        if (!(savePlayListArrToTextfile(pPlay, fileName)))
+            return 0;
+        return 1;
+    }
+    return 0;
+}
+
+
+int loadPlayListRepositoryFromFile(PlayListRepository* pPlay, const char* fileName, SongRepository* pSongRepository, int fileType)
+{
+    if (fileType == FROM_BINARY_FILE)
+    {
+        if (!(loadPlayListArrFromBfile(pPlay, fileName,pSongRepository)))
+            return 0;
+        return 1;
+    }
+    else
+    {
+        if (!(loadPlayListArrFromTextfile(pPlay, fileName, pSongRepository)))
+            return 0;
+        return 1;
+    }
+    return 0;
+}
+
+
 int savePlayListArrToBfile(PlayListRepository* pPlay, const char* fileName)
 {
     CHECK_RETURN_0(pPlay)
@@ -29,6 +66,8 @@ int savePlayListArrToBfile(PlayListRepository* pPlay, const char* fileName)
     fclose(fp);
     return 1;
 }
+
+
 int savePlayListArrToTextfile(PlayListRepository* pPlay,const char* fileName)
 {
     CHECK_RETURN_0(pPlay)
@@ -41,6 +80,9 @@ int savePlayListArrToTextfile(PlayListRepository* pPlay,const char* fileName)
     fclose(fp);
     return 1;
 }
+
+
+
 int loadPlayListArrFromBfile(PlayListRepository* repository, const char* fileName,SongRepository* pSongRepository)
 {
     FILE* fp;
@@ -63,6 +105,11 @@ int loadPlayListArrFromBfile(PlayListRepository* repository, const char* fileNam
     fclose(fp);
     return 1;
 }
+
+
+
+
+
 int loadPlayListArrFromTextfile(PlayListRepository* repository, const char* fileName,SongRepository* pSongRepository)
 {
     FILE* fp;
@@ -86,6 +133,9 @@ int loadPlayListArrFromTextfile(PlayListRepository* repository, const char* file
     fclose(fp);
     return 1;
 }
+
+
+
 
 int createNewSystemPlayList(PlayListRepository* pPlayRepository,SongRepository* pSongRepository)
 {
@@ -115,7 +165,8 @@ int createNewSystemPlayList(PlayListRepository* pPlayRepository,SongRepository* 
 
 
 
-void printPlayLists(PlayListRepository* pPlayRepository)
+
+void printPlayLists(const PlayListRepository* pPlayRepository)
 {
     if (pPlayRepository->numOfPlayList < 1)
     {
@@ -127,7 +178,11 @@ void printPlayLists(PlayListRepository* pPlayRepository)
         printPlayList(&pPlayRepository->systemPlaylists[i]);
     }
 }
-void freePlayLists(PlayListRepository* pPlayRepository)
+
+
+
+
+void freePlayListsRepo(PlayListRepository* pPlayRepository)
 {
     for (int i = 0; i < pPlayRepository->numOfPlayList; i++)
     {
