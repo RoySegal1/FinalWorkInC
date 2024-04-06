@@ -4,7 +4,8 @@
 #include <stdlib.h>
 //#include <crtdbg.h>
 #include <time.h>
-#include <unistd.h>
+//#include <unistd.h>
+#include "string.h"
 #include "artist.h"
 #include "song.h"
 #include "album.h"
@@ -23,7 +24,7 @@ int main() {
 //    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-    sleep(2);
+  //  sleep(2);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -84,8 +85,13 @@ int main() {
             choice = 9;
             break;
         case 8:
-            printf("Enter User Name (with .txt/.bin) To Open File With\n");
+            printf("Enter User Name To Open File With\n");
             scanf("%s", userFileName);
+            if (fileChoice == FROM_BINARY_FILE)
+                strcat(userFileName, ".bin");
+            else
+                strcat(userFileName, ".txt");
+            printf(userFileName);
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
                 freeAlbumManager(&aManager);
@@ -108,7 +114,7 @@ int main() {
     } while (choice != 9);
 
 
-
+    writeAlbumManagerToFile(&aManager, "Albums.bin", FROM_BINARY_FILE);
 //    saveArtistRepositoryToFile(&A, "ComperssArtistRepo.bin", FROM_BINARY_FILE);
 //    writeUserToFile(&user, "dosent matter right now", FROM_BINARY_FILE);
 //    savePlayListRepositoryToFile(&pR, "PlayList.bin", FROM_BINARY_FILE);
@@ -197,7 +203,7 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
         default:
             printf("Invalid choice. Please try again.\n");
         }
-    } while (choice != 12);
+    } while (choice != 13);
 }
 
 

@@ -370,6 +370,7 @@ int createAlbumArr(User* pUser)
 
 int writeUserToTextFile(const User* pUser, const char* fileName)
 {
+    CHECK_RETURN_0(pUser->userName)
     FILE* fp;
     char temp[MAX_STR_LEN];
     strcpy(temp, pUser->userName);
@@ -449,6 +450,7 @@ int readUserFromTextFile(User* pUser, const char* fileName, Artist* artists, int
 }
 int writeUserToBFile(const User* pUser, const char* fileName) /// maybe take out fileName in all Write functions
 {
+    CHECK_RETURN_0(pUser->userName)
     FILE* fp;
     char temp[MAX_STR_LEN];
     strcpy(temp, pUser->userName);
