@@ -95,6 +95,15 @@ int writeArtistToBFile(Artist * pArtist,FILE* fp)
 }
 int saveArtistToCompressFile(Artist* pArtist, FILE* fp)
 {
+    if(pArtist->amountOfPlay > MAX_NUM_PLAY) //more than we can compress 
+        PRINT_RETURN_0("Cant compress num of artist to File")
+    if (pArtist->amountOfSongs > MAX_NUM_SONGS)
+        PRINT_RETURN_0("Cant compress num of songs to File")
+    if (strlen(pArtist->name) > MAX_NAME_LEN)
+        PRINT_RETURN_0("Cant compress name len of artist to File")
+    if (strlen(pArtist->aboutMe) > MAX_CV_LEN)
+         PRINT_RETURN_0("Cant compress CV len of artist to File")
+
     BYTE dataArtist[4];
     int len1  = strlen(pArtist->name);
     int len2 = strlen(pArtist->aboutMe);

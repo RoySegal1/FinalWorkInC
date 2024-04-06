@@ -1,5 +1,9 @@
 #pragma once
 
+#define MAX_NUM_PLAY 4096
+#define MAX_NUM_SONGS 128
+#define MAX_NAME_LEN 31
+#define MAX_CV_LEN 255
 
 typedef unsigned char BYTE;
 typedef struct{

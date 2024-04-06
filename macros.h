@@ -27,6 +27,7 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
+#define PRINT_RETURN_0(str) {printf(#str"\n"); return 0;}
 #define CHECK_RETURN_NULL(ptr) {if(!ptr) return NULL;}
 #define CHECK_RETURN_0(fp) if(!fp) return 0;
 #define CHECK_CLOSE_RETURN_NULL(ptr,fp) {if(!ptr){fclose(fp); return NULL;}}
