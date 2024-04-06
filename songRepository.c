@@ -207,32 +207,35 @@ Song* getSongFromRepositoryByCode(const SongRepository* pSongs,const char Code[C
 
 }
 
-//get a pointer to song and if not Null or already exist adding to repository
 int addSongToRepository(SongRepository* pRepository, Artist* artists,int size)
 {
 //    if(pSong == NULL)
 //        return 0;
-    Song* pSong = (Song*) malloc(sizeof(Song));
     int artistIndex;
     //print all artists
-
+    for (int i = 0; i < size; i++)
+    {
+        printf("%d.", i + 1);
+        showArtistName(&artists[i]);
+    }
     do {
       printf("Enter index of artists to add to song\n");
       scanf("%d",&artistIndex);
     }
     while(artistIndex<0 || artistIndex> size);//number of artists)
-
-    initSong(pSong,&artists[artistIndex]);
-    Song* temp = getSongFromRepositoryByCode(pRepository,pSong->songCode) ;
-    if(temp)// if temp != null
-    {
-        printf("Song already exist in repository\n");
+    pRepository->songsArr = (Song*)realloc(pRepository->songsArr, (pRepository->numSongs + 1) * sizeof(Song));
+    if (!pRepository->songsArr)
         return 0;
-    }
-    pRepository->songsArr = (Song*)realloc(pRepository->songsArr,(pRepository->numSongs + 1)*sizeof(Song));
-    if(!pRepository->songsArr)
-        return 0;
-    pRepository->songsArr[pRepository->numSongs++] = *pSong;
+    initSong(&pRepository->songsArr[pRepository->numSongs], &artists[artistIndex-1]);
+   // Song* temp = getSongFromRepositoryByCode(pRepository, pRepository->songsArr[pRepository->numSongs + 1].songCode);
+   // if(temp)// if temp != null
+    //{
+     //   printf(ANSI_COLOR_RED"Song already exist in repository\n"ANSI_COLOR_RESET);
+      //  codeHelper--;
+       // return 0;
+   // }
+    printSong(&pRepository->songsArr[pRepository->numSongs]);
+    pRepository->numSongs++;
     return 1;
 
 }

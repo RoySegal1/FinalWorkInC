@@ -7,6 +7,11 @@
 
 int addAlbumToManager(AlbumManager* pAblumManager,const ArtistRepository* pArtistRepo)
 {
+    if (pArtistRepo->numOfArtist < 1)
+    {
+        printf(ANSI_COLOR_RED"Not Enough Artists.\n"ANSI_COLOR_RESET);
+        return 0;
+    }
     pAblumManager->allAlbums = (Album*) realloc(pAblumManager->allAlbums,sizeof(Album)*(pAblumManager->numOfAlbums+ 1));
     CHECK_RETURN_0(pAblumManager->allAlbums)
     printf("Enter Artist For Album 1 - %d\n",pArtistRepo->numOfArtist);
@@ -23,6 +28,16 @@ int addAlbumToManager(AlbumManager* pAblumManager,const ArtistRepository* pArtis
  }
 int addSongToAlbumManager(AlbumManager* pAlbumManager,const SongRepository* pSongs)
 {
+    if (pAlbumManager->numOfAlbums < 1)
+    {
+        printf(ANSI_COLOR_RED"Not Enough Albums.\n"ANSI_COLOR_RESET);
+        return 0;
+    }
+    if (pSongs->numSongs < 1)
+    {
+        printf(ANSI_COLOR_RED"Not Enough Songs\n"ANSI_COLOR_RESET);
+        return 0;
+    }
     printf("Enter Album Index To Add a Song to\n");
     for (int i = 0; i < pAlbumManager->numOfAlbums; ++i) {
         printf("%d."ANSI_COLOR_BLUE"%s\n"ANSI_COLOR_RESET,i+1,pAlbumManager->allAlbums[i].albumName);
@@ -178,6 +193,11 @@ int readAlbumManagerFromFile(AlbumManager* pAlbum, const char* fileName, Artist*
 
 
 void printAlbumManager(AlbumManager* pAlbumManager){
+    if (pAlbumManager->numOfAlbums < 1)
+    {
+        printf("Album Manager , Has no songs.\n");
+        return;
+    }
     for (int i = 0; i < pAlbumManager->numOfAlbums; i++) {
         printAlbum(&pAlbumManager->allAlbums[i]);
     }
