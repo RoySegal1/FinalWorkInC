@@ -154,9 +154,10 @@ int readArtistFromCompressFile(Artist* pArtist,FILE* fp)
 
 }
 
+
+
 void freeArtist(Artist *artist)
 {
     free(artist->name);
     free(artist->aboutMe);
-
 }

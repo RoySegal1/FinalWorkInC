@@ -48,11 +48,12 @@ int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* 
             fp = fopen(fileName, "rb");
             CHECK_RETURN_0(fp)
             BYTE dataCounter;
-            if (fread(&artistRepository->numOfArtist, sizeof(BYTE),1,fp) != 1)
+            if (fread(&dataCounter, sizeof(BYTE),1,fp) != 1)
             {
                 fclose(fp);
                 return 0;
             }
+            artistRepository->numOfArtist = dataCounter;
 
             if(!createArtistArr(artistRepository))//printing allocation error
             {
@@ -98,6 +99,7 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
            if(!saveArtistToTextFile(&artistRepository->allArtists[i],fp))
                return 0;
         }
+        fclose(fp);
         return 1;
     }
     if (typeFile == FROM_BINARY_FILE)
@@ -106,7 +108,6 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
         CHECK_RETURN_0_PRINT(fp,"Error open artist repository file to write\n")
 
         BYTE bCounter = (BYTE)artistRepository->numOfArtist;
-        printf("%d", bCounter);
         if (fwrite(&bCounter, sizeof(BYTE),1,fp) != 1)
         {
             fclose(fp);
@@ -120,6 +121,7 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
                 return 0;
             }
         }
+        fclose(fp);
         return 1;
 
     }else
@@ -159,7 +161,6 @@ void freeArtistRepository(ArtistRepository * artistRepository)
     for (int i = 0; i < artistRepository->numOfArtist; ++i)
     {
         freeArtist(&artistRepository->allArtists[i]);
-
     }
     free(artistRepository->allArtists);
 }

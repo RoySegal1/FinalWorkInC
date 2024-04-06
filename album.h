@@ -11,6 +11,11 @@ typedef struct {
 	char* albumName;
 }Album;
 
+typedef struct {
+	Album* allAlbums;
+	int numOfAlbums;
+}AlbumManager;
+
 
 int initAlbum(Album* pAlbum, Artist* pArtist);
 int addSongToAlbum(Album* pAlbum, Song* pSong,int fromFile);

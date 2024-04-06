@@ -20,7 +20,7 @@ typedef struct {
 void initUser(User* pUser);
 
 int addPlayListToUser(User* pUser, PlayList* pPlay);
-int createPlayListToUser(User* pUser, SongRepository* pSongs);
+int createPlayListToUser(User* pUser, const SongRepository* pSongs);
 int addSongToUserPlayList(User* pUser,const SongRepository* pSongs);
 int deleteSongFromUserPlayList(User* pUser);
 int addAlbumToUser(User* pUser, Album* pAlbums);
@@ -39,10 +39,12 @@ void freeUserAlbums(Album* albums,int size);
 void freeUserPlayLists(PlayList* pPlay,int size);
 
 
-int writeUserToTextFile(User* pUser, const char* fileName);
+int writeUserToTextFile(const User* pUser, const char* fileName);
 int readUserFromTextFile(User* pUser, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs);
-int writeUserToBFile(User* pUser, const char* fileName);
+int writeUserToBFile(const User* pUser, const char* fileName);
 int readUserFromBFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs);
+int readUserFromFile(User* pUser, const char* fileName, const Artist* artists, int size, const SongRepository* pSongs, int fileType);
+int writeUserToFile(const User* pUser, const char* fileName, int fileType);
 
 
 

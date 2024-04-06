@@ -66,7 +66,7 @@ int playSong(Song* pSong)
     strcat(temp, ".wav");
     printf(ANSI_COLOR_CYAN"Playing: %s Press Any Key To Stop The Music.\n"ANSI_COLOR_RESET, pSong->songName);
     if (SDL_LoadWAV(temp, &wavespec, &wavbuf, &wavelen) == NULL)
-        printf(stderr, "DIDNT WORK %s\n", SDL_GetError);
+        printf(stderr, "Didnt find the file%s\n", SDL_GetError);
     // Initialize SDL Mixer
     if (Mix_OpenAudio(0, &wavespec) == -1) {
         printf("SDL Mixer initialization error: %s\n", Mix_GetError());
@@ -114,7 +114,7 @@ int playSong(Song* pSong)
     }
     // Clean up
 
-
+    return 1;
 }
 
 
