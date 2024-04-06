@@ -15,7 +15,10 @@
 #define ARTIST_REPO_FROM_BIN "ComperssArtistRepo.bin"
 #define PLAYLIST_REPO_FROM_TEXT "PlayList.txt"
 #define PLAYLIST_REPO_FROM_BIN "PlayList.bin"
-
+#define ALBUM_MANAGER_FROM_TEXT "Albums.txt"
+#define ALBUM_MANAGER_FROM_BIN  "Albums.bin"
+#define USER_MANAGER_FROM_BIN  "Users.bin"
+#define USER_MANAGER_FROM_TEXT  "Users.txt"
 
 
 

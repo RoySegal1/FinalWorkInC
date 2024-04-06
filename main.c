@@ -18,10 +18,11 @@
 #include "General.h"
 
 
+
 int main() {
 //    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
-    printf("Welcome To Our System\n");
+    printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
     sleep(2);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
@@ -31,12 +32,16 @@ int main() {
     PlayListRepository pR;
     initPlayListRepo(&pR);
     SongRepository sR;
+    AlbumManager aManager;
     User user;
-    if (!initSystemFromFile(&sR, &pR, &A, fileChoice))
+    user.userName = '\0';
+    if (!initSystemFromFile(&sR, &pR, &A,&aManager, fileChoice))
         return 0;
-    Album album;
-    L_init(&album.songs);
-    readAlbumFromTextFile(&album, "Album.txt", A.allArtists, A.numOfArtist, &sR);
+//    Album album;
+//    L_init(&album.songs);
+
+//    readAlbumManagerFromFile(&aManager, "Albums.txt", A.allArtists, A.numOfArtist, &sR, FROM_TEXT_FILE);
+ //   readAlbumFromTextFile(&album, "Album.txt", A.allArtists, A.numOfArtist, &sR);
     int choice;
     char userFileName[MAX_STR_LEN];
     do {
@@ -83,7 +88,7 @@ int main() {
             scanf("%s", userFileName);
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
-                freeAlbum(&album);
+                freeAlbumManager(&aManager);
                 freeSongRepository(&sR);
                 freePlayListsRepo(&pR);
                 freeArtistRepository(&A);
@@ -93,23 +98,27 @@ int main() {
             choice = 9;
             break;
         case 9:
+            endProgram(&sR,&pR,&A,&aManager,&user);
             printf("Exiting program...\n");
+
             break;
         default:
             printf("Invalid choice. Please try again.\n");
         }
     } while (choice != 9);
 
-    saveArtistRepositoryToFile(&A, "ComperssArtistRepo.bin", FROM_BINARY_FILE);
-    writeUserToFile(&user, "dosent matter right now", FROM_BINARY_FILE);
-    savePlayListRepositoryToFile(&pR, "PlayList.bin", FROM_BINARY_FILE);
-    saveSongRepositoryToTextFile(&sR, "Songs.txt");
-    saveSongRepositoryToBFile(&sR, "Songs.bin");
-    freeAlbum(&album);
-    freeSongRepository(&sR);
-    freePlayListsRepo(&pR);
-    freeArtistRepository(&A);
-    freeUser(&user);
+
+
+//    saveArtistRepositoryToFile(&A, "ComperssArtistRepo.bin", FROM_BINARY_FILE);
+//    writeUserToFile(&user, "dosent matter right now", FROM_BINARY_FILE);
+//    savePlayListRepositoryToFile(&pR, "PlayList.bin", FROM_BINARY_FILE);
+//    saveSongRepositoryToTextFile(&sR, "Songs.txt");
+//    saveSongRepositoryToBFile(&sR, "Songs.bin");
+//    freeAlbum(&album);
+//    freeSongRepository(&sR);
+//    freePlayListsRepo(&pR);
+//    freeArtistRepository(&A);
+//    freeUser(&user);
 	return 0;
 }
 
@@ -121,8 +130,8 @@ int main() {
 void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListRepository* pPlayLists) {
     int choice, playListChoice;
     do {
-        printf("\nUser Submenu\n");
-        printf("Hello %s\n", pUser->userName);
+        printf(ANSI_COLOR_GREEN"\nUser Submenu\n"ANSI_COLOR_RESET);
+        printf(ANSI_COLOR_YELLOW"Hello %s\n", pUser->userName);
         printf("1. Add a System Playlist to user\n"); // need work
         printf("2. Delete a playlist from user\n");
         printf("3. Create a new playlist\n");
@@ -136,7 +145,7 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
         printf("11. Print All Albums\n");
         printf("12. Print All Data About User\n");
         printf("13. Exit\n");
-        printf("Enter your choice: ");
+        printf("Enter your choice: "ANSI_COLOR_RESET);
         scanf("%d", &choice);
 
         // Implement functionality based on user choice
@@ -193,28 +202,91 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
 
 
 
-int initSystemFromFile(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists, int typeFile)
+int initSystemFromFile(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum, int typeFile)
 {
     if (typeFile == FROM_BINARY_FILE)
-    {
+    {/////// need to call to end program function
         if (!initArtistRepositoryFromFile(pArtists, ARTIST_REPO_FROM_BIN, FROM_BINARY_FILE))
             return 0;
         if (!loadSongsRepositoryFromBFile(pSong, SONGS_REPO_FROM_BIN, pArtists->allArtists, pArtists->numOfArtist))
             return 0;
         if (!loadPlayListRepositoryFromFile(pPlayList, PLAYLIST_REPO_FROM_BIN, pSong, FROM_BINARY_FILE))
             return 0;
+        if(!readAlbumManagerFromFile(pAlbum,ALBUM_MANAGER_FROM_BIN,pArtists->allArtists,pArtists->numOfArtist,pSong,FROM_BINARY_FILE))
+            return 0;
     }
     else
-    {
+    {/////// need to call to end program function
         if (!initArtistRepositoryFromFile(pArtists, ARTIST_REPO_FROM_TEXT, FROM_TEXT_FILE))
             return 0;
         if (!loadSongsRepositoryFromTextFile(pSong, SONGS_REPO_FROM_TEXT, pArtists->allArtists, pArtists->numOfArtist))
             return 0;
         if (!loadPlayListRepositoryFromFile(pPlayList, PLAYLIST_REPO_FROM_TEXT, pSong, FROM_TEXT_FILE))
             return 0;
+        if(!readAlbumManagerFromFile(pAlbum, ALBUM_MANAGER_FROM_TEXT, pArtists->allArtists,  pArtists->numOfArtist, pSong, FROM_TEXT_FILE))
+            return 0;
     }
     return 1;
 }
 
 
-int saveSystemFiles(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists, int typeFile);
+int saveSystemFiles(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum,User* pUser)
+{
+
+    if(!saveArtistRepositoryToFile(pArtists, ARTIST_REPO_FROM_BIN, FROM_BINARY_FILE))
+        return 0;
+    if(! saveArtistRepositoryToFile(pArtists, ARTIST_REPO_FROM_TEXT, FROM_TEXT_FILE))
+        return 0;
+
+    if(!saveSongRepositoryToBFile(pSong,SONGS_REPO_FROM_BIN))
+        return 0;
+    if(!saveSongRepositoryToTextFile(pSong,SONGS_REPO_FROM_TEXT))
+        return 0;
+
+    if(!savePlayListRepositoryToFile(pPlayList,PLAYLIST_REPO_FROM_BIN,FROM_BINARY_FILE))
+        return 0;
+    if(!savePlayListRepositoryToFile(pPlayList,PLAYLIST_REPO_FROM_TEXT,FROM_TEXT_FILE))
+        return 0;
+
+    if(!writeAlbumManagerToFile(pAlbum,ALBUM_MANAGER_FROM_BIN,FROM_BINARY_FILE))
+        return 0;
+    if(!writeAlbumManagerToFile(pAlbum,ALBUM_MANAGER_FROM_TEXT,FROM_TEXT_FILE))
+        return 0;
+
+    if (pUser)
+    {
+        if (!writeUserToFile(pUser,USER_MANAGER_FROM_BIN,FROM_BINARY_FILE))
+            return 0;
+        if(!writeUserToFile(pUser,USER_MANAGER_FROM_TEXT,FROM_TEXT_FILE))
+            return 0;
+    }
+
+
+
+
+    return 1;
+}
+
+void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum,User* pUser)
+{
+
+    printf("So you want to save before exit program?\n"ANSI_COLOR_GREEN "1) YES\n"ANSI_COLOR_RESET ANSI_COLOR_RED "2) NO\n"ANSI_COLOR_RESET);
+        int saveOp;
+        scanf("%d",&saveOp);
+    if (saveOp == 1)
+    {
+      if(!saveSystemFiles( pSong,  pPlayList,  pArtists,pAlbum,pUser))
+          printf("Failed to save the files\n");
+        saveOp = 2;
+
+    }
+    else
+    {
+        freeAlbumManager(pAlbum);
+        freeSongRepository(pSong);
+        freePlayListsRepo(pPlayList);
+        freeArtistRepository(pArtists);
+        freeUser(pUser);
+    }
+
+}
