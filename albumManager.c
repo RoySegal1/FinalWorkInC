@@ -5,6 +5,55 @@
 
 
 
+int addAlbumToManager(AlbumManager* pAblumManager,const ArtistRepository* pArtistRepo)
+{
+    pAblumManager->allAlbums = (Album*) realloc(pAblumManager->allAlbums,sizeof(Album)*(pAblumManager->numOfAlbums+ 1));
+    CHECK_RETURN_0(pAblumManager->allAlbums)
+    printf("Enter Artist For Album 1 - %d\n",pArtistRepo->numOfArtist);
+    showArtistRepository(pArtistRepo);
+    int artistChoice;
+    do {
+        scanf("%d",&artistChoice);
+    }while(artistChoice<0 || artistChoice>pArtistRepo->numOfArtist);
+    if(!initAlbum(&pAblumManager->allAlbums[pAblumManager->numOfAlbums++],&pArtistRepo->allArtists[artistChoice-1]))
+        return 0;
+    else
+        printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
+    return 1;
+ }
+int addSongToAlbumManager(AlbumManager* pAlbumManager,const SongRepository* pSongs)
+{
+    printf("Enter Album Index To Add a Song to\n");
+    for (int i = 0; i < pAlbumManager->numOfAlbums; ++i) {
+        printf("%d."ANSI_COLOR_BLUE"%s\n"ANSI_COLOR_RESET,i+1,pAlbumManager->allAlbums[i].albumName);
+    }
+    int albumChoice,songChoice;
+    do {
+        scanf("%d",&albumChoice);
+    }while(albumChoice<0 || albumChoice>pAlbumManager->numOfAlbums);
+    albumChoice--;
+    printf("Enter Song Index To Be Added To Album\n");
+    printAllSongs(pSongs);
+    do {
+        scanf("%d",&songChoice);
+    }while(songChoice<0 || songChoice>pSongs->numSongs);
+    songChoice--;
+    if (!addSongToAlbum(&pAlbumManager->allAlbums[albumChoice], &pSongs->songsArr[songChoice], 0))
+        return 0;
+    else
+        printf(ANSI_COLOR_GREEN"Song Added\n"ANSI_COLOR_RESET);
+    return 1;
+}
+
+
+
+
+
+
+
+
+
+
 int writeAlbumManagerToTextFile(const AlbumManager* pAlbum, FILE* fp)
 {
 	CHECK_RETURN_0(pAlbum)

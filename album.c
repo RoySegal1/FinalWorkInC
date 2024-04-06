@@ -20,7 +20,12 @@ int addSongToAlbum(Album* pAlbum, Song* pSong,int fromFile)
 {
     if(strcmp(pAlbum->artist.name,pSong->artist.name))
     {
-        printf("Song artist isn't the Album Artist");
+        printf(ANSI_COLOR_RED"Song Artist Is Not The Album Artist. Cant Add Song! \n"ANSI_COLOR_RESET);
+        return 0;
+    }
+    if (findSongByName(pAlbum, pSong->songName) != NULL)
+    {
+        printf(ANSI_COLOR_RED"Cant Add Same Song Twice\n"ANSI_COLOR_RESET);
         return 0;
     }
     else {
@@ -280,7 +285,7 @@ void freeAlbum(Album* pAlbum)
 
 void printAlbum(const Album* pAlbum)
 {
-	printf("Album name: %s\nThere are %d Songs in the Album\n", pAlbum->albumName, pAlbum->numOfSongs);
-	showArtist(&pAlbum->artist);
+	printf("Album name: %s\n", pAlbum->albumName);
+	showArtistName(&pAlbum->artist);
 	L_print(&pAlbum->songs, printSongForAlbum);
 }

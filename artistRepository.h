@@ -17,7 +17,7 @@ typedef struct {
 int initArtistRepositoryFromFile(ArtistRepository* artistRepository,const char* fileName, int typeFile);
 int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* fileName, int typeFile);
 int addArtistToRepository(ArtistRepository* artistRepository);
-int showArtistRepository(ArtistRepository* artistRepository);
+int showArtistRepository(const ArtistRepository* artistRepository);
 int	createArtistArr(ArtistRepository* artistRepository);
 void freeArtistRepository(ArtistRepository * artistRepository);
 #endif //FINALWORKINC_ARTISTREPOSITORY_H
