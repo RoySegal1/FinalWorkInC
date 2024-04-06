@@ -147,6 +147,7 @@ int writeAlbumManagerToFile(const AlbumManager* pAlbum, const char* fileName, in
                 fclose(fp);
                 return 0;
             }
+        fclose(fp);
         return 1;
     }
     else
@@ -159,6 +160,7 @@ int writeAlbumManagerToFile(const AlbumManager* pAlbum, const char* fileName, in
                 fclose(fp);
                 return 0;
             }
+        fclose(fp);
         return 1;
     }
     return 0;

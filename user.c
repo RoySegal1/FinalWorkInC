@@ -379,10 +379,14 @@ int writeUserToTextFile(const User* pUser, const char* fileName)
     fp = fopen(temp,"w");
     CHECK_RETURN_0(fp)
     fprintf(fp,"%s\n",pUser->userName);
-    fprintf(fp,"%d\n",pUser->numOfPlaylists);
+    int numberOfUserPlaylist = numberOfUserPlayList(pUser);
+    fprintf(fp,"%d\n", numberOfUserPlaylist); // need change
     for (int i = 0; i < pUser->numOfPlaylists; ++i) {
-        if(!writePlayListToTextFile(&pUser->userPlayLists[i],fp))
-            return 0;
+        if (pUser->userPlayLists[i].typeOfPlayList == eUser)
+        {
+            if (!writePlayListToTextFile(&pUser->userPlayLists[i], fp)) // need change
+                return 0;
+        }
     }
     fprintf(fp,"%d\n",pUser->numOfAlbums);
     for (int i = 0; i < pUser->numOfAlbums; ++i) {
@@ -452,14 +456,18 @@ int writeUserToBFile(const User* pUser, const char* fileName) /// maybe take out
     if (temp == NULL)
         return 0;
     fp = fopen(temp,"wb");
-    CHECK_RETURN_0_PRINT(fp,"Error Opening File")
-    if(!writeStringToFile(pUser->userName,fp,"Error Writing User name"))
-        RETURN_0_CLOSE_FILE(fp)
-    if(!writeIntToFile(pUser->numOfPlaylists,fp,"Error Writing User Number Of PlayLists"))
+    CHECK_RETURN_0_PRINT(fp, "Error Opening File")
+        if (!writeStringToFile(pUser->userName, fp, "Error Writing User name"))
+            RETURN_0_CLOSE_FILE(fp)
+    int numberOfUserPlaylist = numberOfUserPlayList(pUser);
+    if(!writeIntToFile(numberOfUserPlaylist,fp,"Error Writing User Number Of PlayLists")) // need change
     RETURN_0_CLOSE_FILE(fp)
     for (int i = 0; i < pUser->numOfPlaylists; i++) {
-        if(!writePlayListToBFile(&pUser->userPlayLists[i],fp))
-        RETURN_0_CLOSE_FILE(fp)
+        if (pUser->userPlayLists[i].typeOfPlayList == eUser)
+        {
+            if (!writePlayListToBFile(&pUser->userPlayLists[i], fp)) // need change
+                RETURN_0_CLOSE_FILE(fp)
+        }
     }
     if(!writeIntToFile(pUser->numOfAlbums,fp,"Error Writing User Number Of Albums)"))
         RETURN_0_CLOSE_FILE(fp)
@@ -550,6 +558,16 @@ int writeUserToFile(const User* pUser, const char* fileName, int fileType)
         return 1;
     }
     return 0;
+}
+int numberOfUserPlayList(User* pUser)
+{
+    int count = 0;
+    for (int i = 0; i < pUser->numOfPlaylists; i++)
+    {
+        if (pUser->userPlayLists[i].typeOfPlayList == eUser)
+            count++;
+    }
+    return count;
 }
 
 

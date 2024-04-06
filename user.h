@@ -30,6 +30,7 @@ int deletePlayListFromUser(User* pUser);
 
 int hasPlayList(User* pUser, PlayList* pPlay);
 int hasAlbum(User* pUser, Album* pAlbum);
+int numberOfUserPlayList(User* pUser);
 
 void ShufflePlayList(const User* pUser); // maby receives only user and asks him which one to play
 void playByOrderPlayList(const User* pUser); // same comments to all play functions
