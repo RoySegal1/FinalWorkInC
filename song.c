@@ -291,7 +291,7 @@ int writeSongToTextFile(Song* pSong, FILE* fp)
     fprintf(fp, "%d,%d,%d,%d\n", pSong->minutes, pSong->seconds, pSong->amountPlayedSong, pSong->typeOfSong);
     return 1;
 }
-Artist* findArtistInArr(const Artist* pArr,int size, const char* name)
+Artist* findArtistInArr(Artist* pArr,int size, const char* name)
 {
     for (int i = 0; i < size; i++)
     {

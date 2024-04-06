@@ -213,7 +213,7 @@ void printPlayList(const PlayList* pPlay) {
 //        return;
     if (pPlay->numOfSongs < 1)
     {
-        printf("Playlist is empty\n");
+        printf("Playlist name: %s is empty\n",pPlay->playlistName);
         return;
     }
     printf("PlayList (%s) Name: %s, Has %d Songs\n",playListType[pPlay->typeOfPlayList],pPlay->playlistName,pPlay->numOfSongs);

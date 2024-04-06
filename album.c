@@ -141,7 +141,7 @@ int writeAlbumToBFileWithOpenFile(const Album* pAlbum, FILE* fp)
     return 1;
 }
 
-int readAlbumFromTextFile(Album* pAlbum, const char* fileName,const Artist* artists, int size,const SongRepository* pSongs)
+int readAlbumFromTextFile(Album* pAlbum, const char* fileName,Artist* artists, int size,const SongRepository* pSongs)
 {
     FILE* fp;
     fp = fopen(fileName,"r");
@@ -172,7 +172,7 @@ int readAlbumFromTextFile(Album* pAlbum, const char* fileName,const Artist* arti
     return 1;
 }
 
-int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp,const Artist* artists, int size,const SongRepository* pSongs)
+int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp, Artist* artists, int size,const SongRepository* pSongs)
 {
     CHECK_RETURN_0(fp)
     char temp[MAX_STR_LEN];
@@ -200,7 +200,7 @@ int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp,const Artist* arti
     return 1;
 }
 
-int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artists, int size,const SongRepository* pSongs)
+int readAlbumFromBFile(Album* pAlbum, const char* fileName,  Artist* artists, int size,const SongRepository* pSongs)
 {
     FILE* fp;
     fp = fopen(fileName,"rb");
@@ -237,7 +237,7 @@ int readAlbumFromBFile(Album* pAlbum, const char* fileName, const Artist* artist
     return 1;
 }
 
-int readAlbumFromBFileWithOpenFile(Album* pAlbum, FILE* fp, const Artist* artists, int size, const SongRepository* pSongs)
+int readAlbumFromBFileWithOpenFile(Album* pAlbum, FILE* fp, Artist* artists, int size, const SongRepository* pSongs)
 {
     char* temp2 = readStringFromFile(fp, "Error Reading Artist Name");
     if (!temp2)

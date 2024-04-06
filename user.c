@@ -6,6 +6,7 @@
 #include "macros.h"
 #include "General.h"
 #include "fileHelper.h"
+#include "string.h"
 
 
 void initUser(User* pUser)
@@ -131,10 +132,12 @@ int deleteSongFromUserPlayList(User* pUser)
         scanf("%d", &choicePlayList);
     } while (choicePlayList<0 || choicePlayList>pUser->numOfPlaylists);
     choicePlayList--;
-    if(pUser->userPlayLists[choicePlayList].typeOfPlayList == eUser)
+    if (pUser->userPlayLists[choicePlayList].typeOfPlayList == eUser)
+    {
         if (!removeSongFromPlayList(&pUser->userPlayLists[choicePlayList]))
             return 0;
-        else
+    }
+    else
         {
             printf("Cant Delete Songs From System PlayList\n");
             return 1;
@@ -197,7 +200,7 @@ int deleteAlbumFromUser(User* pUser) //maybe need to free it
     while(choice<0 || choice>pUser->numOfAlbums);
     freeAlbum(&pUser->userAlbums[choice - 1]);
     pUser->userAlbums[choice-1] = pUser->userAlbums[pUser->numOfAlbums-1];
-    pUser->userAlbums = (Album*) realloc(pUser->userAlbums,(pUser->numOfAlbums-1)*sizeof(Album));
+    pUser->userAlbums = (Album*)realloc(pUser->userAlbums,(pUser->numOfAlbums-1)*sizeof(Album));
     pUser->numOfAlbums--;
     if(pUser->numOfAlbums>0)
         CHECK_RETURN_0_PRINT(pUser->userAlbums,ALOC_ERROR)
@@ -220,7 +223,7 @@ int addAlbumToUser(User* pUser, Album* pAlbums)
         while (tmp != NULL) // go over the albums songs
         {
             songTmp = tmp->key;
-            addSongToAlbum(&pUser->userAlbums[pUser->numOfAlbums].songs, songTmp, 0);
+            addSongToAlbum(&pUser->userAlbums[pUser->numOfAlbums], songTmp, 0);
             tmp = tmp->next;
         }
    // pUser->userAlbums[pUser->numOfAlbums] = *pAlbums; // maybe not shallow
@@ -485,6 +488,7 @@ int readUserFromFile(User* pUser, const char* fileName, const Artist* artists, i
 }
 int writeUserToFile(const User* pUser, const char* fileName, int fileType)
 {
+    CHECK_RETURN_0(pUser)
     if (fileType == FROM_BINARY_FILE)
     {
         if (!writeUserToBFile(pUser,fileName))
