@@ -106,6 +106,7 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
         CHECK_RETURN_0_PRINT(fp,"Error open artist repository file to write\n")
 
         BYTE bCounter = (BYTE)artistRepository->numOfArtist;
+        printf("%d", bCounter);
         if (fwrite(&bCounter, sizeof(BYTE),1,fp) != 1)
         {
             fclose(fp);
@@ -113,7 +114,7 @@ int saveArtistRepositoryToFile(ArtistRepository* artistRepository, const char* f
         }
         for (int i = 0; i < artistRepository->numOfArtist; ++i)
         {
-            if(!saveArtistToCompressFile(&artistRepository->numOfArtist[i],fp))
+            if(!saveArtistToCompressFile(&artistRepository->allArtists[i],fp))
             {
                 fclose(fp);
                 return 0;
