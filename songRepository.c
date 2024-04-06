@@ -243,7 +243,7 @@ void printAllSongs(const SongRepository* pSongRepository)
         printf("Empty repository\n");
         return;
     }
-    generalArrayFunctionForSongRepostiory(pSongRepository->songsArr, pSongRepository->numSongs, sizeof(Song), printSongForPlayList);
+    generalArrayFunctionForRepostiory(pSongRepository->songsArr, pSongRepository->numSongs, sizeof(Song), printSongForPlayList);
    // for (int i = 0; i < pSongRepository->numSongs; ++i)
   //  {
     //    printf("%d.",i+1);

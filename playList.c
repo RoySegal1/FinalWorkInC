@@ -217,7 +217,7 @@ void printPlayList(const PlayList* pPlay) {
         return;
     }
     printf("PlayList (%s) Name: %s, Has %d Songs\n",playListType[pPlay->typeOfPlayList],pPlay->playlistName,pPlay->numOfSongs);
-    generalArrayFunctionForSongRepostiory(pPlay->allSongs, pPlay->numOfSongs, sizeof(Song*), printSongForPlayListptr);
+    generalArrayFunctionForRepostiory(pPlay->allSongs, pPlay->numOfSongs, sizeof(Song*), printSongForPlayListptr);
     //for (int i = 0; i < pPlay->numOfSongs; i++) {
     //    printf("%d.",i+1);
      //   printSongForPlayList(pPlay->allSongs[i]);

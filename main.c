@@ -15,6 +15,7 @@
 #include "playlistRepository.h"
 #include "artistRepository.h"
 #include "main.h"
+#include "General.h"
 
 
 int main() {
@@ -37,6 +38,7 @@ int main() {
     L_init(&album.songs);
     readAlbumFromTextFile(&album, "Album.txt", A.allArtists, A.numOfArtist, &sR);
     int choice;
+    char userFileName[MAX_STR_LEN];
     do {
         printf(ANSI_COLOR_GREEN"\nSystem Menu\n");
         printf("1. Add song to song repository\n");
@@ -69,7 +71,7 @@ int main() {
             showArtistRepository(&A);
             break;
         case 6:
-        //    addArtistToRepostiory(&A);
+            addArtistToRepository(&A);
             break;
         case 7:
             initUser(&user);
@@ -78,6 +80,18 @@ int main() {
             break;
         case 8:
             printf("Enter User Name (with .txt/.bin) To Open File With\n");
+            scanf("%s", userFileName);
+            if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
+            {
+                freeAlbum(&album);
+                freeSongRepository(&sR);
+                freePlayListsRepo(&pR);
+                freeArtistRepository(&A);
+                return 0;
+            }
+            userSubMenu(&user, &sR, &pR);
+            choice = 9;
+            break;
         case 9:
             printf("Exiting program...\n");
             break;

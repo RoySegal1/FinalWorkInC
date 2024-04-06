@@ -270,6 +270,7 @@ int readAlbumFromBFileWithOpenFile(Album* pAlbum, FILE* fp, const Artist* artist
     return 1;
 }
 
+
 void freeAlbum(Album* pAlbum)
 {
     free(pAlbum->albumName);
