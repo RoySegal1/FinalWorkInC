@@ -46,4 +46,4 @@ int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size);
 int writeSongToBFile(Song* pSong,FILE* fp);
 int readSongFromTextFile(Song* pSong, FILE* fp, Artist* artists, int size);
 int writeSongToTextFile(Song* pSong, FILE* fp);
-Artist* findArtistInArr(const Artist* pArr,int size,const char* name);
+Artist* findArtistInArr(Artist* pArr,int size,const char* name);

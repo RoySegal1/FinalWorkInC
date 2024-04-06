@@ -14,7 +14,7 @@
 // Input:	pointer to the list structure
 // Output:	TRUE if succeeded
 //////////////////////////////////////////
-BOOL L_init(LIST* pList)
+BOOL1 L_init(LIST* pList)
 {
 	if ( pList == NULL ) 	
 		return False;	// no list to initialize
@@ -55,7 +55,7 @@ NODE* L_insert(NODE* pNode, DATA Value)
 // Input:	pointer to the node BEFORE the node to be deleted 
 // Output:	TRUE if succeeded
 //////////////////////////////////////////////////////////////
-BOOL L_delete(NODE* pNode ,void freeFunc(void*))
+BOOL1 L_delete(NODE* pNode ,void freeFunc(void*))
 {
 	NODE* tmp;
 	if (!pNode)
@@ -100,10 +100,10 @@ const NODE* L_find(const NODE* pNode, DATA Value,int compare(const void*, const 
 // Input:	pointer to the list structure
 // Output:	TRUE if succeeded
 ////////////////////////////////////////////////
-BOOL L_free(LIST* pList, void freeFunc(void*))
+BOOL1 L_free(LIST* pList, void freeFunc(void*))
 {
 	NODE *tmp;
-	BOOL cont = True;
+	BOOL1 cont = True;
 	if ( !pList ) 
 		return False;
 
