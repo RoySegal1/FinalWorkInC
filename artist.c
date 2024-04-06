@@ -19,17 +19,21 @@ int creatArtist(Artist* artist)
         return 0;
     }
     artist->amountOfPlay = 0;
-    artist->amountOfSongs = 0;
+
+    printf("Enter artist's number of Songs\n");
+    scanf("%d", &artist->amountOfSongs);
+
 
     return 1;
 
 }
 
 
-void showArtist(const Artist* artist)
+void showArtist(const void *pArtist)
 {
-    printf("Artist Name: %s\n ",artist->name);
-    printf("About him: %s\n",artist->aboutMe);
+    Artist *temp = (Artist*)pArtist;
+    printf("Artist Name: %s\n ",temp->name);
+    printf("About him: %s\n",temp->aboutMe);
 }
 
 
@@ -152,6 +156,12 @@ int readArtistFromCompressFile(Artist* pArtist,FILE* fp)
 
     return 1;
 
+}
+
+void showArtistName(const void* pArtist)
+{
+    Artist *temp = (Artist*)pArtist;
+    printf("%s\n",temp->name);
 }
 
 void freeArtist(Artist *artist)
