@@ -32,7 +32,7 @@ int creatArtist(Artist* artist)
 void showArtist(const void *pArtist)
 {
     Artist *temp = (Artist*)pArtist;
-    printf("Artist Name: %s\n ",temp->name);
+    printf(ANSI_COLOR_BLUE"Artist Name: %s\n"ANSI_COLOR_RESET,temp->name);
     printf("About him: %s\n",temp->aboutMe);
 }
 
@@ -171,7 +171,7 @@ int readArtistFromCompressFile(Artist* pArtist,FILE* fp)
 void showArtistName(const void* pArtist)
 {
     Artist *temp = (Artist*)pArtist;
-    printf("%s\n",temp->name);
+    printf(ANSI_COLOR_BLUE"%s\n"ANSI_COLOR_RESET,temp->name);
 }
 
 void freeArtist(Artist *artist)

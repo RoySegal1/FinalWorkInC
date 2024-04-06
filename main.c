@@ -2,9 +2,9 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h>
+//#include <crtdbg.h>
 #include <time.h>
-#include <Windows.h>
+#include <unistd.h>
 #include "artist.h"
 #include "song.h"
 #include "album.h"
@@ -19,10 +19,10 @@
 
 
 int main() {
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf("Welcome To Our System\n");
-    Sleep(1500);
+    sleep(2);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -126,15 +126,16 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
         printf("1. Add a System Playlist to user\n"); // need work
         printf("2. Delete a playlist from user\n");
         printf("3. Create a new playlist\n");
-        printf("4. Delete a song from a user playlist\n");
-        printf("5. Play a Playlist by order\n");
-        printf("6. Shuffle a Playlist\n");
-        printf("7. Add Album to User\n");
-        printf("8. Delete an Album from User\n");
-        printf("9. Print All Playlists\n");
-        printf("10. Print All Albums\n");
-        printf("11. Print All Data About User\n");
-        printf("12. Exit\n");
+        printf("4. Add a song to user playlist\n");
+        printf("5. Delete a song from a user playlist\n");
+        printf("6. Play a Playlist by order\n");
+        printf("7. Shuffle a Playlist\n");
+        printf("8. Add Album to User\n");
+        printf("9. Delete an Album from User\n");
+        printf("10. Print All Playlists\n");
+        printf("11. Print All Albums\n");
+        printf("12. Print All Data About User\n");
+        printf("13. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -155,32 +156,35 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
             createPlayListToUser(pUser, pSongs);
             break;
         case 4:
-            deleteSongFromUserPlayList(pUser);
+            addSongToUserPlayList(pUser,pSongs);
             break;
         case 5:
-            playByOrderPlayList(pUser);
+            deleteSongFromUserPlayList(pUser);
             break;
         case 6:
-            printf("Shuffling a Playlist...\n");
+            playByOrderPlayList(pUser);
             break;
         case 7:
-            printf("Adding Album to User...\n");
+            printf("Shuffling a Playlist...\n");
             break;
         case 8:
-            deleteAlbumFromUser(pUser);
+            printf("Adding Album to User...\n");
             break;
         case 9:
-            printPlayListForUser(pUser);
+            deleteAlbumFromUser(pUser);
             break;
         case 10:
-            printAlbumsForUser(pUser);
+            printPlayListForUser(pUser);
             break;
         case 11:
-            printUser(pUser);
+            printAlbumsForUser(pUser);
             break;
         case 12:
-            printf("Exiting...\n");
+            printUser(pUser);
             break;
+             case 13:
+                 printf("Exiting...\n");
+                break;
         default:
             printf("Invalid choice. Please try again.\n");
         }
