@@ -20,8 +20,39 @@ void initUser(User* pUser)
 
 void ShufflePlayList(const User* pUser)
 {
-
+    if (pUser->numOfPlaylists < 1)
+    {
+        printf("No Enough PlayLists\n");
+        return;
+    }
+    printf("Enter Number Of PlayList To Be Played. From 1 - %d\n", pUser->numOfPlaylists);
+    for (int i = 0; i < pUser->numOfPlaylists; i++)
+    {
+        printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n", i + 1, pUser->userPlayLists[i].playlistName);
+    }
+    int choice,songChoice,songsRemaning;
+    do {
+        scanf("%d", &choice);
+    } while (choice<0 || choice>pUser->numOfPlaylists);
+    int allSongs = pUser->userPlayLists[choice - 1].numOfSongs;
+    songsRemaning = allSongs;
+    int* arrayHelper = (int*)calloc(allSongs, sizeof(int));
+    CHECK_RETURN(arrayHelper)
+    while(songsRemaning >0) {
+        songChoice = MIN_SONGS + (rand() % (allSongs - MIN_SONGS + 1));
+        if (arrayHelper[songChoice] == 0)
+        {
+            if (!playSong(pUser->userPlayLists[choice - 1].allSongs[songChoice]))
+                return;
+            printf("Press Enter To Play Next Song\n");
+            getchar();
+            arrayHelper[songChoice] = 1;
+            songsRemaning--;
+        }
+    }
+    free(arrayHelper);
 }
+
 
 
 
@@ -72,7 +103,8 @@ void playByOrderPlayList(const User* pUser)
     }
     while(choice<0 || choice>pUser->numOfPlaylists);
     for (int i = 0; i < pUser->userPlayLists[choice-1].numOfSongs; ++i) {
-        playSong(pUser->userPlayLists[choice - 1].allSongs[i]);
+        if (!playSong(pUser->userPlayLists[choice - 1].allSongs[i]))
+            return;
         printf("Press Enter To Play Next Song\n");
         getchar();
     }
