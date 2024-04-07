@@ -225,7 +225,7 @@ int addSongToRepository(SongRepository* pRepository, Artist* artists,int size)
     while(artistIndex<0 || artistIndex> size);//number of artists)
     pRepository->songsArr = (Song*)realloc(pRepository->songsArr, (pRepository->numSongs + 1) * sizeof(Song));
     if (!pRepository->songsArr)
-        return 0;
+        return ERROR;
     initSong(&pRepository->songsArr[pRepository->numSongs], &artists[artistIndex-1]);
    // Song* temp = getSongFromRepositoryByCode(pRepository, pRepository->songsArr[pRepository->numSongs + 1].songCode);
    // if(temp)// if temp != null

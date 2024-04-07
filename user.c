@@ -260,7 +260,8 @@ int addAlbumstoUser(User* pUser,const AlbumManager* pAlbums)
     } while (albumChoice < 0 || albumChoice > pAlbums->numOfAlbums);
     if (addAlbumToUser(pUser, &pAlbums->allAlbums[albumChoice - 1]) == ERROR)
         return ERROR;
-    printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
+    else
+        printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
     return 1;
 }
 

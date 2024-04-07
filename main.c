@@ -24,7 +24,7 @@ int main() {
 //    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-    //Sleep(2);
+    Sleep(2);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -64,13 +64,21 @@ int main() {
         // Implement functionality based on user choice
         switch (choice) {
         case 1:
-            addSongToRepository(&sR, A.allArtists, A.numOfArtist);
+            if(addSongToRepository(&sR, A.allArtists, A.numOfArtist) == ERROR)
+            {
+                freeSystem(&sR, &pR, &A, &aManager, &user);
+                return ERROR;
+            }
             break;
         case 2:
             printAllSongs(&sR);
             break;
         case 3:
-            createNewSystemPlayList(&pR, &sR);
+            if(createNewSystemPlayList(&pR, &sR) == ERROR)
+            {
+                freeSystem(&sR, &pR, &A, &aManager, &user);
+                return ERROR;
+            }
             break;
         case 4:
             printPlayLists(&pR);
@@ -79,15 +87,23 @@ int main() {
             showArtistRepository(&A);
             break;
         case 6:
-            addArtistToRepository(&A);
+            if (addArtistToRepository(&A) == ERROR)
+            {
+                freeSystem(&sR, &pR, &A, &aManager, &user);
+                return ERROR;
+            }
             break;
-            case 7:
-                addAlbumToManager(&aManager,&A);
+        case 7:
+                if(addAlbumToManager(&aManager,&A) == ERROR)
+                {
+                    freeSystem(&sR, &pR, &A, &aManager, &user);
+                    return 0;
+                }
                 break;
-            case 8:
+        case 8:
                 addSongToAlbumManager(&aManager,&sR);
                 break;
-            case 9:
+        case 9:
                 printAlbumManager(&aManager);
                 break;
         case 10:
@@ -186,39 +202,39 @@ int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposit
         // Implement functionality based on user choice
         switch (choice) {
         case 1:
-            if (addPlayListToUserFromSystem(pUser, pPlayLists) == ERROR)
+            if(addPlayListToUserFromSystem(pUser, pPlayLists) == ERROR)
                 return ERROR;
             break;
         case 2:
-            if (deletePlayListFromUser(pUser) == ERROR)
+            if(deletePlayListFromUser(pUser) == ERROR)
                 return ERROR;
             break;
         case 3:
-            if (createPlayListToUser(pUser, pSongs) == ERROR)
+            if(createPlayListToUser(pUser, pSongs) == ERROR)
                 return ERROR;
             break;
         case 4:
-            if (addSongToUserPlayList(pUser, pSongs) == ERROR)
+            if(addSongToUserPlayList(pUser, pSongs) == ERROR)
                 return ERROR;
             break;
         case 5:
-            if (deleteSongFromUserPlayList(pUser) == ERROR)
+            if(deleteSongFromUserPlayList(pUser) == ERROR)
                 return ERROR;
             break;
         case 6:
-            if (playByOrderPlayList(pUser) == ERROR)
+            if(playByOrderPlayList(pUser) == ERROR)
                 return ERROR;
             break;
         case 7:
-            if (ShufflePlayList(pUser) == ERROR)
+            if(ShufflePlayList(pUser) == ERROR)
                 return ERROR;
             break;
         case 8:
-            if (addAlbumstoUser(pUser, pAlbums) == ERROR)
+            if(addAlbumstoUser(pUser, pAlbums) == ERROR)
                 return ERROR;
             break;
         case 9:
-            if (deleteAlbumFromUser(pUser) == ERROR)
+            if(deleteAlbumFromUser(pUser) == ERROR)
                 return ERROR;
             break;
         case 10:
@@ -236,10 +252,10 @@ int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposit
         case 14:
             findSongInSortedPlayListForUser(pUser);
             break;
-             case 15:
-                 printf("Exiting...\n");
-                 return 1;
-                break;
+        case 15:
+            printf("Exiting...\n");
+            return 1;
+            break;
         default:
             printf("Invalid choice. Please try again.\n");
         }

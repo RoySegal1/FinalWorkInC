@@ -11,12 +11,12 @@ int creatArtist(Artist* artist)
 {
     artist->name = getStrExactName("Enter artist name\n");
     if(!artist->name)
-        return 0;
+        return ERROR;
     artist->aboutMe = getStrExactName("Write about the artist\n");
     if(!artist->aboutMe)
     {
         free(artist->name);
-        return 0;
+        return ERROR;
     }
     artist->amountOfPlay = 0;
 

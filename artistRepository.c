@@ -174,9 +174,9 @@ int addArtistToRepository(ArtistRepository* artistRepository)
 
     artistRepository->allArtists = (Artist *)realloc(artistRepository->allArtists,(artistRepository->numOfArtist + 1)*sizeof(Artist));
     if(!artistRepository->allArtists)
-        return 0;
+        return ERROR;
    if(!creatArtist(&artistRepository->allArtists[artistRepository->numOfArtist++]))
-       return 0;
+       return ERROR;
 //    artistRepository->allArtists[artistRepository->numOfArtist++] = *pSong;
     return 1;
 

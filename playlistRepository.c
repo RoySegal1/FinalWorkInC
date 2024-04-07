@@ -148,12 +148,14 @@ int createNewSystemPlayList(PlayListRepository* pPlayRepository,SongRepository* 
 
     pPlayRepository->systemPlaylists = (PlayList*) realloc(pPlayRepository->systemPlaylists,(pPlayRepository->numOfPlayList+1)*(sizeof(PlayList)));
     CHECK_RETURN_0(pPlayRepository->systemPlaylists)
-    initPlayListForSystem(&pPlayRepository->systemPlaylists[pPlayRepository->numOfPlayList]);
+        if (initPlayListForSystem(&pPlayRepository->systemPlaylists[pPlayRepository->numOfPlayList]) == ERROR)
+            return ERROR;
     eGenreOptions option = genreMenu();
     for (int i = 0; i < pSongRepository->numSongs && maxSongs; i++) {
         if (pSongRepository->songsArr[i].typeOfSong == option)
         {
-            addSongToPlayList(&pPlayRepository->systemPlaylists[pPlayRepository->numOfPlayList], &pSongRepository->songsArr[i]);
+            if (addSongToPlayList(&pPlayRepository->systemPlaylists[pPlayRepository->numOfPlayList], &pSongRepository->songsArr[i]) == ERROR)
+                return ERROR;
             maxSongs--;
         }
     }
