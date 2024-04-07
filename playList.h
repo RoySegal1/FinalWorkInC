@@ -6,7 +6,7 @@
 #define FINALWORKINC_PLAYLIST_H
 #include "song.h"
 #include "songRepository.h"
-
+#define MIN_SONGS 0
 
 typedef enum {eUser,eSystem,eNofPlayListType} ePlayListsType;
 static const char* playListType[eNofPlayListType] = {"User","System"};
