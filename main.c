@@ -4,7 +4,7 @@
 #include <stdlib.h>
 //#include <crtdbg.h>
 #include <time.h>
-//#include <unistd.h>
+#include <unistd.h>
 #include "string.h"
 #include "artist.h"
 #include "song.h"
@@ -24,7 +24,7 @@ int main() {
 //    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-  //  sleep(2);
+    sleep(2);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -53,9 +53,12 @@ int main() {
         printf("4. Show All System Playlists\n");
         printf("5. Show all artists\n");
         printf("6. Add An artist\n");
-        printf("7. Create a new user\n");
-        printf("8. Use user from file\n");
-        printf("9. Quit\n");
+        printf("7. Create a new album\n");
+        printf("8. Add song to album\n");
+        printf("9. Show all albums\n");
+        printf("10. Create a new user\n");
+        printf("11. Use user from file\n");
+        printf("12. Quit\n");
         printf("Enter your choice: "ANSI_COLOR_RESET);
         scanf("%d", &choice);
 
@@ -79,19 +82,28 @@ int main() {
         case 6:
             addArtistToRepository(&A);
             break;
-        case 7:
+            case 7:
+                addAlbumToManager(&aManager,&A);
+                break;
+            case 8:
+                addSongToAlbumManager(&aManager,&sR);
+                break;
+            case 9:
+                printAlbumManager(&aManager);
+                break;
+        case 10:
             initUser(&user);
             userSubMenu(&user,&sR,&pR);
-            choice = 9;
+            choice = 12;
             break;
-        case 8:
+        case 11:
             printf("Enter User Name To Open File With\n");
             scanf("%s", userFileName);
             if (fileChoice == FROM_BINARY_FILE)
                 strcat(userFileName, ".bin");
             else
                 strcat(userFileName, ".txt");
-            printf(userFileName);
+            printf("%s\n",userFileName);
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
                 freeAlbumManager(&aManager);
@@ -101,9 +113,9 @@ int main() {
                 return 0;
             }
             userSubMenu(&user, &sR, &pR);
-            choice = 9;
+            choice = 12;
             break;
-        case 9:
+        case 12:
             endProgram(&sR,&pR,&A,&aManager,&user);
             printf("Exiting program...\n");
 
@@ -111,10 +123,10 @@ int main() {
         default:
             printf("Invalid choice. Please try again.\n");
         }
-    } while (choice != 9);
+    } while (choice != 12);
 
 
-    writeAlbumManagerToFile(&aManager, "Albums.bin", FROM_BINARY_FILE);
+//    writeAlbumManagerToFile(&aManager, "Albums.bin", FROM_BINARY_FILE);
 //    saveArtistRepositoryToFile(&A, "ComperssArtistRepo.bin", FROM_BINARY_FILE);
 //    writeUserToFile(&user, "dosent matter right now", FROM_BINARY_FILE);
 //    savePlayListRepositoryToFile(&pR, "PlayList.bin", FROM_BINARY_FILE);
@@ -184,6 +196,7 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
             break;
         case 8:
             printf("Adding Album to User...\n");
+            //    addAlbumToUser(pUser,)
             break;
         case 9:
             deleteAlbumFromUser(pUser);
@@ -218,7 +231,7 @@ int initSystemFromFile(SongRepository* pSong, PlayListRepository* pPlayList, Art
             return 0;
         if (!loadPlayListRepositoryFromFile(pPlayList, PLAYLIST_REPO_FROM_BIN, pSong, FROM_BINARY_FILE))
             return 0;
-        if(!readAlbumManagerFromFile(pAlbum,ALBUM_MANAGER_FROM_BIN,pArtists->allArtists,pArtists->numOfArtist,pSong,FROM_BINARY_FILE))
+        if(!readAlbumManagerFromFile(pAlbum,"Albums.bin",pArtists->allArtists,pArtists->numOfArtist,pSong,FROM_BINARY_FILE))
             return 0;
     }
     else
@@ -229,7 +242,7 @@ int initSystemFromFile(SongRepository* pSong, PlayListRepository* pPlayList, Art
             return 0;
         if (!loadPlayListRepositoryFromFile(pPlayList, PLAYLIST_REPO_FROM_TEXT, pSong, FROM_TEXT_FILE))
             return 0;
-        if(!readAlbumManagerFromFile(pAlbum, ALBUM_MANAGER_FROM_TEXT, pArtists->allArtists,  pArtists->numOfArtist, pSong, FROM_TEXT_FILE))
+        if(!readAlbumManagerFromFile(pAlbum, "Albums.txt", pArtists->allArtists,  pArtists->numOfArtist, pSong, FROM_TEXT_FILE))
             return 0;
     }
     return 1;
@@ -259,7 +272,7 @@ int saveSystemFiles(SongRepository* pSong, PlayListRepository* pPlayList, Artist
     if(!writeAlbumManagerToFile(pAlbum,ALBUM_MANAGER_FROM_TEXT,FROM_TEXT_FILE))
         return 0;
 
-    if (pUser)
+    if (pUser->userName && pUser->userAlbums)
     {
         if (!writeUserToFile(pUser,USER_MANAGER_FROM_BIN,FROM_BINARY_FILE))
             return 0;
@@ -286,13 +299,13 @@ void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepo
         saveOp = 2;
 
     }
-    else
-    {
+
+
         freeAlbumManager(pAlbum);
         freeSongRepository(pSong);
         freePlayListsRepo(pPlayList);
         freeArtistRepository(pArtists);
         freeUser(pUser);
-    }
+
 
 }

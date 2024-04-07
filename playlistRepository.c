@@ -25,7 +25,7 @@ int savePlayListRepositoryToFile(PlayListRepository* pPlay, const char* fileName
     }
     else
     {
-        if (!(savePlayListArrToTextfile(pPlay, fileName)))
+        if (!(savePlayListArrToTextFile(pPlay, fileName)))
             return 0;
         return 1;
     }
@@ -43,7 +43,7 @@ int loadPlayListRepositoryFromFile(PlayListRepository* pPlay, const char* fileNa
     }
     else
     {
-        if (!(loadPlayListArrFromTextfile(pPlay, fileName, pSongRepository)))
+        if (!(loadPlayListArrFromTextFile(pPlay, fileName, pSongRepository)))
             return 0;
         return 1;
     }
@@ -68,7 +68,7 @@ int savePlayListArrToBfile(PlayListRepository* pPlay, const char* fileName)
 }
 
 
-int savePlayListArrToTextfile(PlayListRepository* pPlay,const char* fileName)
+int savePlayListArrToTextFile(PlayListRepository* pPlay, const char* fileName)
 {
     CHECK_RETURN_0(pPlay)
         FILE* fp = fopen(fileName, "w");
@@ -110,7 +110,7 @@ int loadPlayListArrFromBfile(PlayListRepository* repository, const char* fileNam
 
 
 
-int loadPlayListArrFromTextfile(PlayListRepository* repository, const char* fileName,SongRepository* pSongRepository)
+int loadPlayListArrFromTextFile(PlayListRepository* repository, const char* fileName, SongRepository* pSongRepository)
 {
     FILE* fp;
     fp = fopen(fileName, "r");
