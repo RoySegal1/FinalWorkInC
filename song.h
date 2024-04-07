@@ -3,10 +3,10 @@
 #include "artist.h"
 #define CODE_LENGTH 5
 
-typedef enum{eRock,ePop,eHipHop,eRB,eEDM,eReggae,eMizrahit,eNumOfOptions} eGenreOptions;
+typedef enum{eRock,eHipHop,eEDM,eReggae,eMizrahit,eNumOfOptions} eGenreOptions;
 
 
-static char* typeOfGenre[eNumOfOptions]= {"Rock","Pop","Hip Hop","R&B","EDM","Reggae","Mizrahit"};
+static char* typeOfGenre[eNumOfOptions]= {"Rock","Hip Hop","EDM","Reggae","Mizrahit"};
 static int codeHelper = 0;
 typedef struct {
     char songCode[CODE_LENGTH];

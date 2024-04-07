@@ -67,7 +67,7 @@ int playSong(Song* pSong)
     printf(ANSI_COLOR_CYAN"Playing: %s Press Any Key To Stop The Music.\n"ANSI_COLOR_RESET, pSong->songName);
     if (SDL_LoadWAV(temp, &wavespec, &wavbuf, &wavelen) == -1)
     {
-       printf(stderr, "Didnt find the file%s\n", SDL_GetError);
+       printf("Didnt find the file%s\n");
         return ERROR;
     }
     // Initialize SDL Mixer

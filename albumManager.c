@@ -21,7 +21,7 @@ int addAlbumToManager(AlbumManager* pAblumManager,const ArtistRepository* pArtis
         scanf("%d",&artistChoice);
     }while(artistChoice<0 || artistChoice>pArtistRepo->numOfArtist);
     if(!initAlbum(&pAblumManager->allAlbums[pAblumManager->numOfAlbums++],&pArtistRepo->allArtists[artistChoice-1]))
-        return 0;
+        return ERROR;
     else
         printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
     return 1;
@@ -31,12 +31,12 @@ int addSongToAlbumManager(AlbumManager* pAlbumManager,const SongRepository* pSon
     if (pAlbumManager->numOfAlbums < 1)
     {
         printf(ANSI_COLOR_RED"Not Enough Albums.\n"ANSI_COLOR_RESET);
-        return 0;
+        return NOT_ENOUGH;
     }
     if (pSongs->numSongs < 1)
     {
         printf(ANSI_COLOR_RED"Not Enough Songs\n"ANSI_COLOR_RESET);
-        return 0;
+        return NOT_ENOUGH;
     }
     printf("Enter Album Index To Add a Song to\n");
     for (int i = 0; i < pAlbumManager->numOfAlbums; ++i) {
