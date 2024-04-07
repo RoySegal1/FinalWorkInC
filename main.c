@@ -2,7 +2,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h>
+//#include <crtdbg.h>
 #include <time.h>
 //#include <unistd.h>
 #include "string.h"
@@ -21,7 +21,7 @@
 
 
 int main() {
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
     //Sleep(2);
@@ -35,7 +35,7 @@ int main() {
     SongRepository sR;
     AlbumManager aManager;
     User user;
-    user.userName = '\0';
+//    user.userName = '\0';
     if (!initSystemFromFile(&sR, &pR, &A,&aManager, fileChoice))
         return 0;
 //    Album album;
@@ -106,18 +106,20 @@ int main() {
             printf("%s\n",userFileName);
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
-                freeAlbumManager(&aManager);
-                freeSongRepository(&sR);
-                freePlayListsRepo(&pR);
-                freeArtistRepository(&A);
+                freeSystem(&sR,&pR,&A,&aManager,&user);
+//                freeAlbumManager(&aManager);
+//                freeSongRepository(&sR);
+//                freePlayListsRepo(&pR);
+//                freeArtistRepository(&A);
                 return 0;
             }
             if (userSubMenu(&user, &sR, &pR, &aManager) == ERROR)
             {
-                freeAlbumManager(&aManager);
-                freeSongRepository(&sR);
-                freePlayListsRepo(&pR);
-                freeArtistRepository(&A);
+                freeSystem(&sR,&pR,&A,&aManager,&user);
+//                freeAlbumManager(&aManager);
+//                freeSongRepository(&sR);
+//                freePlayListsRepo(&pR);
+//                freeArtistRepository(&A);
                 return 0;
             }
             endProgram(&sR,&pR,&A,&aManager,&user);
@@ -320,13 +322,23 @@ void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepo
         saveOp = 2;
 
     }
+    freeSystem( pSong,  pPlayList,  pArtists,pAlbum,pUser);
+//        freeAlbumManager(pAlbum);
+//        freeSongRepository(pSong);
+//        freePlayListsRepo(pPlayList);
+//        freeArtistRepository(pArtists);
+//        freeUser(pUser);
 
 
-        freeAlbumManager(pAlbum);
-        freeSongRepository(pSong);
-        freePlayListsRepo(pPlayList);
-        freeArtistRepository(pArtists);
-        freeUser(pUser);
+}
 
+void freeSystem(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum,User* pUser)
+{
+
+    freeAlbumManager(pAlbum);
+    freeSongRepository(pSong);
+    freePlayListsRepo(pPlayList);
+    freeArtistRepository(pArtists);
+    freeUser(pUser);
 
 }

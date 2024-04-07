@@ -158,7 +158,7 @@ int	createArtistArr(ArtistRepository* artistRepository)
 
 void freeArtistRepository(ArtistRepository * artistRepository)
 {
-    CHECK_RETURN(artistRepository)
+    CHECK_RETURN(artistRepository->allArtists)// if not initialize don't free
 //    if (songRepository == NULL)
 //        return;
 

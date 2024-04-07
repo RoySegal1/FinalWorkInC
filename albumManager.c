@@ -208,6 +208,7 @@ void printAlbumManager(const AlbumManager* pAlbumManager){
 }
 void freeAlbumManager(AlbumManager* pAlbumManager)
 {
+    CHECK_RETURN(pAlbumManager->allAlbums); // if not initialize don't free
     for (int i = 0; i < pAlbumManager->numOfAlbums; i++) {
         freeAlbum(&pAlbumManager->allAlbums[i]);
     }
