@@ -176,6 +176,7 @@ int readAlbumManagerFromFile(AlbumManager* pAlbum, const char* fileName, Artist*
             fclose(fp);
             return 0;
         }
+        fclose(fp);
         return 1;
     }
     else
@@ -188,6 +189,7 @@ int readAlbumManagerFromFile(AlbumManager* pAlbum, const char* fileName, Artist*
             fclose(fp);
             return 0;
         }
+        fclose(fp);
         return 1;
     }
     return 0;

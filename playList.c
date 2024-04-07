@@ -37,14 +37,14 @@ int addSongToPlayList(PlayList* pPlay, Song* pSong)
 {
     CHECK_RETURN_0(pSong)
     CHECK_RETURN_0(pPlay)
-        if (pPlay->numOfSongs > 1)
+    if (pPlay->numOfSongs > 1)
+    {
+        if(getSongFromPlayList(pPlay,pSong->songCode))
         {
-            if (getSongFromPlayList(pPlay, pSong->songCode))
-            {
-                printf("Song all ready in PlayList\n");
-                return 2; // 2 for duplicate
-            }
+            printf("Song all ready in PlayList\n");
+            return 2; // 2 for duplicate
         }
+    }
     pPlay->allSongs = (Song**)realloc(pPlay->allSongs,(pPlay->numOfSongs + 1)*sizeof(Song*));
     if(!pPlay->allSongs)
         return 0;
