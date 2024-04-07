@@ -236,13 +236,16 @@ int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists
         return NOT_ENOUGH;
     }
     printf("Enter Index Of PlayList To Be Added 1 - %d\n", pPlayLists->numOfPlayList);
-    printPlayLists(pPlayLists);
+    printPlayListsWithIndex(pPlayLists);
     do {
         scanf("%d", &playListChoice);
     } while (playListChoice<0 || playListChoice>pPlayLists->numOfPlayList);
-    if (addPlayListToUser(pUser, &pPlayLists->systemPlaylists[playListChoice - 1]) == ERROR)
+    int flagAdd = addPlayListToUser(pUser, &pPlayLists->systemPlaylists[playListChoice - 1]);
+    if (flagAdd == ERROR)
         return ERROR;
-    printf(ANSI_COLOR_GREEN"PlayList Added\n"ANSI_COLOR_RESET);
+    else
+        if(flagAdd != DUPLICATE)
+            printf(ANSI_COLOR_GREEN"PlayList Added\n"ANSI_COLOR_RESET);
     return 1;
 }
 int addAlbumstoUser(User* pUser,const AlbumManager* pAlbums)
@@ -254,14 +257,20 @@ int addAlbumstoUser(User* pUser,const AlbumManager* pAlbums)
         return NOT_ENOUGH;
     }
     printf("Enter Index Of Album To Add 1 - %d\n", pAlbums->numOfAlbums);
-    printAlbumManager(pAlbums);
+    for (int i = 0; i < pAlbums->numOfAlbums; i++)
+    {
+        printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n", i + 1, pAlbums->allAlbums[i].albumName);
+    }
+    //printAlbumManager(pAlbums);
     do {
         scanf("%d", &albumChoice);
     } while (albumChoice < 0 || albumChoice > pAlbums->numOfAlbums);
-    if (addAlbumToUser(pUser, &pAlbums->allAlbums[albumChoice - 1]) == ERROR)
+    int flagAdd = addAlbumToUser(pUser, &pAlbums->allAlbums[albumChoice - 1]); // can be DUPLICATE OR ERROR
+    if(flagAdd == ERROR)
         return ERROR;
     else
-        printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
+        if(flagAdd != DUPLICATE)
+             printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
     return 1;
 }
 
@@ -275,12 +284,12 @@ int addPlayListToUser(User* pUser, PlayList* pPlay)
     CHECK_RETURN_0(pPlay) // maby change
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists+1)*sizeof(PlayList));
     CHECK_RETURN_0(pUser->userPlayLists)
-    pUser->userPlayLists[pUser->numOfPlaylists] = *pPlay; // maybe not shallow
+    pUser->userPlayLists[pUser->numOfPlaylists] = *pPlay; 
     pUser->numOfPlaylists++;
     return 1;
 }
 
-int deletePlayListFromUser(User* pUser) // maybe need to free it
+int deletePlayListFromUser(User* pUser) 
 {
     if (pUser->numOfPlaylists < 1)
     {
@@ -297,7 +306,7 @@ int deletePlayListFromUser(User* pUser) // maybe need to free it
         scanf("%d",&choice);
     }
     while(choice<0 || choice>pUser->numOfPlaylists);
-    if (pUser->userPlayLists[choice - 1].typeOfPlayList == eUser)
+    if (pUser->userPlayLists[choice - 1].typeOfPlayList == eUser) // if the user created the playlist he needs to free it.
         freePlayList(&pUser->userPlayLists[choice - 1]);
     pUser->userPlayLists[choice-1] = pUser->userPlayLists[pUser->numOfPlaylists-1];
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists-1)*sizeof(PlayList));
@@ -307,7 +316,7 @@ int deletePlayListFromUser(User* pUser) // maybe need to free it
     printf(ANSI_COLOR_GREEN"PlayList Deleted\n"ANSI_COLOR_RESET);
     return 1;
 }
-int deleteAlbumFromUser(User* pUser) //maybe need to free it
+int deleteAlbumFromUser(User* pUser)
 {
     if (pUser->numOfAlbums < 1)
     {
@@ -324,8 +333,8 @@ int deleteAlbumFromUser(User* pUser) //maybe need to free it
         scanf("%d",&choice);
     }
     while(choice<0 || choice>pUser->numOfAlbums); 
-    pUser->userAlbums[choice-1] = pUser->userAlbums[pUser->numOfAlbums-1];
     freeAlbum(&pUser->userAlbums[choice - 1]);
+    pUser->userAlbums[choice-1] = pUser->userAlbums[pUser->numOfAlbums-1];
     pUser->userAlbums = (Album*)realloc(pUser->userAlbums,(pUser->numOfAlbums-1)*sizeof(Album));
     pUser->numOfAlbums--;
     if(pUser->numOfAlbums>0)

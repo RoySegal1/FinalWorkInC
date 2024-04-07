@@ -180,7 +180,19 @@ void printPlayLists(const PlayListRepository* pPlayRepository)
         printPlayList(&pPlayRepository->systemPlaylists[i]);
     }
 }
-
+void printPlayListsWithIndex(const PlayListRepository* pPlayRepository)
+{
+    if (pPlayRepository->numOfPlayList < 1)
+    {
+        printf("No playlist to be printed\n");
+        return;
+    }
+    for (int i = 0; i < pPlayRepository->numOfPlayList; i++)
+    {
+        printf("%d - ", i + 1);
+        printPlayList(&pPlayRepository->systemPlaylists[i]);
+    }
+}
 
 
 

@@ -25,6 +25,7 @@ int loadPlayListRepositoryFromFile(PlayListRepository* repository, const char* f
 int createNewSystemPlayList(PlayListRepository* pPlayRepository, SongRepository* pSongRepository);
 
 void printPlayLists(const PlayListRepository* pPlayRepository);
+void printPlayListsWithIndex(const PlayListRepository* pPlayRepository);
 void freePlayListsRepo(PlayListRepository* pPlayRepository);
 
 
