@@ -53,9 +53,8 @@ int addSongToAlbumManager(AlbumManager* pAlbumManager,const SongRepository* pSon
         scanf("%d",&songChoice);
     }while(songChoice<0 || songChoice>pSongs->numSongs);
     songChoice--;
-    if (!addSongToAlbum(&pAlbumManager->allAlbums[albumChoice], &pSongs->songsArr[songChoice], 0))
-        return 0;
-    else
+    int flag = addSongToAlbum(&pAlbumManager->allAlbums[albumChoice], &pSongs->songsArr[songChoice], 0);
+    if (flag != 4 && flag != DUPLICATE)
         printf(ANSI_COLOR_GREEN"Song Added\n"ANSI_COLOR_RESET);
     return 1;
 }

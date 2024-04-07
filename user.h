@@ -20,14 +20,15 @@ typedef struct {
 }User;
 
 void initUser(User* pUser);
+void initUserZeros(User* pUser);
 
 int addPlayListToUser(User* pUser, PlayList* pPlay);
-int addPlayListToUserFromSystem(User* pUser, PlayListRepository* pPlayLists);
+int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists);
 int createPlayListToUser(User* pUser, const SongRepository* pSongs);
 int addSongToUserPlayList(User* pUser,const SongRepository* pSongs);
 int deleteSongFromUserPlayList(User* pUser);
 int addAlbumToUser(User* pUser, Album* pAlbums);
-int addAlbumstoUser(User* pUser, AlbumManager* pAlbums);
+int addAlbumstoUser(User* pUser,const AlbumManager* pAlbums);
 int deleteAlbumFromUser(User* pUser);
 int deletePlayListFromUser(User* pUser);
 
