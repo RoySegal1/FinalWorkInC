@@ -256,9 +256,8 @@ void printAllSongs(const SongRepository* pSongRepository)
 
 void freeSongRepository(SongRepository* songRepository)
 {
-    CHECK_RETURN(songRepository)
-        //    if (songRepository == NULL)
-        //        return;
+    CHECK_RETURN(songRepository)// if not initialize don't free
+
 
         generalArrayFunction(songRepository->songsArr, songRepository->numSongs, sizeof(Song), freeSong);
    // for (int i = 0; i < songRepository->numSongs; ++i)

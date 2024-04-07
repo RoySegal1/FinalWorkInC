@@ -2,7 +2,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h>
+//#include <crtdbg.h>
 #include <time.h>
 //#include <unistd.h>
 #include "string.h"
@@ -21,7 +21,7 @@
 
 
 int main() {
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
     Sleep(2);
@@ -127,11 +127,20 @@ int main() {
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
                 freeSystem(&sR,&pR,&A,&aManager,&user);
+
+//                freeAlbumManager(&aManager);
+//                freeSongRepository(&sR);
+//                freePlayListsRepo(&pR);
+//                freeArtistRepository(&A);
                 return 0;
             }
             if (userSubMenu(&user, &sR, &pR, &aManager) == ERROR)
             {
                 freeSystem(&sR,&pR,&A,&aManager,&user);
+//                freeAlbumManager(&aManager);
+//                freeSongRepository(&sR);
+//                freePlayListsRepo(&pR);
+//                freeArtistRepository(&A);
                 return 0;
             }
             endProgram(&sR,&pR,&A,&aManager,&user);
@@ -334,14 +343,14 @@ void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepo
         saveOp = 2;
 
     }
-
-    freeSystem(pSong,pPlayList,pArtists,pAlbum,pUser);
+    freeSystem( pSong,  pPlayList,  pArtists,pAlbum,pUser);
 //        freeAlbumManager(pAlbum);
- //       freeSongRepository(pSong);
+//        freeSongRepository(pSong);
 //        freePlayListsRepo(pPlayList);
 //        freeArtistRepository(pArtists);
- //       freeUser(pUser);
+//        freeUser(pUser);
 }
+
 
 void freeSystem(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum,User* pUser)
 {
