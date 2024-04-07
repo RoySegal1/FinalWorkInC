@@ -8,6 +8,8 @@
 #define ERROR 0
 #define FROM_TEXT_FILE 1
 #define FROM_BINARY_FILE 2
+#define DUPLICATE 3
+#define NOT_ENOUGH 4
 #define ALOC_ERROR "Allocation error"
 #define SONGS_REPO_FROM_TEXT "Songs.txt"
 #define SONGS_REPO_FROM_BIN "Songs.bin"

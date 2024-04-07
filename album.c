@@ -21,12 +21,12 @@ int addSongToAlbum(Album* pAlbum, Song* pSong,int fromFile)
     if(strcmp(pAlbum->artist.name,pSong->artist.name))
     {
         printf(ANSI_COLOR_RED"Song Artist Is Not The Album Artist. Cant Add Song! \n"ANSI_COLOR_RESET);
-        return 0;
+        return 4; // 4 for Not Same
     }
     if (findSongByName(pAlbum, pSong->songName) != NULL)
     {
         printf(ANSI_COLOR_RED"Cant Add Same Song Twice\n"ANSI_COLOR_RESET);
-        return 0;
+        return DUPLICATE;
     }
     else {
 

@@ -11,7 +11,7 @@ typedef struct {
 }AlbumManager;
 
 
-void printAlbumManager(AlbumManager* pAlbumManager);
+void printAlbumManager(const AlbumManager* pAlbumManager);
 void freeAlbumManager(AlbumManager* pAlbumManager);
 
 int addAlbumToManager(AlbumManager* pAblumManager,const ArtistRepository* pArtistRepo);

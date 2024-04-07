@@ -42,12 +42,12 @@ int addSongToPlayList(PlayList* pPlay, Song* pSong)
         if(getSongFromPlayList(pPlay,pSong->songCode))
         {
             printf("Song all ready in PlayList\n");
-            return 2; // 2 for duplicate
+            return DUPLICATE;
         }
     }
     pPlay->allSongs = (Song**)realloc(pPlay->allSongs,(pPlay->numOfSongs + 1)*sizeof(Song*));
     if(!pPlay->allSongs)
-        return 0;
+        return ERROR;
     pPlay->allSongs[pPlay->numOfSongs] = pSong;
     pPlay->numOfSongs++;
     pPlay->playListSortOp = eNotOrdered; // when we add a song the arr becomes not sorted.
@@ -77,7 +77,7 @@ int removeSongFromPlayList(PlayList* pPlay)
     if (pPlay->numOfSongs < 1)
     {
         printf("PlayList is empty\n");
-        return 0;
+        return NOT_ENOUGH;
     }
     printf("Enter index of song to remove\n");
     printPlayList(pPlay);
@@ -93,7 +93,7 @@ int removeSongFromPlayList(PlayList* pPlay)
     pPlay->numOfSongs--;
     if(pPlay->numOfSongs != 0) // if PlayList isnt empty
         if(!pPlay->allSongs)
-            return 0;
+            return ERROR;
     pPlay->playListSortOp = eNotOrdered; // when we remove a song the arr becomes not sorted.
     return 1;
 }
@@ -139,8 +139,11 @@ void sortPlayList(PlayList* pPlay)
             compare = compareByName;
             break;
     }
-    if(compare!=NULL)
-        qsort(pPlay->allSongs,pPlay->numOfSongs,sizeof(Song*),compare);
+    if (compare != NULL)
+    {
+        qsort(pPlay->allSongs, pPlay->numOfSongs, sizeof(Song*), compare);
+        printf("PlayList Sorted.\n");
+    }
 }
 
 void findSong(const PlayList* pPlay) // need to be modified maby, finding not a particular song
