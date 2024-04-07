@@ -18,12 +18,12 @@ void initUser(User* pUser)
     pUser->userPlayLists = NULL;
 }
 
-void ShufflePlayList(const User* pUser)
+int ShufflePlayList(const User* pUser)
 {
     if (pUser->numOfPlaylists < 1)
     {
         printf("No Enough PlayLists\n");
-        return;
+        return NOT_ENOUGH;
     }
     printf("Enter Number Of PlayList To Be Played. From 1 - %d\n", pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
@@ -37,13 +37,13 @@ void ShufflePlayList(const User* pUser)
     int allSongs = pUser->userPlayLists[choice - 1].numOfSongs;
     songsRemaning = allSongs;
     int* arrayHelper = (int*)calloc(allSongs, sizeof(int));
-    CHECK_RETURN(arrayHelper)
+    CHECK_RETURN_0(arrayHelper)
     while(songsRemaning >0) {
         songChoice = MIN_SONGS + (rand() % (allSongs - MIN_SONGS + 1));
         if (arrayHelper[songChoice] == 0)
         {
             if (!playSong(pUser->userPlayLists[choice - 1].allSongs[songChoice]))
-                return;
+                return ERROR;
             printf("Press Enter To Play Next Song\n");
             getchar();
             arrayHelper[songChoice] = 1;
@@ -51,6 +51,7 @@ void ShufflePlayList(const User* pUser)
         }
     }
     free(arrayHelper);
+    return 1;
 }
 
 
@@ -85,12 +86,12 @@ int hasAlbum(User* pUser, Album* pAlbum)
 
 
 
-void playByOrderPlayList(const User* pUser)
+int playByOrderPlayList(const User* pUser)
 {
     if (pUser->numOfPlaylists < 1)
     {
         printf("No Enough PlayLists\n");
-        return;
+        return NOT_ENOUGH;
     }
     printf("Enter Number Of PlayList To Be Played. From 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
@@ -104,23 +105,24 @@ void playByOrderPlayList(const User* pUser)
     while(choice<0 || choice>pUser->numOfPlaylists);
     for (int i = 0; i < pUser->userPlayLists[choice-1].numOfSongs; ++i) {
         if (!playSong(pUser->userPlayLists[choice - 1].allSongs[i]))
-            return;
+            return ERROR;
         printf("Press Enter To Play Next Song\n");
         getchar();
     }
+    return 1;
 }
 
 int addSongToUserPlayList(User* pUser,const SongRepository* pSongs)
 {
     if (pUser->numOfPlaylists < 1)
     {
-        printf("No Enough PlayLists\n");
-        return 0;
+        printf(ANSI_COLOR_RED"No Enough PlayLists\n"ANSI_COLOR_RESET);
+        return NOT_ENOUGH;
     }
     if (pSongs->numSongs < 1)
     {
         printf(ANSI_COLOR_RED"Not Enough Songs.\n"ANSI_COLOR_RESET);
-        return 0;
+        return NOT_ENOUGH;
     }
     printf("Enter Index Of Playlist To add a Song to from 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
@@ -148,7 +150,7 @@ int addSongToUserPlayList(User* pUser,const SongRepository* pSongs)
         while(choiceSong<0 || choiceSong>pSongs->numSongs);
         choiceSong--;
         if(!addSongToPlayList(&pUser->userPlayLists[choicePlayList],&pSongs->songsArr[choiceSong]))
-            return 0;
+            return ERROR;
         return 1;
     }
 }
@@ -158,7 +160,7 @@ int createPlayListToUser(User* pUser, const SongRepository* pSongs)
     if (pSongs->numSongs < 1)
     {
         printf(ANSI_COLOR_RED"Not Enough Songs.\n"ANSI_COLOR_RESET);
-        return 0;
+        return NOT_ENOUGH;
     }
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists+1)*sizeof(PlayList));
     CHECK_RETURN_0(pUser->userPlayLists)
@@ -174,7 +176,7 @@ int createPlayListToUser(User* pUser, const SongRepository* pSongs)
      if(addFlag == 0)
      {
          printf("error\n");
-         return 0;
+         return ERROR;
      }
      if(addFlag == 1)
          printf("Song added\n");
@@ -190,7 +192,7 @@ int deleteSongFromUserPlayList(User* pUser)
     if (pUser->numOfPlaylists < 1)
     {
         printf("No Enough PlayLists\n");
-        return 0;
+        return NOT_ENOUGH;
     }
     printf("Enter Index Of Playlist To Remove a Song to from 1 - %d\n", pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
@@ -205,14 +207,48 @@ int deleteSongFromUserPlayList(User* pUser)
     if (pUser->userPlayLists[choicePlayList].typeOfPlayList == eUser)
     {
         if (!removeSongFromPlayList(&pUser->userPlayLists[choicePlayList]))
-            return 0;
+            return ERROR;
     }
     else
         {
             printf("Cant Delete Songs From System PlayList\n");
             return 1;
         }
+    //return 1;
+}
+
+int addPlayListToUserFromSystem(User* pUser, PlayListRepository* pPlayLists)
+{
+    int playListChoice;
+    if (pPlayLists->numOfPlayList < 1)
+    {
+        printf("Not Enough PlayList in System\n");
+        return NOT_ENOUGH;
+    }
+    printf("Enter Index Of PlayList To Be Added 1 - %d\n", pPlayLists->numOfPlayList);
+    printPlayLists(pPlayLists);
+    do {
+        scanf("%d", &playListChoice);
+    } while (playListChoice<0 || playListChoice>pPlayLists->numOfPlayList);
+    if (addPlayListToUser(pUser, &pPlayLists->systemPlaylists[playListChoice - 1]) == ERROR)
+        return ERROR;
     return 1;
+}
+int addAlbumstoUser(User* pUser, AlbumManager* pAlbums)
+{
+    int albumChoice;
+    if (pAlbums->numOfAlbums < 1)
+    {
+        printf("Not Enough albums.\n");
+        return NOT_ENOUGH;
+    }
+    printf("Enter Index Of Album To Add 1 - %d\n", pAlbums->numOfAlbums);
+    printAlbumManager(pAlbums);
+    do {
+        scanf("%d", &albumChoice);
+    } while (albumChoice < 0 || albumChoice < pAlbums->numOfAlbums);
+    if (addAlbumToUser(pUser, &pAlbums->allAlbums[albumChoice - 1]) == ERROR)
+        return ERROR;
 }
 
 int addPlayListToUser(User* pUser, PlayList* pPlay)
@@ -220,9 +256,9 @@ int addPlayListToUser(User* pUser, PlayList* pPlay)
     if(hasPlayList(pUser,pPlay))
     {
         printf(ANSI_COLOR_RED"Cant Add Same PlayList.\n"ANSI_COLOR_RESET);
-        return 0;
+        return DUPLICATE;
     }
-    CHECK_RETURN_0(pPlay)
+    CHECK_RETURN_0(pPlay) // maby change
     pUser->userPlayLists = (PlayList*)realloc(pUser->userPlayLists,(pUser->numOfPlaylists+1)*sizeof(PlayList));
     CHECK_RETURN_0(pUser->userPlayLists)
     pUser->userPlayLists[pUser->numOfPlaylists] = *pPlay; // maybe not shallow
@@ -235,7 +271,7 @@ int deletePlayListFromUser(User* pUser) // maybe need to free it
     if (pUser->numOfPlaylists < 1)
     {
         printf("No Enough PlayLists\n");
-        return 0;
+        return NOT_ENOUGH;
     }
     printf("Enter Number Of PlayList To Be Deleted. From 1 - %d\n",pUser->numOfPlaylists);
     for (int i = 0; i < pUser->numOfPlaylists; i++)
@@ -261,7 +297,7 @@ int deleteAlbumFromUser(User* pUser) //maybe need to free it
     if (pUser->numOfAlbums < 1)
     {
         printf("Not Enough Albums\n");
-        return 0;
+        return NOT_ENOUGH;
     }
     printf("Enter Number Of Album To Be Deleted. From 1 - %d\n",pUser->numOfAlbums);
     for (int i = 0; i < pUser->numOfAlbums; i++)
@@ -287,13 +323,14 @@ int addAlbumToUser(User* pUser, Album* pAlbums)
     if (hasAlbum(pUser, pAlbums))
     {
         printf(ANSI_COLOR_RED"Cant Add Same Album\n"ANSI_COLOR_RESET);
-        return 0;
+        return DUPLICATE;
     }
     CHECK_RETURN_0(pAlbums)
     pUser->userAlbums = (Album *)realloc(pUser->userAlbums,(pUser->numOfAlbums+1)*sizeof(Album));
     CHECK_RETURN_0(pUser->userAlbums)
 
-    L_init(&pUser->userAlbums[pUser->numOfAlbums].songs);
+   if(!L_init(&pUser->userAlbums[pUser->numOfAlbums].songs))
+       return ERROR;
     pUser->userAlbums[pUser->numOfAlbums].albumName = getDynStr(pAlbums->albumName);
     pUser->userAlbums[pUser->numOfAlbums].artist = pAlbums->artist;
     pUser->userAlbums[pUser->numOfAlbums].numOfSongs = 0;
@@ -309,6 +346,43 @@ int addAlbumToUser(User* pUser, Album* pAlbums)
    // pUser->userAlbums[pUser->numOfAlbums] = *pAlbums; // maybe not shallow
     pUser->numOfAlbums++;
     return 1;
+}
+
+void sortPlayListForUser(const User* pUser)
+{
+    int playListChoice;
+    if (pUser->numOfPlaylists < 1)
+    {
+        printf("Not Enough PlayLists\n");
+        return;
+    }
+    printf("Enter Index Of PlayList To Be Sorted 1 - %d\n", pUser->numOfPlaylists);
+    printPlayListForUser(pUser);
+    do {
+        scanf("%d", &playListChoice);
+    } while (playListChoice < 0 || playListChoice > pUser->numOfPlaylists);
+    if (pUser->userPlayLists[playListChoice - 1].typeOfPlayList == eUser)
+        sortPlayList(&pUser->userPlayLists[playListChoice - 1]);
+    else
+        printf(ANSI_COLOR_RED"Cant Sort System PlayList.\n"ANSI_COLOR_RESET);
+}
+void findSongInSortedPlayListForUser(const User* pUser)
+{
+    int playListChoice;
+    if (pUser->numOfPlaylists < 1)
+    {
+        printf("Not Enough PlayLists\n");
+        return;
+    }
+    printf("Enter Index Of PlayList To Find Song In 1 - %d\n", pUser->numOfPlaylists);
+    printPlayListForUser(pUser);
+    do {
+        scanf("%d", &playListChoice);
+    } while (playListChoice < 0 || playListChoice > pUser->numOfPlaylists);
+    if (pUser->userPlayLists[playListChoice - 1].typeOfPlayList == eUser)
+        findSong(&pUser->userPlayLists[playListChoice - 1]);
+    else
+        printf(ANSI_COLOR_RED"Cant Sort System PlayList.\n"ANSI_COLOR_RESET);
 }
 
 
@@ -593,7 +667,7 @@ int writeUserToFile(const User* pUser, const char* fileName, int fileType)
     }
     return 0;
 }
-int numberOfUserPlayList(User* pUser)
+int numberOfUserPlayList(const User* pUser)
 {
     int count = 0;
     for (int i = 0; i < pUser->numOfPlaylists; i++)

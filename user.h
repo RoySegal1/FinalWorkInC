@@ -7,6 +7,8 @@
 #include "playList.h"
 #include "album.h"
 #include "songRepository.h"
+#include "playlistRepository.h"
+#include "albumManager.h"
 
 
 typedef struct {
@@ -20,20 +22,24 @@ typedef struct {
 void initUser(User* pUser);
 
 int addPlayListToUser(User* pUser, PlayList* pPlay);
+int addPlayListToUserFromSystem(User* pUser, PlayListRepository* pPlayLists);
 int createPlayListToUser(User* pUser, const SongRepository* pSongs);
 int addSongToUserPlayList(User* pUser,const SongRepository* pSongs);
 int deleteSongFromUserPlayList(User* pUser);
 int addAlbumToUser(User* pUser, Album* pAlbums);
+int addAlbumstoUser(User* pUser, AlbumManager* pAlbums);
 int deleteAlbumFromUser(User* pUser);
 int deletePlayListFromUser(User* pUser);
 
 
 int hasPlayList(User* pUser, PlayList* pPlay);
 int hasAlbum(User* pUser, Album* pAlbum);
-int numberOfUserPlayList(User* pUser);
+int numberOfUserPlayList(const User* pUser);
 
-void ShufflePlayList(const User* pUser);
-void playByOrderPlayList(const User* pUser);
+int ShufflePlayList(const User* pUser);
+int playByOrderPlayList(const User* pUser);
+void sortPlayListForUser(const User* pUser);
+void findSongInSortedPlayListForUser(const User* pUser);
 
 
 void printUser(const User* pUser);

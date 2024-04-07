@@ -2,9 +2,9 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
-//#include <crtdbg.h>
+#include <crtdbg.h>
 #include <time.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include "string.h"
 #include "artist.h"
 #include "song.h"
@@ -21,10 +21,10 @@
 
 
 int main() {
-//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-    sleep(2);
+    //Sleep(2);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -93,7 +93,7 @@ int main() {
                 break;
         case 10:
             initUser(&user);
-            userSubMenu(&user,&sR,&pR);
+            userSubMenu(&user,&sR,&pR,&aManager);
             choice = 12;
             break;
         case 11:
@@ -112,7 +112,15 @@ int main() {
                 freeArtistRepository(&A);
                 return 0;
             }
-            userSubMenu(&user, &sR, &pR);
+            if (userSubMenu(&user, &sR, &pR, &aManager) == ERROR)
+            {
+                freeAlbumManager(&aManager);
+                freeSongRepository(&sR);
+                freePlayListsRepo(&pR);
+                freeArtistRepository(&A);
+                return 0;
+            }
+            endProgram(&sR,&pR,&A,&aManager,&user);
             choice = 12;
             break;
         case 12:
@@ -145,8 +153,8 @@ int main() {
 
 
 
-void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListRepository* pPlayLists) {
-    int choice, playListChoice;
+int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListRepository* pPlayLists,const AlbumManager* pAlbums) {
+    int choice, playListChoice,albumChoice;
     do {
         printf(ANSI_COLOR_GREEN"\nUser Submenu\n"ANSI_COLOR_RESET);
         printf(ANSI_COLOR_YELLOW"Hello %s\n", pUser->userName);
@@ -162,44 +170,49 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
         printf("10. Print All Playlists\n");
         printf("11. Print All Albums\n");
         printf("12. Print All Data About User\n");
-        printf("13. Exit\n");
+        printf("13. Sort A User PlayList\n");
+        printf("14. Find A Song In A User PlayList\n");
+        printf("15. Exit\n");
         printf("Enter your choice: "ANSI_COLOR_RESET);
         scanf("%d", &choice);
 
         // Implement functionality based on user choice
         switch (choice) {
         case 1:
-            printf("Enter Index Of PlayList To Be Added 1 - %d\n", pPlayLists->numOfPlayList);
-            printPlayLists(pPlayLists);
-            do {
-                scanf("%d", &playListChoice);
-            } while (playListChoice<0 || playListChoice>pPlayLists->numOfPlayList);
-            addPlayListToUser(pUser, &pPlayLists->systemPlaylists[playListChoice - 1]);
+            if (addPlayListToUserFromSystem(pUser, pPlayLists) == ERROR)
+                return ERROR;
             break;
         case 2:
-            deletePlayListFromUser(pUser);
+            if (deletePlayListFromUser(pUser) == ERROR)
+                return ERROR;
             break;
         case 3:
-            createPlayListToUser(pUser, pSongs);
+            if (createPlayListToUser(pUser, pSongs) == ERROR)
+                return ERROR;
             break;
         case 4:
-            addSongToUserPlayList(pUser,pSongs);
+            if (addSongToUserPlayList(pUser, pSongs) == ERROR)
+                return ERROR;
             break;
         case 5:
-            deleteSongFromUserPlayList(pUser);
+            if (deleteSongFromUserPlayList(pUser) == ERROR)
+                return ERROR;
             break;
         case 6:
-            playByOrderPlayList(pUser);
+            if (playByOrderPlayList(pUser) == ERROR)
+                return ERROR;
             break;
         case 7:
-            printf("Shuffling a Playlist...\n");
+            if (ShufflePlayList(pUser) == ERROR)
+                return ERROR;
             break;
         case 8:
-            printf("Adding Album to User...\n");
-            //    addAlbumToUser(pUser,)
+            if (addAlbumstoUser(pUser, pAlbums) == ERROR)
+                return ERROR;
             break;
         case 9:
-            deleteAlbumFromUser(pUser);
+            if (deleteAlbumFromUser(pUser) == ERROR)
+                return ERROR;
             break;
         case 10:
             printPlayListForUser(pUser);
@@ -210,13 +223,21 @@ void userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposi
         case 12:
             printUser(pUser);
             break;
-             case 13:
+        case 13:
+            sortPlayListForUser(pUser);
+            break;
+        case 14:
+            findSongInSortedPlayListForUser(pUser);
+            break;
+             case 15:
                  printf("Exiting...\n");
+                 return 1;
                 break;
         default:
             printf("Invalid choice. Please try again.\n");
         }
-    } while (choice != 13);
+    } while (choice != 15);
+    return 1;
 }
 
 

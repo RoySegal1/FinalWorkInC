@@ -196,7 +196,7 @@ int readAlbumManagerFromFile(AlbumManager* pAlbum, const char* fileName, Artist*
 }
 
 
-void printAlbumManager(AlbumManager* pAlbumManager){
+void printAlbumManager(const AlbumManager* pAlbumManager){
     if (pAlbumManager->numOfAlbums < 1)
     {
         printf("Album Manager , Has no songs.\n");
