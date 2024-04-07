@@ -22,3 +22,4 @@ void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepo
 
 
 
+void freeSystem(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum,User* pUser);

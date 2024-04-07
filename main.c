@@ -35,7 +35,7 @@ int main() {
     SongRepository sR;
     AlbumManager aManager;
     User user;
-    user.userName = '\0';
+    initUserZeros(&user);
     if (!initSystemFromFile(&sR, &pR, &A,&aManager, fileChoice))
         return 0;
 //    Album album;
@@ -61,7 +61,6 @@ int main() {
         printf("12. Quit\n");
         printf("Enter your choice: "ANSI_COLOR_RESET);
         scanf("%d", &choice);
-
         // Implement functionality based on user choice
         switch (choice) {
         case 1:
@@ -93,7 +92,12 @@ int main() {
                 break;
         case 10:
             initUser(&user);
-            userSubMenu(&user,&sR,&pR,&aManager);
+            if (userSubMenu(&user, &sR, &pR, &aManager) == ERROR)
+            {
+                freeSystem(&sR,&pR,&A,&aManager,&user);
+                return 0;
+            }
+            endProgram(&sR, &pR, &A, &aManager, &user);
             choice = 12;
             break;
         case 11:
@@ -106,18 +110,12 @@ int main() {
             printf("%s\n",userFileName);
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
-                freeAlbumManager(&aManager);
-                freeSongRepository(&sR);
-                freePlayListsRepo(&pR);
-                freeArtistRepository(&A);
+                freeSystem(&sR,&pR,&A,&aManager,&user);
                 return 0;
             }
             if (userSubMenu(&user, &sR, &pR, &aManager) == ERROR)
             {
-                freeAlbumManager(&aManager);
-                freeSongRepository(&sR);
-                freePlayListsRepo(&pR);
-                freeArtistRepository(&A);
+                freeSystem(&sR,&pR,&A,&aManager,&user);
                 return 0;
             }
             endProgram(&sR,&pR,&A,&aManager,&user);
@@ -321,12 +319,21 @@ void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepo
 
     }
 
+    freeSystem(pSong,pPlayList,pArtists,pAlbum,pUser);
+//        freeAlbumManager(pAlbum);
+ //       freeSongRepository(pSong);
+//        freePlayListsRepo(pPlayList);
+//        freeArtistRepository(pArtists);
+ //       freeUser(pUser);
+}
 
-        freeAlbumManager(pAlbum);
-        freeSongRepository(pSong);
-        freePlayListsRepo(pPlayList);
-        freeArtistRepository(pArtists);
-        freeUser(pUser);
+void freeSystem(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum,User* pUser)
+{
 
+    freeAlbumManager(pAlbum);
+    freeSongRepository(pSong);
+    freePlayListsRepo(pPlayList);
+    freeArtistRepository(pArtists);
+    freeUser(pUser);
 
 }

@@ -17,6 +17,14 @@ void initUser(User* pUser)
     pUser->userAlbums = NULL;
     pUser->userPlayLists = NULL;
 }
+void initUserZeros(User* pUser)
+{
+    pUser->numOfAlbums = 0;
+    pUser->numOfPlaylists = 0;
+    pUser->userName = NULL;
+    pUser->userAlbums = NULL;
+    pUser->userPlayLists = NULL;
+}
 
 int ShufflePlayList(const User* pUser)
 {
@@ -151,6 +159,7 @@ int addSongToUserPlayList(User* pUser,const SongRepository* pSongs)
         choiceSong--;
         if(!addSongToPlayList(&pUser->userPlayLists[choicePlayList],&pSongs->songsArr[choiceSong]))
             return ERROR;
+        printf(ANSI_COLOR_GREEN"Song Added\n"ANSI_COLOR_RESET);
         return 1;
     }
 }
@@ -208,21 +217,22 @@ int deleteSongFromUserPlayList(User* pUser)
     {
         if (!removeSongFromPlayList(&pUser->userPlayLists[choicePlayList]))
             return ERROR;
+        printf(ANSI_COLOR_GREEN"Song Removed\n"ANSI_COLOR_RESET);
     }
     else
         {
-            printf("Cant Delete Songs From System PlayList\n");
+            printf(ANSI_COLOR_RED"Cant Delete Songs From System PlayList\n"ANSI_COLOR_RESET);
             return 1;
         }
     //return 1;
 }
 
-int addPlayListToUserFromSystem(User* pUser, PlayListRepository* pPlayLists)
+int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists)
 {
     int playListChoice;
     if (pPlayLists->numOfPlayList < 1)
     {
-        printf("Not Enough PlayList in System\n");
+        printf(ANSI_COLOR_RED"Not Enough PlayList in System\n"ANSI_COLOR_RESET);
         return NOT_ENOUGH;
     }
     printf("Enter Index Of PlayList To Be Added 1 - %d\n", pPlayLists->numOfPlayList);
@@ -232,23 +242,26 @@ int addPlayListToUserFromSystem(User* pUser, PlayListRepository* pPlayLists)
     } while (playListChoice<0 || playListChoice>pPlayLists->numOfPlayList);
     if (addPlayListToUser(pUser, &pPlayLists->systemPlaylists[playListChoice - 1]) == ERROR)
         return ERROR;
+    printf(ANSI_COLOR_GREEN"PlayList Added\n"ANSI_COLOR_RESET);
     return 1;
 }
-int addAlbumstoUser(User* pUser, AlbumManager* pAlbums)
+int addAlbumstoUser(User* pUser,const AlbumManager* pAlbums)
 {
     int albumChoice;
     if (pAlbums->numOfAlbums < 1)
     {
-        printf("Not Enough albums.\n");
+        printf(ANSI_COLOR_RED"Not Enough albums.\n"ANSI_COLOR_RESET);
         return NOT_ENOUGH;
     }
     printf("Enter Index Of Album To Add 1 - %d\n", pAlbums->numOfAlbums);
     printAlbumManager(pAlbums);
     do {
         scanf("%d", &albumChoice);
-    } while (albumChoice < 0 || albumChoice < pAlbums->numOfAlbums);
+    } while (albumChoice < 0 || albumChoice > pAlbums->numOfAlbums);
     if (addAlbumToUser(pUser, &pAlbums->allAlbums[albumChoice - 1]) == ERROR)
         return ERROR;
+    printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
+    return 1;
 }
 
 int addPlayListToUser(User* pUser, PlayList* pPlay)
@@ -290,6 +303,7 @@ int deletePlayListFromUser(User* pUser) // maybe need to free it
     pUser->numOfPlaylists--;
     if(pUser->numOfPlaylists>0)
         CHECK_RETURN_0_PRINT(pUser->userPlayLists,ALOC_ERROR)
+    printf(ANSI_COLOR_GREEN"PlayList Deleted\n"ANSI_COLOR_RESET);
     return 1;
 }
 int deleteAlbumFromUser(User* pUser) //maybe need to free it
@@ -315,6 +329,7 @@ int deleteAlbumFromUser(User* pUser) //maybe need to free it
     pUser->numOfAlbums--;
     if(pUser->numOfAlbums>0)
         CHECK_RETURN_0_PRINT(pUser->userAlbums,ALOC_ERROR)
+    printf(ANSI_COLOR_GREEN"Album Deleted\n"ANSI_COLOR_RESET);
     return 1;
 }
 
