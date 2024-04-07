@@ -170,7 +170,7 @@ void printPlayLists(const PlayListRepository* pPlayRepository)
 {
     if (pPlayRepository->numOfPlayList < 1)
     {
-        printf("No playlist to be printted\n");
+        printf("No playlist to be printed\n");
         return;
     }
     for (int i = 0; i < pPlayRepository->numOfPlayList; i++)
@@ -184,6 +184,7 @@ void printPlayLists(const PlayListRepository* pPlayRepository)
 
 void freePlayListsRepo(PlayListRepository* pPlayRepository)
 {
+    CHECK_RETURN(pPlayRepository->systemPlaylists)// if not initialize don't free
     for (int i = 0; i < pPlayRepository->numOfPlayList; i++)
     {
         freePlayList(&pPlayRepository->systemPlaylists[i]);

@@ -414,8 +414,11 @@ void printAlbumsForUser(const User* pUser)
 
 void freeUser(User* pUser)
 {
+    if(pUser->numOfAlbums)
     freeUserAlbums(pUser->userAlbums,pUser->numOfAlbums);
+    if (pUser->userPlayLists)
     freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
+    if (pUser->userName)
     free(pUser->userName);
 }
 
@@ -432,7 +435,7 @@ void freeUserPlayLists(PlayList* pPlay,int size)
 {
     for (int i = 0; i < size; i++)
     {
-        if(pPlay[i].typeOfPlayList == eUser) // if it's the system she suppose to free it.
+        if(pPlay[i].typeOfPlayList == eUser) // if it's the system she supposes to free it.
             freePlayList(&pPlay[i]);
     }
     free(pPlay);
