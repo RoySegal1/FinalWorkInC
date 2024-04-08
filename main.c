@@ -2,7 +2,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
-//#include <crtdbg.h>
+#include <crtdbg.h>
 #include <time.h>
 //#include <unistd.h>
 #include "string.h"
@@ -21,10 +21,10 @@
 
 
 int main() {
-//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-    Sleep(2);
+    Sleep(2000);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -177,7 +177,7 @@ int main() {
 
 
 int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListRepository* pPlayLists,const AlbumManager* pAlbums) {
-    int choice, playListChoice,albumChoice;
+    int choice;
     do {
         printf(ANSI_COLOR_GREEN"\nUser Submenu\n"ANSI_COLOR_RESET);
         printf(ANSI_COLOR_YELLOW"Hello %s\n", pUser->userName);
@@ -230,7 +230,7 @@ int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposit
                 return ERROR;
             break;
         case 8:
-            if(addAlbumstoUser(pUser, pAlbums) == ERROR)
+            if(addAlbumFromAlbumManagertoUser(pUser, pAlbums) == ERROR)
                 return ERROR;
             break;
         case 9:
@@ -316,16 +316,10 @@ int saveSystemFiles(SongRepository* pSong, PlayListRepository* pPlayList, Artist
     if(!writeAlbumManagerToFile(pAlbum,ALBUM_MANAGER_FROM_TEXT,FROM_TEXT_FILE))
         return 0;
 
-    if (pUser->userName && pUser->userAlbums)
-    {
-        if (!writeUserToFile(pUser,USER_MANAGER_FROM_BIN,FROM_BINARY_FILE))
+    if(!writeUserToFile(pUser,USER_MANAGER_FROM_BIN,FROM_BINARY_FILE))
             return 0;
-        if(!writeUserToFile(pUser,USER_MANAGER_FROM_TEXT,FROM_TEXT_FILE))
+    if(!writeUserToFile(pUser,USER_MANAGER_FROM_TEXT,FROM_TEXT_FILE))
             return 0;
-    }
-
-
-
 
     return 1;
 }
