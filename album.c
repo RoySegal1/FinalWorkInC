@@ -61,7 +61,7 @@ Song* findSongByName(const Album* pAlbum, const char* songName)
 	}
 	return NULL;
 }
-
+/*
 int writeAlbumToTextFile(const Album* pAlbum, const char* fileName)
 {
     if(!pAlbum)
@@ -82,7 +82,7 @@ int writeAlbumToTextFile(const Album* pAlbum, const char* fileName)
     }
     fclose(fp);
     return 1;
-}
+}*/
 
 int writeAlbumToTextFileWithOpenFile(const Album* pAlbum,FILE* fp)
 {
@@ -101,7 +101,7 @@ int writeAlbumToTextFileWithOpenFile(const Album* pAlbum,FILE* fp)
     }
     return 1;
 }
-
+/*
 int writeAlbumToBFile(const Album* pAlbum, const char* fileName)
 {
     FILE* fp;
@@ -124,7 +124,7 @@ int writeAlbumToBFile(const Album* pAlbum, const char* fileName)
     }
     fclose(fp);
     return 1;
-}
+}*/
 int writeAlbumToBFileWithOpenFile(const Album* pAlbum, FILE* fp)
 {
     CHECK_RETURN_0(fp)
@@ -145,7 +145,7 @@ int writeAlbumToBFileWithOpenFile(const Album* pAlbum, FILE* fp)
     }
     return 1;
 }
-
+/*
 int readAlbumFromTextFile(Album* pAlbum, const char* fileName,Artist* artists, int size,const SongRepository* pSongs)
 {
     FILE* fp;
@@ -175,7 +175,7 @@ int readAlbumFromTextFile(Album* pAlbum, const char* fileName,Artist* artists, i
     }
     fclose(fp);
     return 1;
-}
+}*/
 
 int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp, Artist* artists, int size,const SongRepository* pSongs)
 {
@@ -204,7 +204,7 @@ int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp, Artist* artists, 
     }
     return 1;
 }
-
+/*
 int readAlbumFromBFile(Album* pAlbum, const char* fileName,  Artist* artists, int size,const SongRepository* pSongs)
 {
     FILE* fp;
@@ -240,7 +240,7 @@ int readAlbumFromBFile(Album* pAlbum, const char* fileName,  Artist* artists, in
     }
     fclose(fp);
     return 1;
-}
+}*/
 
 int readAlbumFromBFileWithOpenFile(Album* pAlbum, FILE* fp, Artist* artists, int size, const SongRepository* pSongs)
 {

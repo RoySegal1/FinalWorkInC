@@ -23,11 +23,11 @@ void printAlbum(const Album* pAlbum);
 void freeAlbum(Album* pAlbum);
 
 
-int readAlbumFromBFile(Album* pAlbum, const char* fileName,  Artist* artists, int size,const SongRepository* pSongs);
+//int readAlbumFromBFile(Album* pAlbum, const char* fileName,  Artist* artists, int size,const SongRepository* pSongs);
 int readAlbumFromBFileWithOpenFile(Album* pAlbum,FILE* fp,  Artist* artists, int size,const SongRepository* pSongs);
-int writeAlbumToBFile(const Album* pAlbum, const char* fileName);
+//int writeAlbumToBFile(const Album* pAlbum, const char* fileName);
 int writeAlbumToBFileWithOpenFile(const Album* pAlbum, FILE* fp);
-int readAlbumFromTextFile(Album* pAlbum, const char* fileName,  Artist* artists, int size,const SongRepository* pSongs);
+//int readAlbumFromTextFile(Album* pAlbum, const char* fileName,  Artist* artists, int size,const SongRepository* pSongs);
 int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp,  Artist* artists, int size, const SongRepository* pSongs);
-int writeAlbumToTextFile(const Album* pAlbum, const char* fileName);
+//int writeAlbumToTextFile(const Album* pAlbum, const char* fileName);
 int writeAlbumToTextFileWithOpenFile(const Album* pAlbum,FILE* fp); // for user

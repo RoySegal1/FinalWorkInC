@@ -236,7 +236,7 @@ int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists
         return NOT_ENOUGH;
     }
     printf("Enter Index Of PlayList To Be Added 1 - %d\n", pPlayLists->numOfPlayList);
-    printPlayListsWithIndex(pPlayLists);
+    printPlayLists(pPlayLists);
     do {
         scanf("%d", &playListChoice);
     } while (playListChoice<0 || playListChoice>pPlayLists->numOfPlayList);
@@ -248,7 +248,7 @@ int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists
             printf(ANSI_COLOR_GREEN"PlayList Added\n"ANSI_COLOR_RESET);
     return 1;
 }
-int addAlbumstoUser(User* pUser,const AlbumManager* pAlbums)
+int addAlbumFromAlbumManagertoUser(User* pUser,const AlbumManager* pAlbums)
 {
     int albumChoice;
     if (pAlbums->numOfAlbums < 1)
@@ -425,6 +425,7 @@ void printPlayListForUser(const User* pUser)
 {
     for (int i = 0; i < pUser->numOfPlaylists; i++)
     {
+        printf("%d - ", i + 1);
         printPlayList(&pUser->userPlayLists[i]);
     }
 }
@@ -433,6 +434,7 @@ void printAlbumsForUser(const User* pUser)
 {
     for (int i = 0; i < pUser->numOfAlbums; i++)
     {
+        printf("%d - ", i + 1);
         printAlbum(&pUser->userAlbums[i]);
     }
 }
@@ -589,8 +591,6 @@ int writeUserToBFile(const User* pUser, const char* fileName) /// maybe take out
     char temp[MAX_STR_LEN];
     strcpy(temp, pUser->userName);
     strcat(temp, ".bin");
-    if (temp == NULL)
-        return 0;
     fp = fopen(temp,"wb");
     CHECK_RETURN_0_PRINT(fp, "Error Opening File")
         if (!writeStringToFile(pUser->userName, fp, "Error Writing User name"))
