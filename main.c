@@ -2,9 +2,9 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
-//#include <crtdbg.h>
+#include <crtdbg.h>
 #include <time.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include "string.h"
 #include "artist.h"
 #include "song.h"
@@ -21,10 +21,10 @@
 
 
 int main() {
-//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-    //Sleep(2000);
+    Sleep(2000);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -127,18 +127,16 @@ int main() {
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
                 printf(ANSI_COLOR_RED"Error, Cant open %s\n"ANSI_COLOR_RESET,userFileName);
-                freeSystem(&sR,&pR,&A,&aManager,&user);
-
-//                freeAlbumManager(&aManager);
-//                freeSongRepository(&sR);
-//                freePlayListsRepo(&pR);
-//                freeArtistRepository(&A);
+                //freeSystem(&sR,&pR,&A,&aManager,NULL);
+                freeAlbumManager(&aManager);
+                freeSongRepository(&sR);
+                freePlayListsRepo(&pR);
+                freeArtistRepository(&A);
                 return 0;
             }
             if (userSubMenu(&user, &sR, &pR, &aManager) == ERROR)
             {
                 freeSystem(&sR,&pR,&A,&aManager,&user);
-
                 return 0;
             }
             endProgram(&sR,&pR,&A,&aManager,&user);
@@ -182,7 +180,7 @@ int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposit
         printf("11. Print All Albums\n");
         printf("12. Print All Data About User\n");
         printf("13. Sort A User PlayList\n");
-        printf("14. Find A Song In A User PlayList\n");
+        printf("14. Find A Song In An Ordered PlayList\n");
         printf("15. Exit\n");
         printf("Enter your choice: "ANSI_COLOR_RESET);
         scanf("%d", &choice);
@@ -260,22 +258,46 @@ int initSystemFromFile(SongRepository* pSong, PlayListRepository* pPlayList, Art
         if (!initArtistRepositoryFromFile(pArtists, ARTIST_REPO_FROM_BIN, FROM_BINARY_FILE))
             return 0;
         if (!loadSongsRepositoryFromBFile(pSong, SONGS_REPO_FROM_BIN, pArtists->allArtists, pArtists->numOfArtist))
+        {
+            freeArtistRepository(pArtists);
             return 0;
+        }
         if (!loadPlayListRepositoryFromFile(pPlayList, PLAYLIST_REPO_FROM_BIN, pSong, FROM_BINARY_FILE))
+        {
+            freeArtistRepository(pArtists);
+            freeSongRepository(pSong);
             return 0;
-        if(!readAlbumManagerFromFile(pAlbum,"Albums.bin",pArtists->allArtists,pArtists->numOfArtist,pSong,FROM_BINARY_FILE))
+        }
+        if(!readAlbumManagerFromFile(pAlbum, ALBUM_MANAGER_FROM_BIN,pArtists->allArtists,pArtists->numOfArtist,pSong,FROM_BINARY_FILE))
+        {
+            freeArtistRepository(pArtists);
+            freeSongRepository(pSong);
+            freePlayListsRepo(pPlayList);
             return 0;
+        }
     }
     else
     {/////// need to call to end program function
         if (!initArtistRepositoryFromFile(pArtists, ARTIST_REPO_FROM_TEXT, FROM_TEXT_FILE))
             return 0;
         if (!loadSongsRepositoryFromTextFile(pSong, SONGS_REPO_FROM_TEXT, pArtists->allArtists, pArtists->numOfArtist))
+        {
+            freeArtistRepository(pArtists);
             return 0;
+        }
         if (!loadPlayListRepositoryFromFile(pPlayList, PLAYLIST_REPO_FROM_TEXT, pSong, FROM_TEXT_FILE))
+        {
+            freeArtistRepository(pArtists);
+            freeSongRepository(pSong);
             return 0;
-        if(!readAlbumManagerFromFile(pAlbum, "Albums.txt", pArtists->allArtists,  pArtists->numOfArtist, pSong, FROM_TEXT_FILE))
+        }
+        if(!readAlbumManagerFromFile(pAlbum, ALBUM_MANAGER_FROM_TEXT, pArtists->allArtists,  pArtists->numOfArtist, pSong, FROM_TEXT_FILE))
+        {
+            freeArtistRepository(pArtists);
+            freeSongRepository(pSong);
+            freePlayListsRepo(pPlayList);
             return 0;
+        }
     }
     return 1;
 }
@@ -286,7 +308,7 @@ int saveSystemFiles(SongRepository* pSong, PlayListRepository* pPlayList, Artist
 
     if(!saveArtistRepositoryToFile(pArtists, ARTIST_REPO_FROM_BIN, FROM_BINARY_FILE))
         return 0;
-    if(! saveArtistRepositoryToFile(pArtists, ARTIST_REPO_FROM_TEXT, FROM_TEXT_FILE))
+    if(!saveArtistRepositoryToFile(pArtists, ARTIST_REPO_FROM_TEXT, FROM_TEXT_FILE))
         return 0;
 
     if(!saveSongRepositoryToBFile(pSong,SONGS_REPO_FROM_BIN))

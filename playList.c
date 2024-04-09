@@ -188,11 +188,12 @@ void findSong(const PlayList* pPlay) // need to be modified maby, finding not a 
             printf("Array not sorted, cant perform search.\n");
             break;
     }
-    if(compare!=NULL) {
-        Song **pS = bsearch(&pTemp, pPlay->allSongs, pPlay->numOfSongs, sizeof(Song *), compare);
+    if (compare != NULL) {
+        Song** pS = bsearch(&pTemp, pPlay->allSongs, pPlay->numOfSongs, sizeof(Song*), compare);
         if (pS == NULL) {
             printf("didnt find\n");
-        } else {
+        }
+        else {
             printSong(*pS);
         }
     }
