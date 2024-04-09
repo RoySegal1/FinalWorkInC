@@ -43,7 +43,7 @@ int compareSongByCode(const void* pSong1,const void* pSong2);
 
 
 int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size);
-int writeSongToBFile(Song* pSong,FILE* fp);
+int writeSongToBFile(const Song* pSong,FILE* fp);
 int readSongFromTextFile(Song* pSong, FILE* fp, Artist* artists, int size);
-int writeSongToTextFile(Song* pSong, FILE* fp);
+int writeSongToTextFile(const Song* pSong, FILE* fp);
 Artist* findArtistInArr(Artist* pArr,int size,const char* name);

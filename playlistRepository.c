@@ -15,7 +15,7 @@ void initPlayListRepo(PlayListRepository* repository)
 }
 
 
-int savePlayListRepositoryToFile(PlayListRepository* pPlay, const char* fileName, int fileType)
+int savePlayListRepositoryToFile(const PlayListRepository* pPlay, const char* fileName, int fileType)
 {
     if (fileType == FROM_BINARY_FILE)
     {
@@ -51,7 +51,7 @@ int loadPlayListRepositoryFromFile(PlayListRepository* pPlay, const char* fileNa
 }
 
 
-int savePlayListArrToBfile(PlayListRepository* pPlay, const char* fileName)
+int savePlayListArrToBfile(const PlayListRepository* pPlay, const char* fileName)
 {
     CHECK_RETURN_0(pPlay)
         FILE* fp = fopen(fileName, "wb");
@@ -68,7 +68,7 @@ int savePlayListArrToBfile(PlayListRepository* pPlay, const char* fileName)
 }
 
 
-int savePlayListArrToTextFile(PlayListRepository* pPlay, const char* fileName)
+int savePlayListArrToTextFile(const PlayListRepository* pPlay, const char* fileName)
 {
     CHECK_RETURN_0(pPlay)
         FILE* fp = fopen(fileName, "w");
@@ -147,7 +147,7 @@ int createNewSystemPlayList(PlayListRepository* pPlayRepository,SongRepository* 
     while(maxSongs<0 || maxSongs>pSongRepository->numSongs);
     if (maxSongs == 0)
         return RETURN_MENU;
-    pPlayRepository->systemPlaylists = (PlayList*) realloc(pPlayRepository->systemPlaylists,(pPlayRepository->numOfPlayList+1)*(sizeof(PlayList)));
+    pPlayRepository->systemPlaylists = (PlayList*)realloc(pPlayRepository->systemPlaylists, (pPlayRepository->numOfPlayList + 1) * (sizeof(PlayList)));
     CHECK_RETURN_0(pPlayRepository->systemPlaylists)
         if (initPlayListForSystem(&pPlayRepository->systemPlaylists[pPlayRepository->numOfPlayList]) == ERROR)
             return ERROR;
