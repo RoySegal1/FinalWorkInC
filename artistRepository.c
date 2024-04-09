@@ -171,7 +171,6 @@ void freeArtistRepository(ArtistRepository * artistRepository)
 
 int addArtistToRepository(ArtistRepository* artistRepository)
 {
-
     artistRepository->allArtists = (Artist *)realloc(artistRepository->allArtists,(artistRepository->numOfArtist + 1)*sizeof(Artist));
     if(!artistRepository->allArtists)
         return ERROR;

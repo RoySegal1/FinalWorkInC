@@ -219,10 +219,12 @@ int addSongToRepository(SongRepository* pRepository, Artist* artists,int size)
         showArtistName(&artists[i]);
     }
     do {
-      printf("Enter index of artists to add to song\n");
+      printf("Enter index of artists to add to song\n" ANSI_COLOR_RED"To return menu Press 0\n"ANSI_COLOR_RESET);
       scanf("%d",&artistIndex);
     }
     while(artistIndex<0 || artistIndex> size);//number of artists)
+    if (artistIndex == 0)
+            return RETURN_MENU;
     pRepository->songsArr = (Song*)realloc(pRepository->songsArr, (pRepository->numSongs + 1) * sizeof(Song));
     if (!pRepository->songsArr)
         return ERROR;

@@ -237,9 +237,12 @@ int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists
     }
     printf("Enter Index Of PlayList To Be Added 1 - %d\n", pPlayLists->numOfPlayList);
     printPlayLists(pPlayLists);
+    printf(ANSI_COLOR_RED"To return menu Press 0\n"ANSI_COLOR_RESET);
     do {
         scanf("%d", &playListChoice);
     } while (playListChoice<0 || playListChoice>pPlayLists->numOfPlayList);
+    if(playListChoice == 0)
+        return RETURN_MENU;
     int flagAdd = addPlayListToUser(pUser, &pPlayLists->systemPlaylists[playListChoice - 1]);
     if (flagAdd == ERROR)
         return ERROR;
@@ -301,11 +304,14 @@ int deletePlayListFromUser(User* pUser)
     {
         printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n",i+1,pUser->userPlayLists[i].playlistName);
     }
+    printf(ANSI_COLOR_RED"To return menu Press 0\n"ANSI_COLOR_RESET);
     int choice;
     do{
         scanf("%d",&choice);
     }
     while(choice<0 || choice>pUser->numOfPlaylists);
+    if (choice == 0)
+        return RETURN_MENU;
     if (pUser->userPlayLists[choice - 1].typeOfPlayList == eUser) // if the user created the playlist he needs to free it.
         freePlayList(&pUser->userPlayLists[choice - 1]);
     pUser->userPlayLists[choice-1] = pUser->userPlayLists[pUser->numOfPlaylists-1];
@@ -443,9 +449,9 @@ void freeUser(User* pUser)
 {
     if(pUser->numOfAlbums)
     freeUserAlbums(pUser->userAlbums,pUser->numOfAlbums);
-    if (pUser->userPlayLists)
+    if (pUser->numOfPlaylists)
     freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
-    if (pUser->userName)
+    if (pUser->userName != NULL && *pUser->userName != '\0')
     free(pUser->userName);
 }
 
@@ -545,11 +551,12 @@ int readUserFromTextFile(User* pUser, const char* fileName, Artist* artists, int
     if(fscanf(fp,"%d",&pUser->numOfPlaylists) != 1)
     {
         free(pUser->userName);
-        return 0;
+        return 0;//numOfPlaylist =0;
     }
     if (!createPlayListArr(pUser))
     {
         free(pUser->userName);
+        pUser->numOfPlaylists =0;
         return 0;
     }
     for (int i = 0; i < pUser->numOfPlaylists; i++) {
@@ -557,6 +564,7 @@ int readUserFromTextFile(User* pUser, const char* fileName, Artist* artists, int
         {
             freeUserPlayLists(pUser->userPlayLists,i);
             free(pUser->userName);
+            pUser->numOfPlaylists =0;
             return 0;
         }
     }
@@ -564,12 +572,14 @@ int readUserFromTextFile(User* pUser, const char* fileName, Artist* artists, int
     {
         freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
         free(pUser->userName);
+        pUser->numOfPlaylists =0;
         return 0;
     }
     if (!createAlbumArr(pUser))
     {
         freeUserPlayLists(pUser->userPlayLists, pUser->numOfPlaylists);
         free(pUser->userName);
+        pUser->numOfPlaylists =0;
         return 0;
     }
     for (int i = 0; i < pUser->numOfAlbums; i++) {
@@ -578,6 +588,8 @@ int readUserFromTextFile(User* pUser, const char* fileName, Artist* artists, int
             freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
             freeUserAlbums(pUser->userAlbums,i);
             free(pUser->userName);
+            pUser->numOfPlaylists =0;
+            pUser->numOfAlbums =0;
             return 0;
         }
     }
@@ -636,6 +648,7 @@ int readUserFromBFile(User* pUser, const char* fileName, Artist* artists, int si
         {
             freeUserPlayLists(pUser->userPlayLists,i);
             free(pUser->userName);
+            pUser->numOfPlaylists =0;
             return 0;
         }
     }
@@ -643,11 +656,13 @@ int readUserFromBFile(User* pUser, const char* fileName, Artist* artists, int si
     {
         freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
         free(pUser->userName);
+        pUser->numOfPlaylists =0;
         return 0;
     }
     if (!createAlbumArr(pUser)) {
         freeUserPlayLists(pUser->userPlayLists, pUser->numOfPlaylists);
         free(pUser->userName);
+        pUser->numOfPlaylists =0;
         return 0;
     }
     for (int i = 0; i < pUser->numOfAlbums; i++) {
@@ -655,6 +670,8 @@ int readUserFromBFile(User* pUser, const char* fileName, Artist* artists, int si
             freeUserPlayLists(pUser->userPlayLists, pUser->numOfPlaylists);
             freeUserAlbums(pUser->userAlbums, i);
             free(pUser->userName);
+            pUser->numOfPlaylists =0;
+            pUser->numOfAlbums =0;
             return 0;
         }
     }

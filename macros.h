@@ -5,6 +5,7 @@
 #ifndef FINALWORKINC_MACROS_H
 #define FINALWORKINC_MACROS_H
 
+#define RETURN_MENU (-1)
 #define ERROR 0
 #define FROM_TEXT_FILE 1
 #define FROM_BINARY_FILE 2
