@@ -248,7 +248,7 @@ int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
     codeHelper++;
     return 1;
 }
-int writeSongToBFile(Song* pSong,FILE* fp)
+int writeSongToBFile(const Song* pSong,FILE* fp)
 {
     //WriteArtist
     if (!writeStringToFile(pSong->artist.name, fp, "Error Writing Artist Name"))
@@ -288,7 +288,7 @@ int readSongFromTextFile(Song* pSong, FILE* fp,Artist* artists,int size)
     return 1;
 
 }
-int writeSongToTextFile(Song* pSong, FILE* fp)
+int writeSongToTextFile(const Song* pSong, FILE* fp)
 {
     //Artist
     fprintf(fp,"%s\n", pSong->artist.name);

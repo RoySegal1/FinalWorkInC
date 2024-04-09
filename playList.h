@@ -42,8 +42,8 @@ void printPlayList(const PlayList* pPlay);
 void freePlayList(PlayList* pPlay);
 void freeSongsArr(Song** pSongs, int size);
 
-int writePlayListToBFile(PlayList* pPlay,FILE* fp);
-int writePlayListToTextFile(PlayList* pPlay,FILE* fp);
+int writePlayListToBFile(const PlayList* pPlay,FILE* fp);
+int writePlayListToTextFile(const PlayList* pPlay,FILE* fp);
 int readPlayListFromBFile(PlayList* pPlay,FILE* fp,const SongRepository* sR);
 int readPlayListFromTextFile(PlayList* pPlay,FILE* fp,const SongRepository* sR);
 

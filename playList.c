@@ -45,9 +45,8 @@ int addSongToPlayList(PlayList* pPlay, Song* pSong)
             return DUPLICATE;
         }
     }
-    pPlay->allSongs = (Song**)realloc(pPlay->allSongs,(pPlay->numOfSongs + 1)*sizeof(Song*));
-    if(!pPlay->allSongs)
-        return ERROR;
+    pPlay->allSongs = (Song**)realloc(pPlay->allSongs, (pPlay->numOfSongs + 1) * sizeof(Song*));
+    CHECK_RETURN_0(pPlay->allSongs)
     pPlay->allSongs[pPlay->numOfSongs] = pSong;
     pPlay->numOfSongs++;
     pPlay->playListSortOp = eNotOrdered; // when we add a song the arr becomes not sorted.
@@ -89,7 +88,7 @@ int removeSongFromPlayList(PlayList* pPlay)
     while(index<0||index>pPlay->numOfSongs);
     index -=1; // index goes from 1..numOfSongs,  so now 0...numOfSongs-1.
     pPlay->allSongs[index] = pPlay->allSongs[pPlay->numOfSongs-1];
-    pPlay->allSongs = (Song**)realloc(pPlay->allSongs,(pPlay->numOfSongs - 1)*sizeof(Song*));
+    pPlay->allSongs = (Song**)realloc(pPlay->allSongs, (pPlay->numOfSongs - 1) * sizeof(Song*));
     pPlay->numOfSongs--;
     if(pPlay->numOfSongs != 0) // if PlayList isnt empty
         if(!pPlay->allSongs)
@@ -264,7 +263,7 @@ int createSongArr(PlayList* pPlay) // for reading from a file
     return 1;
 }
 
-int writePlayListToBFile(PlayList* pPlay,FILE* fp)
+int writePlayListToBFile(const PlayList* pPlay,FILE* fp)
 {
     CHECK_RETURN_0(pPlay)
 //    if(!pPlay)
@@ -282,7 +281,7 @@ int writePlayListToBFile(PlayList* pPlay,FILE* fp)
     return 1;
 
 }
-int writePlayListToTextFile(PlayList* pPlay,FILE* fp)
+int writePlayListToTextFile(const PlayList* pPlay,FILE* fp)
 {
     CHECK_RETURN_0(pPlay)
 //    if(!pPlay)

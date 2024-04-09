@@ -81,7 +81,7 @@ int	loadArtistFromTextFile(Artist * artist, FILE* fp)
 }
 
 
-int writeArtistToBFile(Artist * pArtist,FILE* fp)
+int writeArtistToBFile(const Artist * pArtist,FILE* fp)
 {
     if(!writeStringToFile(pArtist->name,fp,"Error Writing Artist Name"))
         return 0;
@@ -93,7 +93,7 @@ int writeArtistToBFile(Artist * pArtist,FILE* fp)
         return 0;
     return 1;
 }
-int saveArtistToCompressFile(Artist* pArtist, FILE* fp)
+int saveArtistToCompressFile(const Artist* pArtist, FILE* fp)
 {
     if(pArtist->amountOfPlay > MAX_NUM_PLAY) //more than we can compress 
         PRINT_RETURN_0("Cant compress num of artist to File")
@@ -105,8 +105,8 @@ int saveArtistToCompressFile(Artist* pArtist, FILE* fp)
          PRINT_RETURN_0("Cant compress CV len of artist to File")
 
     BYTE dataArtist[4];
-    int len1  = strlen(pArtist->name);
-    int len2 = strlen(pArtist->aboutMe);
+    int len1 = (int)strlen(pArtist->name);
+    int len2 = (int)strlen(pArtist->aboutMe);
     dataArtist[0] = len1 << 3 | len2 >> 5;
     dataArtist[1] = (len2 & 0x1F) << 3 | pArtist->amountOfSongs >> 4 ;
     dataArtist[2] = (pArtist->amountOfSongs & 0xF) << 4 | pArtist->amountOfPlay >> 8;
