@@ -141,11 +141,12 @@ int createNewSystemPlayList(PlayListRepository* pPlayRepository,SongRepository* 
 {
     int maxSongs;
     do{
-        printf("Enter Number Of Max Songs in PlayList 1 - %d\n",pSongRepository->numSongs);
+        printf("Enter Number Of Max Songs in PlayList 1 - %d\n"ANSI_COLOR_RED"To return menu Press 0\n"ANSI_COLOR_RESET,pSongRepository->numSongs);
         scanf("%d",&maxSongs);
     }
     while(maxSongs<0 || maxSongs>pSongRepository->numSongs);
-
+    if (maxSongs == 0)
+        return RETURN_MENU;
     pPlayRepository->systemPlaylists = (PlayList*) realloc(pPlayRepository->systemPlaylists,(pPlayRepository->numOfPlayList+1)*(sizeof(PlayList)));
     CHECK_RETURN_0(pPlayRepository->systemPlaylists)
         if (initPlayListForSystem(&pPlayRepository->systemPlaylists[pPlayRepository->numOfPlayList]) == ERROR)

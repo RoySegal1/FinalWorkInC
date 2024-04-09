@@ -12,14 +12,18 @@ int addAlbumToManager(AlbumManager* pAblumManager,const ArtistRepository* pArtis
         printf(ANSI_COLOR_RED"Not Enough Artists.\n"ANSI_COLOR_RESET);
         return 0;
     }
-    pAblumManager->allAlbums = (Album*) realloc(pAblumManager->allAlbums,sizeof(Album)*(pAblumManager->numOfAlbums+ 1));
-    CHECK_RETURN_0(pAblumManager->allAlbums)
-    printf("Enter Artist For Album 1 - %d\n",pArtistRepo->numOfArtist);
-    showArtistRepository(pArtistRepo);
+
     int artistChoice;
     do {
+        printf("Enter Artist For Album 1 - %d\n",pArtistRepo->numOfArtist);
+        showArtistRepository(pArtistRepo);
+        printf(ANSI_COLOR_RED"To return menu Press 0\n"ANSI_COLOR_RESET);
         scanf("%d",&artistChoice);
-    }while(artistChoice<0 || artistChoice>pArtistRepo->numOfArtist);
+    }while(artistChoice < 0 || artistChoice>pArtistRepo->numOfArtist);
+    if (artistChoice == 0)
+        return RETURN_MENU;
+    pAblumManager->allAlbums = (Album*) realloc(pAblumManager->allAlbums,sizeof(Album)*(pAblumManager->numOfAlbums+ 1));
+    CHECK_RETURN_0(pAblumManager->allAlbums)
     if(!initAlbum(&pAblumManager->allAlbums[pAblumManager->numOfAlbums++],&pArtistRepo->allArtists[artistChoice-1]))
         return ERROR;
     else
