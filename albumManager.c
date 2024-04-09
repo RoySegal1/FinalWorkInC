@@ -46,10 +46,13 @@ int addSongToAlbumManager(AlbumManager* pAlbumManager,const SongRepository* pSon
     for (int i = 0; i < pAlbumManager->numOfAlbums; ++i) {
         printf("%d."ANSI_COLOR_BLUE"%s\n"ANSI_COLOR_RESET,i+1,pAlbumManager->allAlbums[i].albumName);
     }
+    printf(ANSI_COLOR_RED"To return menu Press 0\n"ANSI_COLOR_RESET);
     int albumChoice,songChoice;
     do {
         scanf("%d",&albumChoice);
     }while(albumChoice<0 || albumChoice>pAlbumManager->numOfAlbums);
+    if (albumChoice == 0)
+        return RETURN_MENU;
     albumChoice--;
     printf("Enter Song Index To Be Added To Album\n");
     printAllSongs(pSongs);

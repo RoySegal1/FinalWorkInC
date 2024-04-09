@@ -21,8 +21,8 @@ int	 writeStringToFile(const char* str, FILE* fp,const char* msg)
 }
 int	 writeStringToComprassFile(const char* str, FILE* fp, const char* msg)
 {
-
-	if (!writeCharsToFile(str, strlen(str), fp, msg))
+	int length = (int)strlen(str);
+	if (!writeCharsToFile(str, length, fp, msg))
 		return 0;
 
 

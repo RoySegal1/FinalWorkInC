@@ -145,11 +145,9 @@ void sortPlayList(PlayList* pPlay)
     }
 }
 
-void findSong(const PlayList* pPlay) // need to be modified maby, finding not a particular song
+void findSong(const PlayList* pPlay) 
 {
     CHECK_RETURN(pPlay)
-//    if(!pPlay)
-//        return;
     if (pPlay->numOfSongs < 1)
     {
         printf("PlayList is empty\n");
@@ -215,8 +213,6 @@ eSortOption showSortMenu()
 
 void printPlayList(const PlayList* pPlay) {
     CHECK_RETURN(pPlay)
-//    if(!pPlay)
-//        return;
     if (pPlay->numOfSongs < 1)
     {
         printf("Playlist name: %s is empty\n",pPlay->playlistName);
@@ -224,16 +220,11 @@ void printPlayList(const PlayList* pPlay) {
     }
     printf("PlayList (%s) Name: %s, Has %d Songs\n",playListType[pPlay->typeOfPlayList],pPlay->playlistName,pPlay->numOfSongs);
     generalArrayFunctionForRepostiory(pPlay->allSongs, pPlay->numOfSongs, sizeof(Song*), printSongForPlayListptr);
-    //for (int i = 0; i < pPlay->numOfSongs; i++) {
-    //    printf("%d.",i+1);
-     //   printSongForPlayList(pPlay->allSongs[i]);
-  //  }
     printf("\n");
 }
 
 void freePlayList(PlayList* pPlay)
 {
-   // freeSongsArr(pPlay->allSongs,pPlay->numOfSongs);
     free(pPlay->playlistName);
     free(pPlay->allSongs);
 }
@@ -256,18 +247,12 @@ int createSongArr(PlayList* pPlay) // for reading from a file
     else
         pPlay->allSongs = NULL;
 
-   /* for (int i = 0; i < pPlay->numOfSongs; i++) {
-        pPlay->allSongs[i] = (Song*)calloc(1,sizeof(Song));
-        CHECK_RETURN_0_PRINT(pPlay->allSongs[i])
-    }*/
     return 1;
 }
 
 int writePlayListToBFile(const PlayList* pPlay,FILE* fp)
 {
     CHECK_RETURN_0(pPlay)
-//    if(!pPlay)
-//        return 0;
     if(!writeStringToFile(pPlay->playlistName,fp,"Error Writing PlayList Name"))
         return 0;
     if(!writeIntToFile(pPlay->numOfSongs,fp,"Error Writing number of songs"))
@@ -284,8 +269,6 @@ int writePlayListToBFile(const PlayList* pPlay,FILE* fp)
 int writePlayListToTextFile(const PlayList* pPlay,FILE* fp)
 {
     CHECK_RETURN_0(pPlay)
-//    if(!pPlay)
-//        return 0;
     fprintf(fp,"%s\n",pPlay->playlistName);
     fprintf(fp,"%d\n",pPlay->numOfSongs);
     for (int i = 0; i < pPlay->numOfSongs; i++) {
@@ -297,8 +280,6 @@ int writePlayListToTextFile(const PlayList* pPlay,FILE* fp)
 int readPlayListFromBFile(PlayList* pPlay, FILE* fp,const SongRepository* sR)
 {
     CHECK_RETURN_0(pPlay)
-        //    if(!pPlay)
-        //        return 0;
         pPlay->playlistName = readStringFromFile(fp, "Error Reading PlayList Name");
     if (!pPlay->playlistName)
         return 0;

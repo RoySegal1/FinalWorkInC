@@ -1,11 +1,10 @@
-#define _CRT_SECURE_NO_WARNINGS
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <time.h>
-//#include <unistd.h>
 #include "string.h"
+#include "SDL3/SDL.h"
 #include "artist.h"
 #include "song.h"
 #include "album.h"
@@ -21,10 +20,11 @@
 
 
 int main() {
+    srand((unsigned int)time(NULL)); // everytime we will get a different shuffle
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-    Sleep(2000);
+    SDL_Delay(2000);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -38,11 +38,6 @@ int main() {
     initUserZeros(&user);
     if (!initSystemFromFile(&sR, &pR, &A,&aManager, fileChoice))
         return 0;
-//    Album album;
-//    L_init(&album.songs);
-
-//    readAlbumManagerFromFile(&aManager, "Albums.txt", A.allArtists, A.numOfArtist, &sR, FROM_TEXT_FILE);
- //   readAlbumFromTextFile(&album, "Album.txt", A.allArtists, A.numOfArtist, &sR);
     int choice;
     char userFileName[MAX_STR_LEN];
     do {
@@ -61,7 +56,6 @@ int main() {
         printf("12. Quit\n");
         printf("Enter your choice: "ANSI_COLOR_RESET);
         scanf("%d", &choice);
-        // Implement functionality based on user choice
         switch (choice) {
         case 1:
             if(addSongToRepository(&sR, A.allArtists, A.numOfArtist) == ERROR)
@@ -127,7 +121,6 @@ int main() {
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
                 printf(ANSI_COLOR_RED"Error, Cant open %s\n"ANSI_COLOR_RESET,userFileName);
-                //freeSystem(&sR,&pR,&A,&aManager,NULL);
                 freeAlbumManager(&aManager);
                 freeSongRepository(&sR);
                 freePlayListsRepo(&pR);
@@ -185,7 +178,6 @@ int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposit
         printf("Enter your choice: "ANSI_COLOR_RESET);
         scanf("%d", &choice);
 
-        // Implement functionality based on user choice
         switch (choice) {
         case 1:
             if(addPlayListToUserFromSystem(pUser, pPlayLists) == ERROR)
@@ -338,21 +330,16 @@ void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepo
 {
 
     printf("Do you want to save before exit program?\n"ANSI_COLOR_GREEN "1) YES\n"ANSI_COLOR_RESET ANSI_COLOR_RED "2) NO\n"ANSI_COLOR_RESET);
-        int saveOp;
-        scanf("%d",&saveOp);
+    int saveOp;
+    do {
+        scanf("%d", &saveOp);
+    } while (saveOp < 1 || saveOp > 2);
     if (saveOp == 1)
     {
       if(!saveSystemFiles( pSong,  pPlayList,  pArtists,pAlbum,pUser))
           printf("Failed to save the files\n");
-        saveOp = 2;
-
     }
     freeSystem( pSong,  pPlayList,  pArtists,pAlbum,pUser);
-//        freeAlbumManager(pAlbum);
-//        freeSongRepository(pSong);
-//        freePlayListsRepo(pPlayList);
-//        freeArtistRepository(pArtists);
-//        freeUser(pUser);
 }
 
 

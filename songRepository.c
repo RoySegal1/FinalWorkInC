@@ -34,11 +34,6 @@ int loadSongsRepositoryFromBFile(SongRepository* songRepository, const char* fil
     FILE* fp;
     fp = fopen(fileName, "rb");
     CHECK_RETURN_0_PRINT(fp,"Error open Song repository file\n")
-//    if (!fp)
-//    {
-//        printf("Error open Song repository file\n");
-//        return 0;
-//    }
 
     if (!readIntFromFile(&songRepository->numSongs, fp, "Error reading song count\n"))
     {
@@ -76,9 +71,7 @@ int loadSongArrFromBFile(SongRepository* repository, FILE* fp, Artist* artists, 
             for (int j =0; j < i; ++j)
             {
                 freeSong(&repository->songsArr[j]);
-//                free(&repository->songsArr[j]);
             }
-          //  free(repository->songsArr);
             return 0;
         }
     }
@@ -90,10 +83,6 @@ int saveSongRepositoryToBFile(const SongRepository* songRepository, const char* 
     FILE* fp;
     fp = fopen(fileName, "wb");
     CHECK_RETURN_0_PRINT(fp,"Error open Song repository file to write\n")
-//    if (!fp) {
-//        printf("Error open Song repository file to write\n");
-//        return 0;
-//    }
     if (!writeIntToFile(songRepository->numSongs, fp, "Error write songs count\n"))
     {
         fclose(fp);
@@ -119,10 +108,6 @@ int saveSongRepositoryToTextFile(const SongRepository* songRepository, const cha
 
     fp = fopen(fileName, "w");
     CHECK_RETURN_0_PRINT(fp,"Error open song repository file to write\n")// if file == null print and return 0
-//    if (!fp) {
-//        printf("Error open song repository file to write\n");
-//        return 0;
-//    }
 
     fprintf(fp, "%d\n", songRepository->numSongs);
 
@@ -146,11 +131,6 @@ int  loadSongsRepositoryFromTextFile(SongRepository* songRepository, const char*
 
     fp = fopen(fileName, "r");
     CHECK_RETURN_0_PRINT(fp,"Error open song repository file\n")// if file == null print and return 0
-//    if (!fp)
-//    {
-//        printf("Error open song repository file\n");
-//        return 0;
-//    }
 
    if(fscanf(fp, "%d", &songRepository->numSongs) != 1)
        return 0;
@@ -184,7 +164,6 @@ int loadSongArrFromTextFile(SongRepository *repository, FILE *fp, Artist *artist
             for (int j =0; j < i; ++j)
             {
                 freeSong(&repository->songsArr[j]);
-//                free(&repository->songsArr[j]);
             }
             return 0;
         }
@@ -199,18 +178,12 @@ Song* getSongFromRepositoryByCode(const SongRepository* pSongs,const char Code[C
     Song * pTemp = & sTemp;
     strcpy(pTemp->songCode,Code);
     pTemp = bsearch(pTemp,pSongs->songsArr,pSongs->numSongs, sizeof(Song),compareSongByCode);
-//    for (int i = 0; i < pSongs->numSongs; i++) {
-//        if(!strcmp(pSongs->songsArr[i].songCode,Code))
-//            return &pSongs->songsArr[i];
-//    }
     return pTemp;
 
 }
 
 int addSongToRepository(SongRepository* pRepository, Artist* artists,int size)
 {
-//    if(pSong == NULL)
-//        return 0;
     int artistIndex;
     //print all artists
     for (int i = 0; i < size; i++)
@@ -229,13 +202,6 @@ int addSongToRepository(SongRepository* pRepository, Artist* artists,int size)
     if (!pRepository->songsArr)
         return ERROR;
     initSong(&pRepository->songsArr[pRepository->numSongs], &artists[artistIndex-1]);
-   // Song* temp = getSongFromRepositoryByCode(pRepository, pRepository->songsArr[pRepository->numSongs + 1].songCode);
-   // if(temp)// if temp != null
-    //{
-     //   printf(ANSI_COLOR_RED"Song already exist in repository\n"ANSI_COLOR_RESET);
-      //  codeHelper--;
-       // return 0;
-   // }
     printSong(&pRepository->songsArr[pRepository->numSongs]);
     pRepository->numSongs++;
     return 1;
@@ -249,23 +215,13 @@ void printAllSongs(const SongRepository* pSongRepository)
         return;
     }
     generalArrayFunctionForRepostiory(pSongRepository->songsArr, pSongRepository->numSongs, sizeof(Song), printSongForPlayList);
-   // for (int i = 0; i < pSongRepository->numSongs; ++i)
-  //  {
-    //    printf("%d.",i+1);
-        //printSongForPlayList(&pSongRepository->songsArr[i]);
-  //  }
 }
 
 void freeSongRepository(SongRepository* songRepository)
 {
     CHECK_RETURN(songRepository)// if not initialize don't free
 
+    generalArrayFunction(songRepository->songsArr, songRepository->numSongs, sizeof(Song), freeSong);
 
-        generalArrayFunction(songRepository->songsArr, songRepository->numSongs, sizeof(Song), freeSong);
-   // for (int i = 0; i < songRepository->numSongs; ++i)
-  //  {
-  //      freeSong(&songRepository->songsArr[i]);
-
- //   }
     free(songRepository->songsArr);
 }

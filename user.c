@@ -29,7 +29,6 @@ void initUserZeros(User* pUser)
 
 int ShufflePlayList(const User* pUser)
 {
-    srand(time(NULL));
     if (pUser->numOfPlaylists < 1)
     {
         printf("No Enough PlayLists\n");
@@ -52,8 +51,10 @@ int ShufflePlayList(const User* pUser)
         songChoice = MIN_SONGS + (rand() % (allSongs - MIN_SONGS + 1));
         if (arrayHelper[songChoice] == 0)
         {
-            if (!playSong(pUser->userPlayLists[choice - 1].allSongs[songChoice]))
+            if (!playSong(pUser->userPlayLists[choice - 1].allSongs[songChoice])) {
+                free(arrayHelper);
                 return ERROR;
+            }
             printf("Press Enter To Play Next Song\n");
             getchar();
             arrayHelper[songChoice] = 1;
@@ -212,11 +213,14 @@ int deleteSongFromUserPlayList(User* pUser)
     {
         printf("%d."ANSI_COLOR_BLUE"%s"ANSI_COLOR_RESET"\n", i + 1, pUser->userPlayLists[i].playlistName);
     }
+    printf(ANSI_COLOR_RED"To return menu Press 0\n"ANSI_COLOR_RESET);
     int choicePlayList;
     do {
         scanf("%d", &choicePlayList);
     } while (choicePlayList<0 || choicePlayList>pUser->numOfPlaylists);
-    choicePlayList--;
+    if (choicePlayList == 0)
+        return RETURN_MENU;
+    choicePlayList--; // 1 - length, 0 - length-1
     if (pUser->userPlayLists[choicePlayList].typeOfPlayList == eUser)
     {
         int flagRemove = removeSongFromPlayList(&pUser->userPlayLists[choicePlayList]);
