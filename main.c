@@ -2,9 +2,9 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h>
+//#include <crtdbg.h>
 #include <time.h>
-//#include <unistd.h>
+#include <unistd.h>
 #include "string.h"
 #include "artist.h"
 #include "song.h"
@@ -21,10 +21,10 @@
 
 
 int main() {
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int fileChoice;
     printf(ANSI_COLOR_GREEN"Welcome To Our System\n"ANSI_COLOR_RESET);
-    Sleep(2000);
+    Sleep(2);
     printf("Enter 1 For Text Files 2 For Binary File\n");
     do {
         scanf("%d", &fileChoice);
@@ -126,6 +126,7 @@ int main() {
             printf("%s\n",userFileName);
             if (!readUserFromFile(&user, userFileName, A.allArtists, A.numOfArtist, &sR, fileChoice))
             {
+                printf(ANSI_COLOR_RED"Error, Cant open %s\n"ANSI_COLOR_RESET,userFileName);
                 freeSystem(&sR,&pR,&A,&aManager,&user);
 
 //                freeAlbumManager(&aManager);
@@ -137,10 +138,7 @@ int main() {
             if (userSubMenu(&user, &sR, &pR, &aManager) == ERROR)
             {
                 freeSystem(&sR,&pR,&A,&aManager,&user);
-//                freeAlbumManager(&aManager);
-//                freeSongRepository(&sR);
-//                freePlayListsRepo(&pR);
-//                freeArtistRepository(&A);
+
                 return 0;
             }
             endProgram(&sR,&pR,&A,&aManager,&user);
@@ -157,17 +155,7 @@ int main() {
     } while (choice != 12);
 
 
-//    writeAlbumManagerToFile(&aManager, "Albums.bin", FROM_BINARY_FILE);
-//    saveArtistRepositoryToFile(&A, "ComperssArtistRepo.bin", FROM_BINARY_FILE);
-//    writeUserToFile(&user, "dosent matter right now", FROM_BINARY_FILE);
-//    savePlayListRepositoryToFile(&pR, "PlayList.bin", FROM_BINARY_FILE);
-//    saveSongRepositoryToTextFile(&sR, "Songs.txt");
-//    saveSongRepositoryToBFile(&sR, "Songs.bin");
-//    freeAlbum(&album);
-//    freeSongRepository(&sR);
-//    freePlayListsRepo(&pR);
-//    freeArtistRepository(&A);
-//    freeUser(&user);
+
 	return 0;
 }
 
@@ -327,7 +315,7 @@ int saveSystemFiles(SongRepository* pSong, PlayListRepository* pPlayList, Artist
 void endProgram(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum,User* pUser)
 {
 
-    printf("So you want to save before exit program?\n"ANSI_COLOR_GREEN "1) YES\n"ANSI_COLOR_RESET ANSI_COLOR_RED "2) NO\n"ANSI_COLOR_RESET);
+    printf("Do you want to save before exit program?\n"ANSI_COLOR_GREEN "1) YES\n"ANSI_COLOR_RESET ANSI_COLOR_RED "2) NO\n"ANSI_COLOR_RESET);
         int saveOp;
         scanf("%d",&saveOp);
     if (saveOp == 1)
