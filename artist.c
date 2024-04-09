@@ -155,11 +155,11 @@ int readArtistFromCompressFile(Artist* pArtist,FILE* fp)
     int len2 = (dataArtist[0] & 0x7) << 5 | (dataArtist[1] >>3);
     pArtist->amountOfSongs = (dataArtist[1] & 0x7) << 4 | dataArtist[2] >> 4;
     pArtist->amountOfPlay = (dataArtist[2] & 0xF) << 8 | dataArtist[3];
-    pArtist->name = calloc(len1 + 1, sizeof(char ));
+    pArtist->name = (char*)calloc(len1 + 1, sizeof(char));
     if (!pArtist->name || fread(pArtist->name,sizeof(char),len1,fp) != len1)
         return 0;
 
-    pArtist->aboutMe = calloc(len2 + 1, sizeof(char));
+    pArtist->aboutMe = (char*)calloc(len2 + 1, sizeof(char));
     if (!pArtist->aboutMe || fread(pArtist->aboutMe,sizeof(char),len2,fp) != len2)
         return 0;
 
