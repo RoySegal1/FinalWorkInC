@@ -2,6 +2,7 @@
 // Created by User on 02/04/2024.
 //
 #include <stdlib.h>
+#include <time.h>
 #include "user.h"
 #include "macros.h"
 #include "General.h"
@@ -28,6 +29,7 @@ void initUserZeros(User* pUser)
 
 int ShufflePlayList(const User* pUser)
 {
+    srand(time(NULL));
     if (pUser->numOfPlaylists < 1)
     {
         printf("No Enough PlayLists\n");
@@ -65,7 +67,7 @@ int ShufflePlayList(const User* pUser)
 
 
 
-int hasPlayList(User* pUser, PlayList* pPlay)
+int hasPlayList(const User* pUser,const PlayList* pPlay)
 {
     for (int i = 0; i < pUser->numOfPlaylists; i++)
     {
@@ -78,13 +80,13 @@ int hasPlayList(User* pUser, PlayList* pPlay)
     return 0;
 }
 
-int hasAlbum(User* pUser, Album* pAlbum)
+int hasAlbum(const User* pUser,const Album* pAlbum)
 {
     for (int i = 0; i < pUser->numOfAlbums; i++)
     {
         if (!strcmp(pUser->userAlbums[i].albumName, pAlbum->albumName))
         {
-            if (!strcmp(pUser->userAlbums[i].artist.name, pAlbum->artist.name))
+            if (!strcmp(pUser->userAlbums[i].artist->name, pAlbum->artist->name))
                 return 1;
         }
     }
@@ -157,10 +159,12 @@ int addSongToUserPlayList(User* pUser,const SongRepository* pSongs)
         }
         while(choiceSong<0 || choiceSong>pSongs->numSongs);
         choiceSong--;
-        if(!addSongToPlayList(&pUser->userPlayLists[choicePlayList],&pSongs->songsArr[choiceSong]))
+        int addFlag = addSongToPlayList(&pUser->userPlayLists[choicePlayList], &pSongs->songsArr[choiceSong]);
+        if(addFlag == ERROR)
             return ERROR;
-        printf(ANSI_COLOR_GREEN"Song Added\n"ANSI_COLOR_RESET);
-        return 1;
+        if(addFlag != DUPLICATE)
+            printf(ANSI_COLOR_GREEN"Song Added\n"ANSI_COLOR_RESET);
+        return addFlag;
     }
 }
 
@@ -215,9 +219,12 @@ int deleteSongFromUserPlayList(User* pUser)
     choicePlayList--;
     if (pUser->userPlayLists[choicePlayList].typeOfPlayList == eUser)
     {
-        if (!removeSongFromPlayList(&pUser->userPlayLists[choicePlayList]))
+        int flagRemove = removeSongFromPlayList(&pUser->userPlayLists[choicePlayList]);
+        if (flagRemove == ERROR)
             return ERROR;
-        printf(ANSI_COLOR_GREEN"Song Removed\n"ANSI_COLOR_RESET);
+        if(flagRemove != DUPLICATE)
+            printf(ANSI_COLOR_GREEN"Song Removed\n"ANSI_COLOR_RESET);
+        return flagRemove;
     }
     else
         {
@@ -249,7 +256,7 @@ int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists
     else
         if(flagAdd != DUPLICATE)
             printf(ANSI_COLOR_GREEN"PlayList Added\n"ANSI_COLOR_RESET);
-    return 1;
+    return flagAdd;
 }
 int addAlbumFromAlbumManagertoUser(User* pUser,const AlbumManager* pAlbums)
 {
@@ -274,7 +281,7 @@ int addAlbumFromAlbumManagertoUser(User* pUser,const AlbumManager* pAlbums)
     else
         if(flagAdd != DUPLICATE)
              printf(ANSI_COLOR_GREEN"Album Added\n"ANSI_COLOR_RESET);
-    return 1;
+    return flagAdd;
 }
 
 int addPlayListToUser(User* pUser, PlayList* pPlay)
@@ -410,10 +417,7 @@ void findSongInSortedPlayListForUser(const User* pUser)
     do {
         scanf("%d", &playListChoice);
     } while (playListChoice < 0 || playListChoice > pUser->numOfPlaylists);
-    if (pUser->userPlayLists[playListChoice - 1].typeOfPlayList == eUser)
-        findSong(&pUser->userPlayLists[playListChoice - 1]);
-    else
-        printf(ANSI_COLOR_RED"Cant Sort System PlayList.\n"ANSI_COLOR_RESET);
+    findSong(&pUser->userPlayLists[playListChoice - 1]);
 }
 
 
@@ -449,9 +453,11 @@ void freeUser(User* pUser)
 {
     if(pUser->numOfAlbums)
     freeUserAlbums(pUser->userAlbums,pUser->numOfAlbums);
-    if (pUser->numOfPlaylists)
+
+    if(pUser->numOfPlaylists)
     freeUserPlayLists(pUser->userPlayLists,pUser->numOfPlaylists);
-    if (pUser->userName != NULL && *pUser->userName != '\0')
+
+    if(pUser->userName != NULL && *pUser->userName != '\0')
     free(pUser->userName);
 }
 
@@ -507,7 +513,6 @@ int createAlbumArr(User* pUser)
         pUser->userAlbums = NULL;
         return 1;
     }
-    return 0;
 }
 
 int writeUserToTextFile(const User* pUser, const char* fileName)
@@ -604,7 +609,7 @@ int writeUserToBFile(const User* pUser, const char* fileName) /// maybe take out
     strcpy(temp, pUser->userName);
     strcat(temp, ".bin");
     fp = fopen(temp,"wb");
-    CHECK_RETURN_0_PRINT(fp, "Error Opening File")
+    CHECK_RETURN_0_PRINT(fp, Error Opening File)
         if (!writeStringToFile(pUser->userName, fp, "Error Writing User name"))
             RETURN_0_CLOSE_FILE(fp)
     int numberOfUserPlaylist = numberOfUserPlayList(pUser);
@@ -630,7 +635,7 @@ int readUserFromBFile(User* pUser, const char* fileName, Artist* artists, int si
 {
     FILE* fp;
     fp = fopen(fileName, "rb");
-    CHECK_RETURN_0_PRINT(fp,"Error Opening File")
+    CHECK_RETURN_0_PRINT(fp,ANSI_COLOR_REDError Cant Open FileANSI_COLOR_RESET)
     pUser->userName = readStringFromFile(fp,"Error Reading User Name");
     CHECK_RETURN_0_PRINT(pUser->userName,"Error Reading User Name")
     if(!readIntFromFile(&pUser->numOfPlaylists,fp,"Error Reading User Number Of PlayLists"))

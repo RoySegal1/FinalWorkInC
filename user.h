@@ -33,8 +33,8 @@ int deleteAlbumFromUser(User* pUser);
 int deletePlayListFromUser(User* pUser);
 
 
-int hasPlayList(User* pUser, PlayList* pPlay);
-int hasAlbum(User* pUser, Album* pAlbum);
+int hasPlayList(const User* pUser,const PlayList* pPlay);
+int hasAlbum(const User* pUser,const Album* pAlbum);
 int numberOfUserPlayList(const User* pUser);
 
 int ShufflePlayList(const User* pUser);
