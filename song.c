@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 #include "string.h"
 #include "song.h"
 #include "General.h"
@@ -45,7 +46,7 @@ void getLength(Song* pSong)
         printf("Enter seconds\n");
         scanf("%d",&seconds);
     }
-    while(seconds<0||seconds>60);
+    while(seconds<=0||seconds>60);
     pSong->seconds = seconds;
 }
 
@@ -250,7 +251,6 @@ int readSongFromBFile(Song* pSong,FILE* fp, Artist* artists, int size)
 }
 int writeSongToBFile(const Song* pSong,FILE* fp)
 {
-    //WriteArtist
     if (!writeStringToFile(pSong->artist.name, fp, "Error Writing Artist Name"))
         return 0;
     if(!writeStringToFile(pSong->songName,fp,"Error Writing Song Name"))
@@ -272,14 +272,13 @@ int readSongFromTextFile(Song* pSong, FILE* fp,Artist* artists,int size)
     char temp[MAX_STR_LEN];
     if (!pSong)
         return 0;
-    //Artist
     myGets(temp, MAX_STR_LEN, fp);
     if(findArtistInArr(artists,size, temp) == NULL)
         return 0;
     pSong->artist = *findArtistInArr(artists,size, temp);
     myGets(temp, MAX_STR_LEN, fp);
     pSong->songName = getDynStr(temp);
-    myGets(pSong->songCode, MAX_STR_LEN, fp); // maby Not MAX_STR and USING 5 instad
+    myGets(pSong->songCode, MAX_STR_LEN, fp);
     if (4 != fscanf(fp, "%d,%d,%d,%d", &pSong->minutes, &pSong->seconds, &pSong->amountPlayedSong, &pSong->typeOfSong)) {
         free(pSong->songName);
         return 0;
