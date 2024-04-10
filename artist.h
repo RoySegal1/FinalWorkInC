@@ -13,15 +13,18 @@ typedef struct{
     char* aboutMe;
 }Artist;
 
+int creatArtist(Artist* artist);
+
 void showArtist(const void* pArtist);
 void showArtistName(const void* pArtist);
-//void getArtistName(Artist* artist);
+
 int	loadArtistFromTextFile(Artist * artist, FILE* fp);
 int	saveArtistToTextFile(const Artist * artist, FILE* fp);
 int saveArtistToCompressFile(const Artist* pArtist, FILE* fp);
-//int saveArtistArrToCompressFile();
-int creatArtist(Artist* artist);
 int writeArtistToBFile(const Artist* pArtist,FILE* fp);
 int readArtistFromBFile(Artist* pArtist,FILE* fp);
 int readArtistFromCompressFile(Artist* pArtist,FILE* fp);
+
+
+
 void freeArtist(Artist *artist);

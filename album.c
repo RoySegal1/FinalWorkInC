@@ -39,7 +39,7 @@ int addSongToAlbum(Album* pAlbum, Song* pSong,int fromFile)
             {
                 tmp = tmp->next;
             }
-            L_insert(tmp, pSong);
+            L_insert(tmp, pSong); // add at the last node to be in order.
         }
         if(fromFile == 0)
             pAlbum->numOfSongs++;
@@ -121,7 +121,7 @@ int readAlbumFromTextFileWithOpenFile(Album* pAlbum, FILE* fp, Artist* artists, 
         tempSong = getSongFromRepositoryByCode(pSongs,temp);
         if(!addSongToAlbum(pAlbum,tempSong,1))
         {
-            freeAlbum(pAlbum); // check
+            freeAlbum(pAlbum);
             return 0;
         }
     }
@@ -134,7 +134,7 @@ int readAlbumFromBFileWithOpenFile(Album* pAlbum, FILE* fp, Artist* artists, int
     if (!temp2)
         return 0;
         pAlbum->artist = findArtistInArr(artists, size, temp2);
-    free(temp2); //maby Change to new Function
+    free(temp2); 
     pAlbum->albumName = readStringFromFile(fp, "Error Reading Album Name");
     if (!pAlbum->albumName)
         return 0;

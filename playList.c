@@ -1,6 +1,4 @@
-//
-// Created by User on 01/04/2024.
-//
+
 #include <stdlib.h>
 #include "string.h"
 #include "playList.h"
@@ -114,8 +112,6 @@ ePlayListsType playListTypeMenu()
 void sortPlayList(PlayList* pPlay)
 {
     CHECK_RETURN(pPlay)
-//    if(!pPlay)
-//        return;
     if (pPlay->numOfSongs < 1)
     {
         printf("PlayList is empty\n");
@@ -231,10 +227,6 @@ void freePlayList(PlayList* pPlay)
 void freeSongsArr(Song** pSongs,int size)
 {
     generalArrayFunction(pSongs, size, sizeof(Song*), free);
-    //for (int i = 0; i < size; i++)
-   // {
-   //     free(pSongs[i]);
-  //  }
 }
 
 int createSongArr(PlayList* pPlay) // for reading from a file

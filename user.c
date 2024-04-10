@@ -1,6 +1,4 @@
-//
-// Created by User on 02/04/2024.
-//
+
 #include <stdlib.h>
 #include <time.h>
 #include "user.h"
@@ -288,7 +286,7 @@ int addAlbumFromAlbumManagertoUser(User* pUser,const AlbumManager* pAlbums)
     return flagAdd;
 }
 
-int addPlayListToUser(User* pUser, PlayList* pPlay)
+int addPlayListToUser(User* pUser,const PlayList* pPlay)
 {
     if(hasPlayList(pUser,pPlay))
     {
@@ -360,7 +358,7 @@ int deleteAlbumFromUser(User* pUser)
     return 1;
 }
 
-int addAlbumToUser(User* pUser, Album* pAlbums)
+int addAlbumToUser(User* pUser,const Album* pAlbums)
 {
     if (hasAlbum(pUser, pAlbums))
     {
@@ -382,10 +380,10 @@ int addAlbumToUser(User* pUser, Album* pAlbums)
         while (tmp != NULL) // go over the albums songs
         {
             songTmp = tmp->key;
-            addSongToAlbum(&pUser->userAlbums[pUser->numOfAlbums], songTmp, 0);
+            addSongToAlbum(&pUser->userAlbums[pUser->numOfAlbums], songTmp, 0); 
             tmp = tmp->next;
         }
-   // pUser->userAlbums[pUser->numOfAlbums] = *pAlbums; // maybe not shallow
+
     pUser->numOfAlbums++;
     return 1;
 }

@@ -1,6 +1,4 @@
-//
-// Created by User on 05/04/2024.
-//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "playlistRepository.h"
