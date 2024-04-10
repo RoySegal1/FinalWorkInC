@@ -246,7 +246,7 @@ int userSubMenu(User* pUser, const SongRepository* pSongs, const PlayListReposit
 int initSystemFromFile(SongRepository* pSong, PlayListRepository* pPlayList, ArtistRepository* pArtists,AlbumManager* pAlbum, int typeFile)
 {
     if (typeFile == FROM_BINARY_FILE)
-    {/////// need to call to end program function
+    {
         if (!initArtistRepositoryFromFile(pArtists, ARTIST_REPO_FROM_BIN, FROM_BINARY_FILE))
             return 0;
         if (!loadSongsRepositoryFromBFile(pSong, SONGS_REPO_FROM_BIN, pArtists->allArtists, pArtists->numOfArtist))
@@ -269,7 +269,7 @@ int initSystemFromFile(SongRepository* pSong, PlayListRepository* pPlayList, Art
         }
     }
     else
-    {/////// need to call to end program function
+    {
         if (!initArtistRepositoryFromFile(pArtists, ARTIST_REPO_FROM_TEXT, FROM_TEXT_FILE))
             return 0;
         if (!loadSongsRepositoryFromTextFile(pSong, SONGS_REPO_FROM_TEXT, pArtists->allArtists, pArtists->numOfArtist))

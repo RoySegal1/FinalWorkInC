@@ -22,15 +22,17 @@ typedef struct {
 void initUser(User* pUser);
 void initUserZeros(User* pUser);
 
-int addPlayListToUser(User* pUser, PlayList* pPlay); // maby const playlist
+int addPlayListToUser(User* pUser,const PlayList* pPlay); 
 int addPlayListToUserFromSystem(User* pUser,const PlayListRepository* pPlayLists);
 int createPlayListToUser(User* pUser, const SongRepository* pSongs);
 int addSongToUserPlayList(User* pUser,const SongRepository* pSongs);
 int deleteSongFromUserPlayList(User* pUser);
-int addAlbumToUser(User* pUser, Album* pAlbums); // maby const album
+int addAlbumToUser(User* pUser,const Album* pAlbums); 
 int addAlbumFromAlbumManagertoUser(User* pUser,const AlbumManager* pAlbums);
 int deleteAlbumFromUser(User* pUser);
 int deletePlayListFromUser(User* pUser);
+
+
 
 
 int hasPlayList(const User* pUser,const PlayList* pPlay);

@@ -1,6 +1,4 @@
-//
-// Created by אילון אהרוני on 01/04/2024.
-//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
