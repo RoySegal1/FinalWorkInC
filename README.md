@@ -17,18 +17,7 @@ Install SDL(3):
 On Linux: sudo apt-get install libsdl3-dev
 On MacOS: brew install sdl3
 On Windows: Download the SDL development libraries from the SDL website and follow the installation instructions.
-Clone the Repository:
 
-sh
-Copy code
-git clone https://github.com/yourusername/music-system.git
-cd music-system
-Build the Project:
-
-sh
-Copy code
-make
-Usage
 Download Songs:
 Ensure you have songs downloaded and named according to the code specified in the Song class.
 
