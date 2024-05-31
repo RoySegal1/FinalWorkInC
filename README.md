@@ -2,7 +2,7 @@ Music System
 Overview
 This project is a music system written in C that uses the SDL (Simple DirectMedia Layer) library to play music files. It allows users to manage songs, albums, artists, playlists, and more.
 
-in the Folder text files you can find some
+in the Folder text files you can find some default data, with 3 songs just for the demonstration.
 
 Features
 Play music files.
